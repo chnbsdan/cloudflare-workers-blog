@@ -25,6 +25,86 @@
 		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/wpcom-cn/assets/fonts/icons-2.6.4.js?ver=6.1.2' id='wpcom-icons-js'></script>
 		<link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.3.2/styles/tomorrow-night-bright.min.css">
 		<script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
+		
+		<!-- 文章目录样式 -->
+		<style>
+		#article-toc {
+			background: rgba(255, 255, 255, 0.9);
+			border-radius: 8px;
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid #e1e1e1;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+		}
+		#article-toc h3 {
+			margin: 0 0 12px 0;
+			padding-bottom: 8px;
+			border-bottom: 2px solid #3b82f6;
+			color: #2d3748;
+			font-size: 16px;
+			font-weight: 600;
+		}
+		#toc-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			max-height: 400px;
+			overflow-y: auto;
+		}
+		#toc-list::-webkit-scrollbar {
+			width: 4px;
+		}
+		#toc-list::-webkit-scrollbar-thumb {
+			background: #cbd5e0;
+			border-radius: 2px;
+		}
+		#toc-list li {
+			margin: 4px 0;
+			line-height: 1.4;
+		}
+		#toc-list a {
+			display: block;
+			padding: 6px 8px;
+			color: #4a5568;
+			text-decoration: none;
+			border-radius: 4px;
+			font-size: 14px;
+			transition: all 0.2s ease;
+			border-left: 3px solid transparent;
+		}
+		#toc-list a:hover {
+			background: #f7fafc;
+			color: #3b82f6;
+			border-left-color: #3b82f6;
+		}
+		#toc-list .toc-h2 {
+			padding-left: 12px;
+			font-weight: 600;
+		}
+		#toc-list .toc-h3 {
+			padding-left: 24px;
+			font-size: 13px;
+			color: #718096;
+		}
+		#toc-list .toc-h4 {
+			padding-left: 36px;
+			font-size: 12px;
+			color: #a0aec0;
+		}
+		#toc-list .toc-active {
+			background: #ebf8ff;
+			color: #3b82f6;
+			border-left-color: #3b82f6;
+			font-weight: 500;
+		}
+		.toc-empty {
+			color: #a0aec0;
+			font-style: italic;
+			text-align: center;
+			padding: 20px;
+		}
+		</style>
+		
 		{{ &OPT.codeBeforHead }}
 	</head>
 	<body class="archive paged category category-zhishi category-5 paged-2 category-paged-2 lang-cn el-boxed">
@@ -64,8 +144,6 @@
 		</header>
 		<div id="wrap">
 			<div class="container wrap">
-
-
 				<div class="main">
 					<article id="post-{{ &articleSingle.id }}" class="post-{{ &articleSingle.id }} post type-post status-publish format-standard has-post-thumbnail hentry ">
 						<div class="entry">
@@ -135,6 +213,14 @@
 				</div>
 
 				<aside class="sidebar">
+					<!-- 文章目录 -->
+					<div id="article-toc">
+						<h3>📑 文章目录</h3>
+						<ul id="toc-list">
+							<li class="toc-empty">正在生成目录...</li>
+						</ul>
+					</div>
+
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -291,7 +377,136 @@ var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom"
 			</script>
 <script>hljs.initHighlightingOnLoad(); //代码高亮
 					</script>
+
+		<!-- 文章目录功能脚本 -->
+		<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// 生成文章目录
+			function generateTOC() {
+				const articleContent = document.querySelector('.entry-content');
+				const tocList = document.getElementById('toc-list');
+				
+				if (!articleContent || !tocList) return;
+				
+				// 清空现有内容
+				tocList.innerHTML = '';
+				
+				// 获取所有标题元素
+				const headings = articleContent.querySelectorAll('h2, h3, h4, h5, h6');
+				
+				if (headings.length === 0) {
+					tocList.innerHTML = '<li class="toc-empty">本文暂无目录结构</li>';
+					return;
+				}
+				
+				let tocHTML = '';
+				let tocCount = 0;
+				
+				headings.forEach((heading, index) => {
+					// 为标题添加ID（如果还没有）
+					let headingId = heading.id;
+					if (!headingId) {
+						headingId = 'heading-' + index;
+						heading.id = headingId;
+					}
+					
+					// 确定标题级别
+					const level = parseInt(heading.tagName.substring(1));
+					const levelClass = 'toc-h' + level;
+					
+					tocHTML += `
+						<li class="${levelClass}">
+							<a href="#${headingId}" data-level="${level}">
+								${heading.textContent}
+							</a>
+						</li>
+					`;
+					tocCount++;
+				});
+				
+				tocList.innerHTML = tocHTML;
+				
+				// 添加滚动监听
+				initScrollSpy();
+			}
+			
+			// 初始化滚动监听
+			function initScrollSpy() {
+				const tocLinks = document.querySelectorAll('#toc-list a');
+				const headings = document.querySelectorAll('.entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6');
+				
+				if (tocLinks.length === 0) return;
+				
+				// 移除所有激活状态
+				function removeActiveClasses() {
+					tocLinks.forEach(link => {
+						link.classList.remove('toc-active');
+					});
+				}
+				
+				// 监听滚动
+				window.addEventListener('scroll', function() {
+					let current = '';
+					
+					headings.forEach(heading => {
+						const headingTop = heading.getBoundingClientRect().top;
+						if (headingTop <= 100) { // 100px偏移量
+							current = heading.id;
+						}
+					});
+					
+					removeActiveClasses();
+					
+					if (current) {
+						const activeLink = document.querySelector(`#toc-list a[href="#${current}"]`);
+						if (activeLink) {
+							activeLink.classList.add('toc-active');
+							
+							// 滚动到可见区域
+							const tocList = document.getElementById('toc-list');
+							const activeLinkTop = activeLink.offsetTop;
+							const tocListHeight = tocList.clientHeight;
+							
+							if (activeLinkTop > tocList.scrollTop + tocListHeight - 50) {
+								tocList.scrollTop = activeLinkTop - tocListHeight + 50;
+							} else if (activeLinkTop < tocList.scrollTop) {
+								tocList.scrollTop = activeLinkTop - 20;
+							}
+						}
+					}
+				});
+				
+				// 初始激活第一个
+				if (headings.length > 0) {
+					const firstLink = document.querySelector(`#toc-list a[href="#${headings[0].id}"]`);
+					if (firstLink) {
+						firstLink.classList.add('toc-active');
+					}
+				}
+			}
+			
+			// 平滑滚动
+			document.querySelectorAll('#toc-list a').forEach(link => {
+				link.addEventListener('click', function(e) {
+					e.preventDefault();
+					const targetId = this.getAttribute('href').substring(1);
+					const targetElement = document.getElementById(targetId);
+					
+					if (targetElement) {
+						const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
+						window.scrollTo({
+							top: offsetTop,
+							behavior: 'smooth'
+						});
+					}
+				});
+			});
+			
+			// 延迟生成目录，确保内容已加载
+			setTimeout(generateTOC, 100);
+		});
+		</script>
+		
 		{{ &OPT.codeBeforBody }}
 	</body>
-
 </html>
