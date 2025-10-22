@@ -32,7 +32,7 @@
 			position: relative;
 		}
 		
-		/* 文章目录样式 */
+		/* 文章目录样式 - 自适应高度 */
 		#article-toc {
 			background: rgba(255, 255, 255, 0.95);
 			border-radius: 8px;
@@ -131,7 +131,7 @@
 			padding: 20px;
 		}
 
-		/* 侧边栏所有小部件通用样式 */
+		/* 侧边栏其他小部件 - 每个都独立固定 */
 		.sidebar .widget {
 			background: rgba(255, 255, 255, 0.9);
 			border-radius: 8px;
@@ -143,29 +143,29 @@
 			z-index: 99;
 		}
 
-		/* 近期文章小部件 */
+		/* 近期文章小部件 - 固定在目录下方 */
 		#wpcom-post-thumb-2 {
-			top: calc(100px + var(--toc-height, 200px) + 20px);
+			top: calc(100px + 200px + 20px); /* 导航栏100px + 目录高度200px + 间距20px */
 		}
 
-		/* 分类目录小部件 */
+		/* 分类目录小部件 - 固定在近期文章下方 */
 		#categories-3 {
-			top: calc(100px + var(--toc-height, 200px) + var(--recent-height, 200px) + 40px);
+			top: calc(100px + 200px + 200px + 40px); /* 导航栏 + 目录 + 近期文章 + 间距 */
 		}
 
-		/* 标签小部件 */
+		/* 标签小部件 - 固定在分类目录下方 */
 		#tag_cloud-3 {
-			top: calc(100px + var(--toc-height, 200px) + var(--recent-height, 200px) + var(--category-height, 150px) + 60px);
+			top: calc(100px + 200px + 200px + 150px + 60px); /* 导航栏 + 目录 + 近期文章 + 分类目录 + 间距 */
 		}
 
-		/* 链接小部件 */
+		/* 链接小部件 - 固定在标签下方 */
 		#linkcat-0 {
-			top: calc(100px + var(--toc-height, 200px) + var(--recent-height, 200px) + var(--category-height, 150px) + var(--tag-height, 100px) + 80px);
+			top: calc(100px + 200px + 200px + 150px + 100px + 80px); /* 导航栏 + 目录 + 近期文章 + 分类目录 + 标签 + 间距 */
 		}
 
-		/* 其他小部件 */
+		/* 其他小部件 - 固定在链接下方 */
 		.widget_other {
-			top: calc(100px + var(--toc-height, 200px) + var(--recent-height, 200px) + var(--category-height, 150px) + var(--tag-height, 100px) + var(--link-height, 100px) + 100px);
+			top: calc(100px + 200px + 200px + 150px + 100px + 100px + 100px); /* 导航栏 + 目录 + 近期文章 + 分类目录 + 标签 + 链接 + 间距 */
 		}
 
 		/* 移动端适配 */
@@ -299,7 +299,7 @@
 						</ul>
 					</div>
 
-					<!-- 其他小部件保持原样 -->
+					<!-- 其他小部件 -->
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -469,7 +469,6 @@ var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom"
 			function generateTOC() {
 				const articleContent = document.querySelector('.entry-content');
 				const tocList = document.getElementById('toc-list');
-				const tocContainer = document.getElementById('article-toc');
 				
 				if (!articleContent || !tocList) return;
 				
@@ -511,56 +510,8 @@ var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom"
 				
 				tocList.innerHTML = tocHTML;
 				
-				// 更新侧边栏小部件位置
-				updateSidebarWidgets();
-				
 				// 添加滚动监听
 				initScrollSpy();
-			}
-			
-			// 更新侧边栏小部件位置
-			function updateSidebarWidgets() {
-				const tocContainer = document.getElementById('article-toc');
-				const recentWidget = document.getElementById('wpcom-post-thumb-2');
-				const categoryWidget = document.getElementById('categories-3');
-				const tagWidget = document.getElementById('tag_cloud-3');
-				const linkWidget = document.getElementById('linkcat-0');
-				const otherWidget = document.querySelector('.widget_other');
-				
-				// 设置默认高度
-				document.documentElement.style.setProperty('--toc-height', '200px');
-				document.documentElement.style.setProperty('--recent-height', '200px');
-				document.documentElement.style.setProperty('--category-height', '150px');
-				document.documentElement.style.setProperty('--tag-height', '100px');
-				document.documentElement.style.setProperty('--link-height', '100px');
-				
-				// 更新实际高度
-				if (tocContainer) {
-					const tocHeight = tocContainer.scrollHeight;
-					document.documentElement.style.setProperty('--toc-height', tocHeight + 'px');
-				}
-				
-				if (recentWidget) {
-					const recentHeight = recentWidget.scrollHeight;
-					document.documentElement.style.setProperty('--recent-height', recentHeight + 'px');
-				}
-				
-				if (categoryWidget) {
-					const categoryHeight = categoryWidget.scrollHeight;
-					document.documentElement.style.setProperty('--category-height', categoryHeight + 'px');
-				}
-				
-				if (tagWidget) {
-					const tagHeight = tagWidget.scrollHeight;
-					document.documentElement.style.setProperty('--tag-height', tagHeight + 'px');
-				}
-				
-				if (linkWidget) {
-					const linkHeight = linkWidget.scrollHeight;
-					document.documentElement.style.setProperty('--link-height', linkHeight + 'px');
-				}
-				
-				console.log('侧边栏小部件位置已更新');
 			}
 			
 			// 初始化滚动监听
@@ -637,12 +588,6 @@ var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom"
 			
 			// 延迟生成目录，确保内容已加载
 			setTimeout(generateTOC, 100);
-			
-			// 监听窗口大小变化，更新小部件位置
-			window.addEventListener('resize', updateSidebarWidgets);
-			
-			// 初始更新一次
-			setTimeout(updateSidebarWidgets, 200);
 		});
 		</script>
 		
