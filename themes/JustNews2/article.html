@@ -32,6 +32,7 @@
 			position: relative;
 		}
 		
+		/* 文章目录样式 */
 		#article-toc {
 			background: rgba(255, 255, 255, 0.95);
 			border-radius: 8px;
@@ -44,11 +45,6 @@
 			z-index: 100;
 			max-height: calc(100vh - 140px);
 			overflow-y: auto;
-			transition: max-height 0.3s ease;
-		}
-		
-		#article-toc.expanded {
-			max-height: calc(100vh - 120px);
 		}
 		
 		#article-toc h3 {
@@ -135,8 +131,8 @@
 			padding: 20px;
 		}
 
-		/* 侧边栏其他小部件样式 */
-		.sidebar-widget {
+		/* 侧边栏所有小部件通用样式 */
+		.sidebar .widget {
 			background: rgba(255, 255, 255, 0.9);
 			border-radius: 8px;
 			padding: 15px;
@@ -175,7 +171,7 @@
 		/* 移动端适配 */
 		@media (max-width: 768px) {
 			#article-toc,
-			.sidebar-widget {
+			.sidebar .widget {
 				position: relative;
 				top: 0 !important;
 				margin-bottom: 15px;
@@ -303,7 +299,8 @@
 						</ul>
 					</div>
 
-					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb sidebar-widget">
+					<!-- 其他小部件保持原样 -->
+					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
 						<ul>
@@ -321,7 +318,7 @@
 							{{ /widgetRecentlyList }}									
 						</ul>
 					</div>
-					<div id="categories-3" class="widget widget_categories sidebar-widget">
+					<div id="categories-3" class="widget widget_categories">
 						<h3 class="widget-title">
 							<span>分类目录</span></h3>
 						<ul>
@@ -331,7 +328,7 @@
 							{{ /widgetCategoryList }}
 						</ul>
 					</div>
-					<div id="tag_cloud-3" class="widget widget_tag_cloud sidebar-widget">
+					<div id="tag_cloud-3" class="widget widget_tag_cloud">
 						<h3 class="widget-title">
 							<span>标签</span></h3>
 						<div class="tagcloud">
@@ -341,7 +338,7 @@
 						</div>
 					</div>
 
-					<div id="linkcat-0" class="widget widget_links sidebar-widget">
+					<div id="linkcat-0" class="widget widget_links">
 						<h3 class="widget-title">
 							<span>链接</span></h3>
 						<div class="link-tagcloud">
@@ -352,7 +349,7 @@
 					</div>
 					
 					{{ #OPT.widgetOther }}
-					<div class="widget_other sidebar-widget">
+					<div class="widget_other">
 						{{ &OPT.widgetOther }}
 					</div>
 					{{ /OPT.widgetOther }}
@@ -528,7 +525,16 @@ var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom"
 				const categoryWidget = document.getElementById('categories-3');
 				const tagWidget = document.getElementById('tag_cloud-3');
 				const linkWidget = document.getElementById('linkcat-0');
+				const otherWidget = document.querySelector('.widget_other');
 				
+				// 设置默认高度
+				document.documentElement.style.setProperty('--toc-height', '200px');
+				document.documentElement.style.setProperty('--recent-height', '200px');
+				document.documentElement.style.setProperty('--category-height', '150px');
+				document.documentElement.style.setProperty('--tag-height', '100px');
+				document.documentElement.style.setProperty('--link-height', '100px');
+				
+				// 更新实际高度
 				if (tocContainer) {
 					const tocHeight = tocContainer.scrollHeight;
 					document.documentElement.style.setProperty('--toc-height', tocHeight + 'px');
@@ -553,6 +559,8 @@ var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom"
 					const linkHeight = linkWidget.scrollHeight;
 					document.documentElement.style.setProperty('--link-height', linkHeight + 'px');
 				}
+				
+				console.log('侧边栏小部件位置已更新');
 			}
 			
 			// 初始化滚动监听
@@ -632,6 +640,9 @@ var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom"
 			
 			// 监听窗口大小变化，更新小部件位置
 			window.addEventListener('resize', updateSidebarWidgets);
+			
+			// 初始更新一次
+			setTimeout(updateSidebarWidgets, 200);
 		});
 		</script>
 		
