@@ -32,7 +32,7 @@
 			position: relative;
 		}
 		
-		/* 文章目录样式 - 自适应高度 */
+		/* 文章目录样式 - 唯一固定的元素 */
 		#article-toc {
 			background: rgba(255, 255, 255, 0.95);
 			border-radius: 8px;
@@ -131,7 +131,7 @@
 			padding: 20px;
 		}
 
-		/* 侧边栏其他小部件 - 每个都独立固定 */
+		/* 侧边栏其他小部件 - 正常滚动，不固定 */
 		.sidebar .widget {
 			background: rgba(255, 255, 255, 0.9);
 			border-radius: 8px;
@@ -139,45 +139,17 @@
 			margin-bottom: 20px;
 			border: 1px solid #e1e1e1;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-			position: sticky;
-			z-index: 99;
-		}
-
-		/* 近期文章小部件 - 固定在目录下方 */
-		#wpcom-post-thumb-2 {
-			top: calc(100px + 200px + 20px); /* 导航栏100px + 目录高度200px + 间距20px */
-		}
-
-		/* 分类目录小部件 - 固定在近期文章下方 */
-		#categories-3 {
-			top: calc(100px + 200px + 200px + 40px); /* 导航栏 + 目录 + 近期文章 + 间距 */
-		}
-
-		/* 标签小部件 - 固定在分类目录下方 */
-		#tag_cloud-3 {
-			top: calc(100px + 200px + 200px + 150px + 60px); /* 导航栏 + 目录 + 近期文章 + 分类目录 + 间距 */
-		}
-
-		/* 链接小部件 - 固定在标签下方 */
-		#linkcat-0 {
-			top: calc(100px + 200px + 200px + 150px + 100px + 80px); /* 导航栏 + 目录 + 近期文章 + 分类目录 + 标签 + 间距 */
-		}
-
-		/* 其他小部件 - 固定在链接下方 */
-		.widget_other {
-			top: calc(100px + 200px + 200px + 150px + 100px + 100px + 100px); /* 导航栏 + 目录 + 近期文章 + 分类目录 + 标签 + 链接 + 间距 */
+			/* 移除 sticky 定位 */
+			position: relative;
+			top: auto;
 		}
 
 		/* 移动端适配 */
 		@media (max-width: 768px) {
-			#article-toc,
-			.sidebar .widget {
-				position: relative;
-				top: 0 !important;
-				margin-bottom: 15px;
-			}
-			
 			#article-toc {
+				position: relative;
+				top: 0;
+				margin-bottom: 15px;
 				max-height: 300px;
 			}
 		}
@@ -291,7 +263,7 @@
 				</div>
 
 				<aside class="sidebar">
-					<!-- 文章目录 -->
+					<!-- 文章目录 - 唯一固定的元素 -->
 					<div id="article-toc">
 						<h3>📑 文章目录</h3>
 						<ul id="toc-list">
@@ -299,7 +271,7 @@
 						</ul>
 					</div>
 
-					<!-- 其他小部件 -->
+					<!-- 其他小部件 - 正常滚动 -->
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
