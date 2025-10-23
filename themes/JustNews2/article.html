@@ -28,13 +28,6 @@
 		
 		<!-- 文章目录样式 -->
 		<style>
-		/* 侧边栏整体布局 */
-		.sidebar {
-			position: relative;
-			height: auto;
-		}
-		
-		/* 文章目录样式 - 固定在右侧 */
 		#article-toc {
 			background: rgba(255, 255, 255, 0.95);
 			border-radius: 8px;
@@ -43,12 +36,9 @@
 			border: 1px solid #e1e1e1;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 			position: sticky;
-			top: 100px; /* 从导航栏下方开始固定 */
+			top: 20px;
 			z-index: 100;
-			max-height: calc(100vh - 140px); /* 不超过屏幕高度 */
-			overflow-y: auto;
 		}
-		
 		#article-toc h3 {
 			margin: 0 0 12px 0;
 			padding-bottom: 8px;
@@ -57,27 +47,24 @@
 			font-size: 16px;
 			font-weight: 600;
 		}
-		
 		#toc-list {
 			list-style: none;
 			padding: 0;
 			margin: 0;
+			max-height: 400px;
+			overflow-y: auto;
 		}
-		
 		#toc-list::-webkit-scrollbar {
 			width: 4px;
 		}
-		
 		#toc-list::-webkit-scrollbar-thumb {
 			background: #cbd5e0;
 			border-radius: 2px;
 		}
-		
 		#toc-list li {
 			margin: 4px 0;
 			line-height: 1.4;
 		}
-		
 		#toc-list a {
 			display: block;
 			padding: 6px 8px;
@@ -88,37 +75,31 @@
 			transition: all 0.2s ease;
 			border-left: 3px solid transparent;
 		}
-		
 		#toc-list a:hover {
 			background: #f7fafc;
 			color: #3b82f6;
 			border-left-color: #3b82f6;
 		}
-		
 		#toc-list .toc-h2 {
 			padding-left: 12px;
 			font-weight: 600;
 		}
-		
 		#toc-list .toc-h3 {
 			padding-left: 24px;
 			font-size: 13px;
 			color: #718096;
 		}
-		
 		#toc-list .toc-h4 {
 			padding-left: 36px;
 			font-size: 12px;
 			color: #a0aec0;
 		}
-		
 		#toc-list .toc-active {
 			background: #ebf8ff;
 			color: #3b82f6;
 			border-left-color: #3b82f6;
 			font-weight: 500;
 		}
-		
 		.toc-empty {
 			color: #a0aec0;
 			font-style: italic;
@@ -126,51 +107,15 @@
 			padding: 20px;
 		}
 
-		/* 侧边栏其他小部件 - 正常跟随页面滚动 */
-		.sidebar .widget {
-			background: rgba(255, 255, 255, 0.9);
-			border-radius: 8px;
-			padding: 15px;
-			margin-bottom: 20px;
-			border: 1px solid #e1e1e1;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-			position: relative; /* 正常文档流 */
-			z-index: 99;
-		}
-
-		/* 确保主内容区和侧边栏布局正确 */
-		.container.wrap {
-			display: flex;
-			flex-wrap: wrap;
-		}
-		
-		.main {
-			flex: 1;
-			min-width: 0;
-		}
-		
-		.sidebar {
-			width: 300px;
-			margin-left: 20px;
-		}
-
 		/* 移动端适配 */
 		@media (max-width: 768px) {
-			.container.wrap {
-				flex-direction: column;
-			}
-			
-			.sidebar {
-				width: 100%;
-				margin-left: 0;
-				margin-top: 20px;
-			}
-			
 			#article-toc {
 				position: relative;
 				top: 0;
 				margin-bottom: 15px;
-				max-height: 300px;
+			}
+			#toc-list {
+				max-height: 200px;
 			}
 		}
 		</style>
@@ -283,7 +228,7 @@
 				</div>
 
 				<aside class="sidebar">
-					<!-- 文章目录 - 固定在右侧 -->
+					<!-- 文章目录 -->
 					<div id="article-toc">
 						<h3>📑 文章目录</h3>
 						<ul id="toc-list">
@@ -291,7 +236,6 @@
 						</ul>
 					</div>
 
-					<!-- 其他小部件 - 正常跟随页面滚动 -->
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -331,20 +275,15 @@
 					</div>
 
 					<div id="linkcat-0" class="widget widget_links">
-						<h3 class="widget-title">
-							<span>链接</span></h3>
-						<div class="link-tagcloud">
-							{{ #widgetLinkList }}
-								<a href="{{ &url }}" target="_blank" class="link-tag">{{ &title }}</a>
-							{{ /widgetLinkList }}
-						</div>
-					</div>
-					
-					{{ #OPT.widgetOther }}
-					<div class="widget_other">
-						{{ &OPT.widgetOther }}
-					</div>
-					{{ /OPT.widgetOther }}
+    <h3 class="widget-title">
+        <span>链接</span></h3>
+    <div class="link-tagcloud">
+        {{ #widgetLinkList }}
+            <a href="{{ &url }}" target="_blank" class="link-tag">{{ &title }}</a>
+        {{ /widgetLinkList }}
+    </div>
+</div>
+					{{ &OPT.widgetOther }}
 				</aside>
 			</div>
 		</div>
