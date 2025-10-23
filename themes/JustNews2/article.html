@@ -28,13 +28,10 @@
 		
 		<!-- 文章目录样式 -->
 		<style>
-		/* 确保侧边栏容器有正确的高度 */
 		.sidebar {
 			position: relative;
-			height: fit-content;
 		}
 		
-		/* 文章目录固定样式 - 关键修复 */
 		#article-toc {
 			background: rgba(255, 255, 255, 0.95);
 			border-radius: 8px;
@@ -43,12 +40,10 @@
 			border: 1px solid #e1e1e1;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 			position: sticky;
-			top: 100px; /* 从导航栏下方开始固定 */
+			top: 100px;
 			z-index: 100;
-			max-height: calc(100vh - 140px); /* 不超过屏幕高度 */
+			max-height: calc(100vh - 140px);
 			overflow-y: auto;
-			/* 确保sticky定位生效 */
-			align-self: flex-start;
 		}
 		
 		#article-toc h3 {
@@ -150,7 +145,7 @@
 			padding: 20px;
 		}
 
-		/* 侧边栏其他小部件 - 正常滚动 */
+		/* 侧边栏其他小部件 */
 		.sidebar .widget {
 			background: rgba(255, 255, 255, 0.9);
 			border-radius: 8px;
@@ -158,37 +153,11 @@
 			margin-bottom: 20px;
 			border: 1px solid #e1e1e1;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-			position: relative; /* 正常文档流 */
-		}
-
-		/* 确保整体布局正确 */
-		.container.wrap {
-			display: flex;
-			align-items: flex-start;
-		}
-		
-		.main {
-			flex: 1;
-			min-width: 0;
-		}
-		
-		.sidebar {
-			width: 300px;
-			margin-left: 20px;
+			position: relative;
 		}
 
 		/* 移动端适配 */
 		@media (max-width: 768px) {
-			.container.wrap {
-				flex-direction: column;
-			}
-			
-			.sidebar {
-				width: 100%;
-				margin-left: 0;
-				margin-top: 20px;
-			}
-			
 			#article-toc {
 				position: relative;
 				top: 0;
@@ -307,7 +276,7 @@
 				</div>
 
 				<aside class="sidebar">
-					<!-- 文章目录 - 现在应该正确固定了 -->
+					<!-- 文章目录 -->
 					<div id="article-toc">
 						<h3>📑 文章目录</h3>
 						<ul id="toc-list">
@@ -315,7 +284,7 @@
 						</ul>
 					</div>
 
-					<!-- 其他小部件 - 正常滚动 -->
+					<!-- 其他小部件保持不变 -->
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -407,7 +376,7 @@
     </a>
 </div>
 
-		<!-- 保持之前的精细目录生成脚本 -->
+		<!-- 更精细的目录生成脚本 -->
 		<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			// 生成更精细的文章目录
