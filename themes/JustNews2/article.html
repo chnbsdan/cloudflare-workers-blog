@@ -36,184 +36,219 @@
 			flex-direction: column;
 		}
 
-		/* 文章目录容器 - 侧边栏位置 */
-		#article-toc-sidebar {
-			background: rgba(255, 255, 255, 0.95);
-			border-radius: 8px;
-			padding: 0;
-			margin-bottom: 20px;
-			border: 1px solid #e1e1e1;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-			position: sticky;
-			top: 20px;
-			z-index: 99;
-			max-height: fit-content;
-			transition: all 0.3s ease;
-		}
-
-		/* 目录头部 */
-		.toc-sidebar-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 15px;
-			border-bottom: 1px solid #f0f0f0;
-			cursor: pointer;
-			background: #fafafa;
-			border-radius: 8px 8px 0 0;
-			transition: background 0.3s ease;
-		}
-
-		.toc-sidebar-header:hover {
-			background: #f5f5f5;
-		}
-
-		.toc-sidebar-header h3 {
-			margin: 0;
-			font-size: 16px;
-			font-weight: 600;
-			color: #2d3748;
-		}
-
-		.toc-toggle-btn {
-			background: none;
+		/* 浮动目录按钮 */
+		#toc-float-btn {
+			position: fixed;
+			right: 30px;
+			bottom: 100px;
+			width: 50px;
+			height: 50px;
+			background: #3b82f6;
+			color: white;
 			border: none;
-			width: 28px;
-			height: 28px;
-			border-radius: 4px;
+			border-radius: 50%;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			cursor: pointer;
+			z-index: 10000;
+			box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 			transition: all 0.3s ease;
-			color: #6b7280;
+			font-size: 18px;
 		}
 
-		.toc-toggle-btn:hover {
-			background: #e5e7eb;
-			color: #374151;
+		#toc-float-btn:hover {
+			background: #2563eb;
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 		}
 
-		.toc-toggle-btn i {
-			font-size: 14px;
-			transition: transform 0.3s ease;
+		/* 文章目录容器 - 右键菜单式定位 */
+		#article-toc-floating {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 320px;
+			max-width: 90vw;
+			max-height: 80vh;
+			background: rgba(255, 255, 255, 0.98);
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 12px;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+			z-index: 10001;
+			display: none;
+			overflow: hidden;
+			animation: tocFadeIn 0.3s ease;
 		}
 
-		.toc-toggle-btn.active i {
-			transform: rotate(180deg);
+		@keyframes tocFadeIn {
+			from {
+				opacity: 0;
+				transform: translate(-50%, -50%) scale(0.9);
+			}
+			to {
+				opacity: 1;
+				transform: translate(-50%, -50%) scale(1);
+			}
+		}
+
+		#article-toc-floating.show {
+			display: block;
+		}
+
+		/* 目录遮罩 */
+		#toc-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(5px);
+			z-index: 10000;
+			display: none;
+		}
+
+		#toc-overlay.show {
+			display: block;
+		}
+
+		/* 目录头部 */
+		.toc-floating-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px;
+			background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+			color: white;
+			border-radius: 12px 12px 0 0;
+		}
+
+		.toc-floating-header h3 {
+			margin: 0;
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		.toc-close-btn {
+			background: none;
+			border: none;
+			color: white;
+			font-size: 18px;
+			cursor: pointer;
+			width: 32px;
+			height: 32px;
+			border-radius: 6px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.3s ease;
+		}
+
+		.toc-close-btn:hover {
+			background: rgba(255, 255, 255, 0.2);
 		}
 
 		/* 目录内容 */
-		#toc-sidebar-content {
-			padding: 0;
-			max-height: 0;
-			overflow: hidden;
-			transition: all 0.3s ease;
-		}
-
-		#toc-sidebar-content.show {
-			max-height: 400px;
-			padding: 15px;
-		}
-
-		#toc-sidebar-list {
+		#toc-floating-list {
 			list-style: none;
-			padding: 0;
+			padding: 15px;
 			margin: 0;
-			max-height: 350px;
+			max-height: 60vh;
 			overflow-y: auto;
 		}
 
-		#toc-sidebar-list::-webkit-scrollbar {
-			width: 4px;
+		#toc-floating-list::-webkit-scrollbar {
+			width: 6px;
 		}
 
-		#toc-sidebar-list::-webkit-scrollbar-thumb {
+		#toc-floating-list::-webkit-scrollbar-thumb {
 			background: #cbd5e0;
-			border-radius: 2px;
+			border-radius: 3px;
 		}
 
-		#toc-sidebar-list li {
-			margin: 3px 0;
+		#toc-floating-list li {
+			margin: 2px 0;
 			line-height: 1.4;
 		}
 
-		#toc-sidebar-list a {
+		#toc-floating-list a {
 			display: block;
-			padding: 6px 8px;
+			padding: 8px 12px;
 			color: #4a5568;
 			text-decoration: none;
-			border-radius: 4px;
+			border-radius: 6px;
 			font-size: 14px;
 			transition: all 0.2s ease;
-			border-left: 3px solid transparent;
+			border-left: 4px solid transparent;
 		}
 
-		#toc-sidebar-list a:hover {
+		#toc-floating-list a:hover {
 			background: #f7fafc;
 			color: #3b82f6;
 			border-left-color: #3b82f6;
 		}
 
 		/* 精细的标题级别样式 */
-		#toc-sidebar-list .toc-h1 {
-			padding-left: 8px;
+		#toc-floating-list .toc-h1 {
+			padding-left: 12px;
 			font-weight: 700;
 			font-size: 15px;
 			color: #1a202c;
 			border-left-color: #3b82f6;
-			background: #f0f9ff;
 		}
 
-		#toc-sidebar-list .toc-h2 {
-			padding-left: 16px;
+		#toc-floating-list .toc-h2 {
+			padding-left: 24px;
 			font-weight: 600;
 			font-size: 14px;
 			color: #2d3748;
 			border-left-color: #60a5fa;
 		}
 
-		#toc-sidebar-list .toc-h3 {
-			padding-left: 24px;
+		#toc-floating-list .toc-h3 {
+			padding-left: 36px;
 			font-weight: 500;
 			font-size: 14px;
 			color: #4a5568;
 			border-left-color: #93c5fd;
 		}
 
-		#toc-sidebar-list .toc-h4 {
-			padding-left: 32px;
+		#toc-floating-list .toc-h4 {
+			padding-left: 48px;
 			font-size: 13px;
 			color: #718096;
 			border-left-color: #bfdbfe;
 		}
 
-		#toc-sidebar-list .toc-h5 {
-			padding-left: 40px;
+		#toc-floating-list .toc-h5 {
+			padding-left: 60px;
 			font-size: 13px;
 			color: #a0aec0;
 			border-left-color: #dbeafe;
 		}
 
-		#toc-sidebar-list .toc-h6 {
-			padding-left: 48px;
+		#toc-floating-list .toc-h6 {
+			padding-left: 72px;
 			font-size: 12px;
 			color: #cbd5e0;
 			border-left-color: #eff6ff;
 		}
 
-		#toc-sidebar-list .toc-active {
+		#toc-floating-list .toc-active {
 			background: #ebf8ff !important;
 			color: #3b82f6 !important;
 			font-weight: 600 !important;
-			border-left-color: #3b82f6 !important;
 		}
 
 		.toc-empty {
 			color: #a0aec0;
 			font-style: italic;
 			text-align: center;
-			padding: 20px;
+			padding: 40px 20px;
 		}
 
 		/* 侧边栏搜索样式 */
@@ -232,14 +267,13 @@
 
 		.widget_search .search-input {
 			width: 100%;
-			padding: 12px 45px 12px 15px;
+			padding: 12px 15px;
 			border: 1px solid #e5e7eb;
 			border-radius: 8px;
 			font-size: 14px;
 			outline: none;
 			transition: all 0.3s ease;
 			background: rgba(255, 255, 255, 0.9);
-			box-sizing: border-box;
 		}
 
 		.widget_search .search-input:focus {
@@ -342,30 +376,39 @@
 
 		/* 移动端适配 */
 		@media (max-width: 768px) {
-			#article-toc-sidebar {
-				position: relative;
-				top: 0;
+			#toc-float-btn {
+				right: 20px;
+				bottom: 80px;
+				width: 44px;
+				height: 44px;
+				font-size: 16px;
 			}
 
-			.toc-sidebar-header {
-				padding: 12px 15px;
+			#article-toc-floating {
+				width: 90vw;
+				max-height: 70vh;
 			}
 
-			#toc-sidebar-content.show {
-				max-height: 300px;
+			.toc-floating-header {
+				padding: 15px;
+			}
+
+			#toc-floating-list {
 				padding: 12px;
+				max-height: 50vh;
 			}
 
-			#toc-sidebar-list {
-				max-height: 250px;
-			}
+			#toc-floating-list .toc-h1 { padding-left: 8px; }
+			#toc-floating-list .toc-h2 { padding-left: 16px; }
+			#toc-floating-list .toc-h3 { padding-left: 24px; }
+			#toc-floating-list .toc-h4 { padding-left: 32px; }
+			#toc-floating-list .toc-h5 { padding-left: 40px; }
+			#toc-floating-list .toc-h6 { padding-left: 48px; }
+		}
 
-			#toc-sidebar-list .toc-h1 { padding-left: 6px; }
-			#toc-sidebar-list .toc-h2 { padding-left: 12px; }
-			#toc-sidebar-list .toc-h3 { padding-left: 18px; }
-			#toc-sidebar-list .toc-h4 { padding-left: 24px; }
-			#toc-sidebar-list .toc-h5 { padding-left: 30px; }
-			#toc-sidebar-list .toc-h6 { padding-left: 36px; }
+		/* 导航栏样式清理 */
+		.navbar-search {
+			display: none;
 		}
 		</style>
 		
@@ -483,27 +526,12 @@
 							<span>🔍 站内搜索</span>
 						</h3>
 						<form id="sidebar-search-form" class="search-form">
-							<input type="text" id="sidebar-search-input" placeholder="输入关键词搜索文章..." class="search-input">
+							<input type="text" id="sidebar-search-input" placeholder="搜索文章标题..." class="search-input">
 							<button type="submit" class="search-btn">
 								<i class="fas fa-search"></i>
 							</button>
 						</form>
 						<div id="sidebar-search-results" class="search-results"></div>
-					</div>
-
-					<!-- 文章目录 - 侧边栏位置 -->
-					<div id="article-toc-sidebar">
-						<div class="toc-sidebar-header">
-							<h3>📑 文章目录</h3>
-							<button id="toc-toggle" class="toc-toggle-btn" title="显示/隐藏目录">
-								<i class="fas fa-chevron-down"></i>
-							</button>
-						</div>
-						<div id="toc-sidebar-content">
-							<ul id="toc-sidebar-list">
-								<li class="toc-empty">正在生成目录...</li>
-							</ul>
-						</div>
 					</div>
 
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
@@ -556,6 +584,25 @@
 					{{ &OPT.widgetOther }}
 				</aside>
 			</div>
+		</div>
+
+		<!-- 浮动目录按钮 -->
+		<button id="toc-float-btn" title="打开文章目录">
+			<i class="fas fa-list"></i>
+		</button>
+
+		<!-- 浮动目录容器 -->
+		<div id="toc-overlay"></div>
+		<div id="article-toc-floating">
+			<div class="toc-floating-header">
+				<h3>📑 文章目录</h3>
+				<button class="toc-close-btn" title="关闭目录">
+					<i class="fas fa-times"></i>
+				</button>
+			</div>
+			<ul id="toc-floating-list">
+				<li class="toc-empty">正在生成目录...</li>
+			</ul>
 		</div>
 
 		<!-- 社交图标栏 -->
@@ -640,101 +687,75 @@
 		</script>
 		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/image.js?ver=3.4.9' id='fifu-image-js-js'></script>
 
-		<!-- 文章目录功能脚本 -->
+		<!-- 浮动目录功能脚本 -->
 		<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			let isTocVisible = false; // 默认隐藏
-			
-			// 初始化目录功能
-			function initSidebarToc() {
-				const tocToggle = document.getElementById('toc-toggle');
-				const tocContent = document.getElementById('toc-sidebar-content');
-				const tocHeader = document.querySelector('.toc-sidebar-header');
-				
-				if (!tocToggle || !tocContent) return;
-				
-				// 从本地存储读取用户偏好
-				const savedTocState = localStorage.getItem('tocSidebarVisible');
-				if (savedTocState === 'true') {
-					isTocVisible = true;
-					showToc();
-				}
-				
-				// 点击头部切换目录显示
-				tocHeader.addEventListener('click', function() {
-					toggleToc();
+			// 浮动目录功能
+			const tocFloatBtn = document.getElementById('toc-float-btn');
+			const tocFloating = document.getElementById('article-toc-floating');
+			const tocOverlay = document.getElementById('toc-overlay');
+			const tocCloseBtn = document.querySelector('.toc-close-btn');
+			let isTocGenerated = false;
+
+			// 初始化浮动目录
+			function initFloatingToc() {
+				// 点击浮动按钮打开目录
+				tocFloatBtn.addEventListener('click', openToc);
+
+				// 点击遮罩关闭目录
+				tocOverlay.addEventListener('click', closeToc);
+
+				// 点击关闭按钮关闭目录
+				tocCloseBtn.addEventListener('click', closeToc);
+
+				// ESC键关闭目录
+				document.addEventListener('keydown', function(e) {
+					if (e.key === 'Escape' && tocFloating.classList.contains('show')) {
+						closeToc();
+					}
 				});
-				
-				// 点击按钮切换目录显示（阻止事件冒泡）
-				tocToggle.addEventListener('click', function(e) {
-					e.stopPropagation();
-					toggleToc();
-				});
-				
-				// 生成目录内容
-				generateSidebarTOC();
 			}
-			
-			// 切换目录显示/隐藏
-			function toggleToc() {
-				isTocVisible = !isTocVisible;
-				
-				if (isTocVisible) {
-					showToc();
-				} else {
-					hideToc();
+
+			// 打开目录
+			function openToc() {
+				tocFloating.classList.add('show');
+				tocOverlay.classList.add('show');
+				document.body.style.overflow = 'hidden';
+
+				// 如果目录内容未生成，则生成
+				if (!isTocGenerated) {
+					generateFloatingTOC();
+					isTocGenerated = true;
 				}
-				
-				// 保存用户偏好
-				localStorage.setItem('tocSidebarVisible', isTocVisible);
 			}
-			
-			// 显示目录
-			function showToc() {
-				const tocContent = document.getElementById('toc-sidebar-content');
-				const tocToggle = document.getElementById('toc-toggle');
-				
-				tocContent.classList.add('show');
-				tocToggle.classList.add('active');
-				
-				// 确保目录内容已生成
-				setTimeout(() => {
-					generateSidebarTOC();
-				}, 100);
+
+			// 关闭目录
+			function closeToc() {
+				tocFloating.classList.remove('show');
+				tocOverlay.classList.remove('show');
+				document.body.style.overflow = '';
 			}
-			
-			// 隐藏目录
-			function hideToc() {
-				const tocContent = document.getElementById('toc-sidebar-content');
-				const tocToggle = document.getElementById('toc-toggle');
-				
-				tocContent.classList.remove('show');
-				tocToggle.classList.remove('active');
-			}
-			
-			// 生成文章目录
-			function generateSidebarTOC() {
-				// 如果目录隐藏，则不生成内容
-				if (!isTocVisible) return;
-				
+
+			// 生成浮动目录内容
+			function generateFloatingTOC() {
 				const articleContent = document.querySelector('.entry-content');
-				const tocList = document.getElementById('toc-sidebar-list');
-				
+				const tocList = document.getElementById('toc-floating-list');
+
 				if (!articleContent || !tocList) return;
-				
+
 				// 清空现有内容
 				tocList.innerHTML = '';
-				
+
 				// 获取所有标题元素 (h1-h6)
 				const headings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
-				
+
 				if (headings.length === 0) {
 					tocList.innerHTML = '<li class="toc-empty">本文暂无目录结构</li>';
 					return;
 				}
-				
+
 				let tocHTML = '';
-				
+
 				headings.forEach((heading, index) => {
 					// 为标题添加ID（如果还没有）
 					let headingId = heading.id;
@@ -742,11 +763,11 @@
 						headingId = 'heading-' + index;
 						heading.id = headingId;
 					}
-					
+
 					// 确定标题级别
 					const level = parseInt(heading.tagName.substring(1));
 					const levelClass = 'toc-h' + level;
-					
+
 					tocHTML += `
 						<li class="${levelClass}">
 							<a href="#${headingId}" data-level="${level}">
@@ -755,181 +776,165 @@
 						</li>
 					`;
 				});
-				
+
 				tocList.innerHTML = tocHTML;
-				
-				// 初始化滚动监听（只在目录显示时）
-				initScrollSpy();
+
+				// 初始化滚动监听和点击事件
+				initFloatingTocEvents();
 			}
-			
-			// 初始化滚动监听
-			function initScrollSpy() {
-				const tocLinks = document.querySelectorAll('#toc-sidebar-list a');
+
+			// 初始化浮动目录事件
+			function initFloatingTocEvents() {
+				const tocLinks = document.querySelectorAll('#toc-floating-list a');
 				const headings = document.querySelectorAll('.entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6');
-				
+
 				if (tocLinks.length === 0) return;
-				
+
+				// 移除所有激活状态
 				function removeActiveClasses() {
 					tocLinks.forEach(link => {
 						link.classList.remove('toc-active');
 					});
 				}
-				
+
+				// 滚动监听
 				window.addEventListener('scroll', function() {
-					// 如果目录隐藏，不执行滚动监听
-					if (!isTocVisible) return;
-					
 					let current = '';
-					
+
 					headings.forEach(heading => {
 						const headingTop = heading.getBoundingClientRect().top;
 						if (headingTop <= 100) {
 							current = heading.id;
 						}
 					});
-					
+
 					removeActiveClasses();
-					
+
 					if (current) {
-						const activeLink = document.querySelector(`#toc-sidebar-list a[href="#${current}"]`);
+						const activeLink = document.querySelector(`#toc-floating-list a[href="#${current}"]`);
 						if (activeLink) {
 							activeLink.classList.add('toc-active');
 						}
 					}
 				});
-				
-				// 平滑滚动
-				document.querySelectorAll('#toc-sidebar-list a').forEach(link => {
+
+				// 平滑滚动和关闭目录
+				tocLinks.forEach(link => {
 					link.addEventListener('click', function(e) {
 						e.preventDefault();
 						const targetId = this.getAttribute('href').substring(1);
 						const targetElement = document.getElementById(targetId);
-						
+
 						if (targetElement) {
 							const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
 							window.scrollTo({
 								top: offsetTop,
 								behavior: 'smooth'
 							});
+
+							// 滚动后关闭目录
+							setTimeout(closeToc, 300);
 						}
 					});
 				});
 			}
-			
-			// 初始化目录功能
-			setTimeout(initSidebarToc, 100);
+
+			// 初始化浮动目录
+			setTimeout(initFloatingToc, 100);
 		});
 		</script>
 
 		<!-- 侧边栏搜索功能 -->
 		<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			console.log('初始化侧边栏搜索功能...');
-			
 			// 搜索功能配置
 			const searchConfig = {
 				maxResults: 6,
 				minQueryLength: 1,
 				debounceTime: 300
 			};
-			
+
 			let searchData = [];
 			let searchTimeout = null;
-			
+
 			// 初始化搜索
 			function initSidebarSearch() {
-				console.log('开始初始化搜索数据...');
 				loadSearchData();
 				setupSidebarSearchEvents();
 			}
-			
+
 			// 加载搜索数据
 			function loadSearchData() {
 				try {
 					// 从页面中提取文章数据
-					extractArticlesFromPage();
+					const recentArticles = document.querySelectorAll('.widget_post_thumb .item');
 					
+					recentArticles.forEach((item, index) => {
+						try {
+							const titleLink = item.querySelector('.item-title a');
+							if (titleLink) {
+								const article = {
+									id: 'recent-' + index,
+									title: titleLink.textContent.trim(),
+									url: titleLink.getAttribute('href'),
+									date: item.querySelector('.item-date')?.textContent?.trim() || '',
+									searchText: titleLink.textContent.trim().toLowerCase(),
+									type: 'recent'
+								};
+								searchData.push(article);
+							}
+						} catch (e) {
+							console.error('提取文章数据出错:', e);
+						}
+					});
+
+					// 从当前文章页面提取
+					const currentArticle = document.querySelector('article');
+					if (currentArticle) {
+						const titleElement = currentArticle.querySelector('.entry-title');
+						if (titleElement) {
+							const article = {
+								id: 'current',
+								title: titleElement.textContent.trim(),
+								url: window.location.pathname,
+								date: currentArticle.querySelector('time')?.textContent?.trim() || '',
+								searchText: titleElement.textContent.trim().toLowerCase(),
+								type: 'current'
+							};
+							if (!searchData.some(item => item.url === article.url)) {
+								searchData.push(article);
+							}
+						}
+					}
+
 					console.log('搜索数据加载完成，共', searchData.length, '篇文章');
-					
+
 				} catch (error) {
 					console.error('加载搜索数据时出错:', error);
 				}
 			}
-			
-			// 从页面提取文章数据
-			function extractArticlesFromPage() {
-				// 从近期文章widget提取
-				const recentArticles = document.querySelectorAll('.widget_post_thumb .item');
-				console.log('发现近期文章:', recentArticles.length);
-				
-				recentArticles.forEach((item, index) => {
-					try {
-						const titleLink = item.querySelector('.item-title a');
-						const dateElement = item.querySelector('.item-date');
-						
-						if (titleLink) {
-							const article = {
-								id: 'recent-' + index,
-								title: titleLink.textContent.trim(),
-								url: titleLink.getAttribute('href'),
-								date: dateElement ? dateElement.textContent.trim() : '',
-								searchText: titleLink.textContent.trim().toLowerCase(),
-								type: 'recent'
-							};
-							searchData.push(article);
-						}
-					} catch (e) {
-						console.error('提取文章数据出错:', e);
-					}
-				});
-				
-				// 从当前文章页面提取
-				const currentArticle = document.querySelector('article');
-				if (currentArticle) {
-					const titleElement = currentArticle.querySelector('.entry-title');
-					if (titleElement) {
-						const article = {
-							id: 'current',
-							title: titleElement.textContent.trim(),
-							url: window.location.pathname,
-							date: currentArticle.querySelector('time')?.textContent?.trim() || '',
-							searchText: titleElement.textContent.trim().toLowerCase(),
-							type: 'current'
-						};
-						// 避免重复添加
-						if (!searchData.some(item => item.url === article.url)) {
-							searchData.push(article);
-						}
-					}
-				}
-			}
-			
+
 			// 设置侧边栏搜索事件
 			function setupSidebarSearchEvents() {
 				const searchInput = document.getElementById('sidebar-search-input');
 				const searchForm = document.getElementById('sidebar-search-form');
 				const searchResults = document.getElementById('sidebar-search-results');
-				
-				if (!searchInput || !searchResults) {
-					console.error('搜索元素未找到');
-					return;
-				}
-				
+
+				if (!searchInput || !searchResults) return;
+
 				// 输入事件（带防抖）
 				searchInput.addEventListener('input', function(e) {
 					const keyword = e.target.value.trim();
-					
-					// 清除之前的定时器
+
 					if (searchTimeout) {
 						clearTimeout(searchTimeout);
 					}
-					
-					// 设置新的定时器
+
 					searchTimeout = setTimeout(() => {
 						performSidebarSearch(keyword, searchResults);
 					}, searchConfig.debounceTime);
 				});
-				
+
 				// 聚焦事件
 				searchInput.addEventListener('focus', function() {
 					const keyword = this.value.trim();
@@ -937,14 +942,14 @@
 						performSidebarSearch(keyword, searchResults);
 					}
 				});
-				
+
 				// 失去焦点事件（延迟隐藏结果）
 				searchInput.addEventListener('blur', function() {
 					setTimeout(() => {
 						searchResults.style.display = 'none';
 					}, 200);
 				});
-				
+
 				// 表单提交事件
 				if (searchForm) {
 					searchForm.addEventListener('submit', function(e) {
@@ -952,40 +957,34 @@
 						const keyword = searchInput.value.trim();
 						if (keyword) {
 							performSidebarSearch(keyword, searchResults);
-							// 保持结果框显示
 							searchResults.style.display = 'block';
 						}
 					});
 				}
-				
+
 				// 点击文档其他地方隐藏结果
 				document.addEventListener('click', function(e) {
 					if (!e.target.closest('.widget_search')) {
 						searchResults.style.display = 'none';
 					}
 				});
-				
-				console.log('搜索事件监听器设置完成');
 			}
-			
+
 			// 执行侧边栏搜索
 			function performSidebarSearch(keyword, resultsContainer) {
 				if (!keyword || keyword.length < searchConfig.minQueryLength) {
 					resultsContainer.style.display = 'none';
 					return;
 				}
-				
-				console.log('执行搜索:', keyword);
-				
+
 				const keywordLower = keyword.toLowerCase();
 				const results = searchData.filter(article => 
 					article.searchText.includes(keywordLower)
 				);
-				
-				console.log('找到结果:', results.length);
+
 				displaySidebarSearchResults(results, keyword, resultsContainer);
 			}
-			
+
 			// 显示侧边栏搜索结果
 			function displaySidebarSearchResults(results, keyword, container) {
 				if (results.length === 0) {
@@ -998,10 +997,10 @@
 					container.style.display = 'block';
 					return;
 				}
-				
+
 				let resultsHTML = '';
 				const displayResults = results.slice(0, searchConfig.maxResults);
-				
+
 				displayResults.forEach(article => {
 					const highlightedTitle = highlightText(article.title, keyword);
 					resultsHTML += `
@@ -1015,7 +1014,7 @@
 						</div>
 					`;
 				});
-				
+
 				if (results.length > searchConfig.maxResults) {
 					resultsHTML += `
 						<div class="search-result-more">
@@ -1023,10 +1022,10 @@
 						</div>
 					`;
 				}
-				
+
 				container.innerHTML = resultsHTML;
 				container.style.display = 'block';
-				
+
 				// 添加结果点击事件
 				container.querySelectorAll('.search-result-link').forEach(link => {
 					link.addEventListener('click', function() {
@@ -1035,7 +1034,7 @@
 					});
 				});
 			}
-			
+
 			// 高亮匹配文本
 			function highlightText(text, keyword) {
 				if (!keyword) return text;
@@ -1043,7 +1042,7 @@
 				const regex = new RegExp(`(${escapedKeyword})`, 'gi');
 				return text.replace(regex, '<mark>$1</mark>');
 			}
-			
+
 			// 初始化侧边栏搜索
 			setTimeout(initSidebarSearch, 100);
 		});
