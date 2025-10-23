@@ -26,16 +26,8 @@
 		<link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.3.2/styles/tomorrow-night-bright.min.css">
 		<script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
 		
-		<!-- 文章目录和搜索样式 -->
+		<!-- 文章目录样式 -->
 		<style>
-		/* 侧边栏基础样式 */
-		.sidebar {
-			position: relative;
-			height: fit-content;
-			display: flex;
-			flex-direction: column;
-		}
-
 		/* 浮动目录按钮 */
 		#toc-float-btn {
 			position: fixed;
@@ -72,10 +64,8 @@
 			width: 320px;
 			max-width: 90vw;
 			max-height: 80vh;
-			background: rgba(255, 255, 255, 0.98);
-			backdrop-filter: blur(20px);
-			-webkit-backdrop-filter: blur(20px);
-			border: 1px solid rgba(255, 255, 255, 0.2);
+			background: white;
+			border: 1px solid #e1e1e1;
 			border-radius: 12px;
 			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 			z-index: 10001;
@@ -107,7 +97,6 @@
 			width: 100%;
 			height: 100%;
 			background: rgba(0, 0, 0, 0.5);
-			backdrop-filter: blur(5px);
 			z-index: 10000;
 			display: none;
 		}
@@ -251,129 +240,6 @@
 			padding: 40px 20px;
 		}
 
-		/* 侧边栏搜索样式 */
-		.widget_search {
-			background: rgba(255, 255, 255, 0.95);
-			border-radius: 8px;
-			padding: 20px;
-			margin-bottom: 20px;
-			border: 1px solid #e1e1e1;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-		}
-
-		.widget_search .search-form {
-			position: relative;
-		}
-
-		.widget_search .search-input {
-			width: 100%;
-			padding: 12px 15px;
-			border: 1px solid #e5e7eb;
-			border-radius: 8px;
-			font-size: 14px;
-			outline: none;
-			transition: all 0.3s ease;
-			background: rgba(255, 255, 255, 0.9);
-		}
-
-		.widget_search .search-input:focus {
-			border-color: #3b82f6;
-			box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-		}
-
-		.widget_search .search-btn {
-			position: absolute;
-			right: 5px;
-			top: 50%;
-			transform: translateY(-50%);
-			background: #3b82f6;
-			border: none;
-			border-radius: 6px;
-			color: white;
-			padding: 8px 12px;
-			cursor: pointer;
-			transition: background 0.3s ease;
-		}
-
-		.widget_search .search-btn:hover {
-			background: #2563eb;
-		}
-
-		.widget_search .search-results {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			right: 0;
-			background: white;
-			border: 1px solid #e5e7eb;
-			border-radius: 8px;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-			max-height: 300px;
-			overflow-y: auto;
-			z-index: 1000;
-			display: none;
-			margin-top: 5px;
-		}
-
-		.search-result-item {
-			border-bottom: 1px solid #f3f4f6;
-			transition: background 0.2s ease;
-		}
-
-		.search-result-item:last-child {
-			border-bottom: none;
-		}
-
-		.search-result-item:hover {
-			background: #f9fafb;
-		}
-
-		.search-result-link {
-			display: block;
-			padding: 12px 15px;
-			text-decoration: none;
-			color: inherit;
-		}
-
-		.search-result-title {
-			font-weight: 600;
-			color: #1f2937;
-			margin-bottom: 4px;
-			line-height: 1.4;
-			font-size: 14px;
-		}
-
-		.search-result-title mark {
-			background: #fef3cd;
-			color: #d97706;
-			padding: 1px 2px;
-			border-radius: 2px;
-		}
-
-		.search-result-meta {
-			font-size: 12px;
-			color: #6b7280;
-		}
-
-		.search-result-date {
-			color: #9ca3af;
-		}
-
-		.no-results {
-			padding: 20px;
-			text-align: center;
-			color: #6b7280;
-			font-style: italic;
-		}
-
-		.search-result-more {
-			padding: 10px 15px;
-			text-align: center;
-			background: #f9fafb;
-			color: #6b7280;
-			font-size: 12px;
-		}
-
 		/* 移动端适配 */
 		@media (max-width: 768px) {
 			#toc-float-btn {
@@ -404,11 +270,6 @@
 			#toc-floating-list .toc-h4 { padding-left: 32px; }
 			#toc-floating-list .toc-h5 { padding-left: 40px; }
 			#toc-floating-list .toc-h6 { padding-left: 48px; }
-		}
-
-		/* 导航栏样式清理 */
-		.navbar-search {
-			display: none;
 		}
 		</style>
 		
@@ -520,20 +381,6 @@
 				</div>
 
 				<aside class="sidebar">
-					<!-- 侧边栏搜索 -->
-					<div class="widget widget_search">
-						<h3 class="widget-title">
-							<span>🔍 站内搜索</span>
-						</h3>
-						<form id="sidebar-search-form" class="search-form">
-							<input type="text" id="sidebar-search-input" placeholder="搜索文章标题..." class="search-input">
-							<button type="submit" class="search-btn">
-								<i class="fas fa-search"></i>
-							</button>
-						</form>
-						<div id="sidebar-search-results" class="search-results"></div>
-					</div>
-
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -841,210 +688,6 @@
 
 			// 初始化浮动目录
 			setTimeout(initFloatingToc, 100);
-		});
-		</script>
-
-		<!-- 侧边栏搜索功能 -->
-		<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			// 搜索功能配置
-			const searchConfig = {
-				maxResults: 6,
-				minQueryLength: 1,
-				debounceTime: 300
-			};
-
-			let searchData = [];
-			let searchTimeout = null;
-
-			// 初始化搜索
-			function initSidebarSearch() {
-				loadSearchData();
-				setupSidebarSearchEvents();
-			}
-
-			// 加载搜索数据
-			function loadSearchData() {
-				try {
-					// 从页面中提取文章数据
-					const recentArticles = document.querySelectorAll('.widget_post_thumb .item');
-					
-					recentArticles.forEach((item, index) => {
-						try {
-							const titleLink = item.querySelector('.item-title a');
-							if (titleLink) {
-								const article = {
-									id: 'recent-' + index,
-									title: titleLink.textContent.trim(),
-									url: titleLink.getAttribute('href'),
-									date: item.querySelector('.item-date')?.textContent?.trim() || '',
-									searchText: titleLink.textContent.trim().toLowerCase(),
-									type: 'recent'
-								};
-								searchData.push(article);
-							}
-						} catch (e) {
-							console.error('提取文章数据出错:', e);
-						}
-					});
-
-					// 从当前文章页面提取
-					const currentArticle = document.querySelector('article');
-					if (currentArticle) {
-						const titleElement = currentArticle.querySelector('.entry-title');
-						if (titleElement) {
-							const article = {
-								id: 'current',
-								title: titleElement.textContent.trim(),
-								url: window.location.pathname,
-								date: currentArticle.querySelector('time')?.textContent?.trim() || '',
-								searchText: titleElement.textContent.trim().toLowerCase(),
-								type: 'current'
-							};
-							if (!searchData.some(item => item.url === article.url)) {
-								searchData.push(article);
-							}
-						}
-					}
-
-					console.log('搜索数据加载完成，共', searchData.length, '篇文章');
-
-				} catch (error) {
-					console.error('加载搜索数据时出错:', error);
-				}
-			}
-
-			// 设置侧边栏搜索事件
-			function setupSidebarSearchEvents() {
-				const searchInput = document.getElementById('sidebar-search-input');
-				const searchForm = document.getElementById('sidebar-search-form');
-				const searchResults = document.getElementById('sidebar-search-results');
-
-				if (!searchInput || !searchResults) return;
-
-				// 输入事件（带防抖）
-				searchInput.addEventListener('input', function(e) {
-					const keyword = e.target.value.trim();
-
-					if (searchTimeout) {
-						clearTimeout(searchTimeout);
-					}
-
-					searchTimeout = setTimeout(() => {
-						performSidebarSearch(keyword, searchResults);
-					}, searchConfig.debounceTime);
-				});
-
-				// 聚焦事件
-				searchInput.addEventListener('focus', function() {
-					const keyword = this.value.trim();
-					if (keyword.length >= searchConfig.minQueryLength) {
-						performSidebarSearch(keyword, searchResults);
-					}
-				});
-
-				// 失去焦点事件（延迟隐藏结果）
-				searchInput.addEventListener('blur', function() {
-					setTimeout(() => {
-						searchResults.style.display = 'none';
-					}, 200);
-				});
-
-				// 表单提交事件
-				if (searchForm) {
-					searchForm.addEventListener('submit', function(e) {
-						e.preventDefault();
-						const keyword = searchInput.value.trim();
-						if (keyword) {
-							performSidebarSearch(keyword, searchResults);
-							searchResults.style.display = 'block';
-						}
-					});
-				}
-
-				// 点击文档其他地方隐藏结果
-				document.addEventListener('click', function(e) {
-					if (!e.target.closest('.widget_search')) {
-						searchResults.style.display = 'none';
-					}
-				});
-			}
-
-			// 执行侧边栏搜索
-			function performSidebarSearch(keyword, resultsContainer) {
-				if (!keyword || keyword.length < searchConfig.minQueryLength) {
-					resultsContainer.style.display = 'none';
-					return;
-				}
-
-				const keywordLower = keyword.toLowerCase();
-				const results = searchData.filter(article => 
-					article.searchText.includes(keywordLower)
-				);
-
-				displaySidebarSearchResults(results, keyword, resultsContainer);
-			}
-
-			// 显示侧边栏搜索结果
-			function displaySidebarSearchResults(results, keyword, container) {
-				if (results.length === 0) {
-					container.innerHTML = `
-						<div class="search-result-item no-results">
-							<div class="search-result-title">未找到相关文章</div>
-							<div class="search-result-meta">尝试使用其他关键词搜索</div>
-						</div>
-					`;
-					container.style.display = 'block';
-					return;
-				}
-
-				let resultsHTML = '';
-				const displayResults = results.slice(0, searchConfig.maxResults);
-
-				displayResults.forEach(article => {
-					const highlightedTitle = highlightText(article.title, keyword);
-					resultsHTML += `
-						<div class="search-result-item">
-							<a href="${article.url}" class="search-result-link">
-								<div class="search-result-title">${highlightedTitle}</div>
-								<div class="search-result-meta">
-									<span class="search-result-date">${article.date}</span>
-								</div>
-							</a>
-						</div>
-					`;
-				});
-
-				if (results.length > searchConfig.maxResults) {
-					resultsHTML += `
-						<div class="search-result-more">
-							还有 ${results.length - searchConfig.maxResults} 个结果...
-						</div>
-					`;
-				}
-
-				container.innerHTML = resultsHTML;
-				container.style.display = 'block';
-
-				// 添加结果点击事件
-				container.querySelectorAll('.search-result-link').forEach(link => {
-					link.addEventListener('click', function() {
-						container.style.display = 'none';
-						document.getElementById('sidebar-search-input').value = '';
-					});
-				});
-			}
-
-			// 高亮匹配文本
-			function highlightText(text, keyword) {
-				if (!keyword) return text;
-				const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-				const regex = new RegExp(`(${escapedKeyword})`, 'gi');
-				return text.replace(regex, '<mark>$1</mark>');
-			}
-
-			// 初始化侧边栏搜索
-			setTimeout(initSidebarSearch, 100);
 		});
 		</script>
 
