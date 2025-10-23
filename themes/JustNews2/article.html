@@ -51,7 +51,7 @@
         align-self: flex-start;
     }
     
-    /* 文章目录固定样式 - 降低z-index确保不覆盖回顶部按钮 */
+    /* 文章目录固定样式 - 降低z-index确保不覆盖其他元素 */
     #article-toc {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 8px;
@@ -61,7 +61,7 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         position: sticky;
         top: 20px;
-        z-index: 99; /* 降低z-index，确保回顶部按钮在上面 */
+        z-index: 99; /* 降低z-index，确保其他元素在上面 */
         max-height: calc(100vh - 40px);
         overflow-y: auto;
         flex-shrink: 0;
@@ -177,14 +177,54 @@
         position: relative;
     }
 
-    /* 确保回顶部按钮在最上层 */
-    .back-to-top, 
-    .go-top, 
-    .scroll-to-top,
-    [class*="back-to-top"],
-    [class*="go-top"],
-    [class*="scroll-to-top"] {
-        z-index: 1000 !important; /* 确保回顶部按钮在最上面 */
+    /* 社交图标栏样式 */
+    .social-icons-bar {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 1000; /* 确保在最上层 */
+    }
+    
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        background: #3b82f6;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .social-icon:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    .social-icon.back-to-top {
+        background: #10b981;
+    }
+    
+    .social-icon.back-to-top:hover {
+        background: #059669;
+    }
+
+    /* 确保页脚正常显示 */
+    .footer {
+        background: #f8f9fa;
+        padding: 30px 0;
+        margin-top: 40px;
+        border-top: 1px solid #e9ecef;
+        z-index: 1;
+        position: relative;
     }
 
     /* 移动端适配 */
@@ -205,6 +245,22 @@
             margin-bottom: 15px;
             max-height: 300px;
             z-index: 99;
+        }
+        
+        .social-icons-bar {
+            position: fixed;
+            bottom: 20px;
+            top: auto;
+            right: 20px;
+            transform: none;
+            flex-direction: row;
+            gap: 8px;
+        }
+        
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
         }
     }
 
@@ -403,130 +459,65 @@
         </div>
     </div>
 
-    <!-- 社交图标栏等保持不变 -->
-		<div class="social-icons-bar">
-    <!-- 左侧图标 -->
-    <a href="mailto:kekelove1688@gmail.com" class="social-icon" title="邮箱">
-        <i class="fas fa-envelope"></i>
-    </a>
-    
-    <a href="https://weibo.com/u/7866257468" class="social-icon" target="_blank" title="微博">
-        <i class="fab fa-weibo"></i>
-    </a>
-    
-    <a href="https://www.facebook.com/profile.php?id=100091963634555" class="social-icon" target="_blank" title="Facebook">
-        <i class="fab fa-facebook-f"></i>
-    </a>
-    
-    <!-- 中间的返回顶部按钮 -->
-    <a href="#" class="social-icon back-to-top" onclick="scrollToTop(); return false;" title="返回顶部">
-        <i class="fas fa-chevron-up"></i>
-    </a>
-    
-    <!-- 右侧图标 -->
-    <a href="https://x.com/home/@chnbsdan" class="social-icon" target="_blank" title="X帐号">
-        <i class="fab fa-twitter"></i>
-    </a>
-    
-    <a href="https://space.bilibili.com/1913680621" class="social-icon" target="_blank" title="Bilibili">
-        <i class="fab fa-bilibili"></i>
-    </a>
-    
-    <a href="https://t.me/ben_mesa" class="social-icon" target="_blank" title="Telegram">
-        <i class="fab fa-telegram-plane"></i>
-    </a>
-</div>
+    <!-- 社交图标栏 - 现在正确显示 -->
+    <div class="social-icons-bar">
+        <!-- 左侧图标 -->
+        <a href="mailto:kekelove1688@gmail.com" class="social-icon" title="邮箱">
+            <i class="fas fa-envelope"></i>
+        </a>
+        
+        <a href="https://weibo.com/u/7866257468" class="social-icon" target="_blank" title="微博">
+            <i class="fab fa-weibo"></i>
+        </a>
+        
+        <a href="https://www.facebook.com/profile.php?id=100091963634555" class="social-icon" target="_blank" title="Facebook">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        
+        <!-- 中间的返回顶部按钮 -->
+        <a href="#" class="social-icon back-to-top" onclick="scrollToTop(); return false;" title="返回顶部">
+            <i class="fas fa-chevron-up"></i>
+        </a>
+        
+        <!-- 右侧图标 -->
+        <a href="https://x.com/home/@chnbsdan" class="social-icon" target="_blank" title="X帐号">
+            <i class="fab fa-twitter"></i>
+        </a>
+        
+        <a href="https://space.bilibili.com/1913680621" class="social-icon" target="_blank" title="Bilibili">
+            <i class="fab fa-bilibili"></i>
+        </a>
+        
+        <a href="https://t.me/ben_mesa" class="social-icon" target="_blank" title="Telegram">
+            <i class="fab fa-telegram-plane"></i>
+        </a>
+    </div>
 
-         <footer class="footer">
-			<div class="container">
-				<div class="clearfix">
-					<div class="footer-col footer-col-copy">
-						<div class="copyright">
-							<p>{{ &OPT.copyRight }}</p>
-						</div>
-					</div>
-					<div class="footer-col footer-col-sns">
-						<div class="footer-sns"></div>
-					</div>
-				</div>
-			</div>
-		</footer>
-    
-    <!-- 如果回顶部按钮不存在，自动创建一个 -->
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="clearfix">
+                <div class="footer-col footer-col-copy">
+                    <div class="copyright">
+                        <p>{{ &OPT.copyRight }}</p>
+                    </div>
+                </div>
+                <div class="footer-col footer-col-sns">
+                    <div class="footer-sns"></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 检查是否存在回顶部按钮
-        function checkBackToTopButton() {
-            const backToTopSelectors = [
-                '.back-to-top',
-                '.go-top', 
-                '.scroll-to-top',
-                '[class*="back-to-top"]',
-                '[class*="go-top"]',
-                '[class*="scroll-to-top"]'
-            ];
-            
-            let backToTopBtn = null;
-            for (let selector of backToTopSelectors) {
-                backToTopBtn = document.querySelector(selector);
-                if (backToTopBtn) break;
-            }
-            
-            if (!backToTopBtn) {
-                console.log('未找到回顶部按钮，自动创建...');
-                createBackToTopButton();
-            } else {
-                console.log('找到回顶部按钮:', backToTopBtn);
-                // 确保按钮在最上层
-                backToTopBtn.style.zIndex = '1000';
-            }
-        }
-        
-        // 创建回顶部按钮
-        function createBackToTopButton() {
-            const backToTop = document.createElement('div');
-            backToTop.className = 'back-to-top';
-            backToTop.innerHTML = '↑';
-            backToTop.style.cssText = `
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                width: 50px;
-                height: 50px;
-                background: #3b82f6;
-                color: white;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 20px;
-                cursor: pointer;
-                z-index: 1000;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-                transition: all 0.3s ease;
-                opacity: 0;
-            `;
-            
-            document.body.appendChild(backToTop);
-            
-            // 显示/隐藏逻辑
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset > 300) {
-                    backToTop.style.opacity = '1';
-                } else {
-                    backToTop.style.opacity = '0';
-                }
+        // 返回顶部函数
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
-            
-            // 点击回顶部
-            backToTop.addEventListener('click', function() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-            
-            console.log('已创建回顶部按钮');
         }
         
         // 生成文章目录
@@ -646,7 +637,6 @@
         });
         
         // 初始化
-        setTimeout(checkBackToTopButton, 100);
         setTimeout(generateTOC, 300);
     });
     </script>
