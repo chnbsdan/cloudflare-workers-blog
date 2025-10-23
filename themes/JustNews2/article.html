@@ -28,12 +28,6 @@
     
     <!-- 修复文章目录样式 -->
     <style>
-    /* 重置可能影响sticky的样式 */
-    .container.wrap, .sidebar, #article-toc {
-        transform: none !important;
-        overflow: visible !important;
-    }
-    
     /* 确保整体布局正确 */
     .container.wrap {
         display: flex;
@@ -47,7 +41,7 @@
         min-width: 0;
     }
     
-    /* 关键修复：侧边栏必须有足够高度且不能有overflow hidden */
+    /* 侧边栏样式 */
     .sidebar {
         width: 300px;
         margin-left: 20px;
@@ -55,10 +49,9 @@
         display: flex;
         flex-direction: column;
         align-self: flex-start;
-        min-height: 100vh; /* 关键：确保侧边栏有足够高度 */
     }
     
-    /* 文章目录固定样式 - 完全重写 */
+    /* 文章目录固定样式 - 降低z-index确保不覆盖回顶部按钮 */
     #article-toc {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 8px;
@@ -67,16 +60,11 @@
         border: 1px solid #e1e1e1;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         position: sticky;
-        top: 20px; /* 固定位置 */
-        z-index: 100;
+        top: 20px;
+        z-index: 99; /* 降低z-index，确保回顶部按钮在上面 */
         max-height: calc(100vh - 40px);
         overflow-y: auto;
-        flex-shrink: 0; /* 防止被压缩 */
-    }
-    
-    /* 确保sticky定位的父容器没有限制 */
-    #wrap, .container.wrap, .sidebar {
-        overflow: visible !important;
+        flex-shrink: 0;
     }
     
     #article-toc h3 {
@@ -90,7 +78,7 @@
         top: 0;
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
-        z-index: 101;
+        z-index: 100;
         padding: 8px 0;
         margin-bottom: 8px;
     }
@@ -178,7 +166,7 @@
         padding: 20px;
     }
 
-    /* 侧边栏其他小部件 - 正常滚动 */
+    /* 侧边栏其他小部件 */
     .sidebar .widget {
         background: rgba(255, 255, 255, 0.9);
         border-radius: 8px;
@@ -187,6 +175,16 @@
         border: 1px solid #e1e1e1;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         position: relative;
+    }
+
+    /* 确保回顶部按钮在最上层 */
+    .back-to-top, 
+    .go-top, 
+    .scroll-to-top,
+    [class*="back-to-top"],
+    [class*="go-top"],
+    [class*="scroll-to-top"] {
+        z-index: 1000 !important; /* 确保回顶部按钮在最上面 */
     }
 
     /* 移动端适配 */
@@ -199,7 +197,6 @@
             width: 100%;
             margin-left: 0;
             margin-top: 20px;
-            min-height: auto;
         }
         
         #article-toc {
@@ -207,6 +204,7 @@
             top: 0;
             margin-bottom: 15px;
             max-height: 300px;
+            z-index: 99;
         }
     }
 
@@ -216,6 +214,7 @@
         top: 20px;
         width: 280px;
         max-height: calc(100vh - 40px);
+        z-index: 99; /* 保持较低的z-index */
     }
 
     .toc-placeholder {
@@ -337,7 +336,7 @@
             </div>
 
             <aside class="sidebar">
-                <!-- 文章目录 - 添加占位符 -->
+                <!-- 文章目录 -->
                 <div class="toc-placeholder" id="toc-placeholder"></div>
                 <div id="article-toc">
                     <h3>📑 文章目录</h3>
@@ -346,7 +345,7 @@
                     </ul>
                 </div>
 
-                <!-- 其他小部件 - 正常滚动 -->
+                <!-- 其他小部件 -->
                 <div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
                     <h3 class="widget-title">
                         <span>近期文章</span></h3>
@@ -404,9 +403,83 @@
         </div>
     </div>
 
-    <!-- 修复目录定位的完整脚本 -->
+    <!-- 如果回顶部按钮不存在，自动创建一个 -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // 检查是否存在回顶部按钮
+        function checkBackToTopButton() {
+            const backToTopSelectors = [
+                '.back-to-top',
+                '.go-top', 
+                '.scroll-to-top',
+                '[class*="back-to-top"]',
+                '[class*="go-top"]',
+                '[class*="scroll-to-top"]'
+            ];
+            
+            let backToTopBtn = null;
+            for (let selector of backToTopSelectors) {
+                backToTopBtn = document.querySelector(selector);
+                if (backToTopBtn) break;
+            }
+            
+            if (!backToTopBtn) {
+                console.log('未找到回顶部按钮，自动创建...');
+                createBackToTopButton();
+            } else {
+                console.log('找到回顶部按钮:', backToTopBtn);
+                // 确保按钮在最上层
+                backToTopBtn.style.zIndex = '1000';
+            }
+        }
+        
+        // 创建回顶部按钮
+        function createBackToTopButton() {
+            const backToTop = document.createElement('div');
+            backToTop.className = 'back-to-top';
+            backToTop.innerHTML = '↑';
+            backToTop.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 50px;
+                height: 50px;
+                background: #3b82f6;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+                cursor: pointer;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+                opacity: 0;
+            `;
+            
+            document.body.appendChild(backToTop);
+            
+            // 显示/隐藏逻辑
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTop.style.opacity = '1';
+                } else {
+                    backToTop.style.opacity = '0';
+                }
+            });
+            
+            // 点击回顶部
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            console.log('已创建回顶部按钮');
+        }
+        
         // 生成文章目录
         function generateTOC() {
             const articleContent = document.querySelector('.entry-content');
@@ -414,10 +487,7 @@
             
             if (!articleContent || !tocList) return;
             
-            // 清空现有内容
             tocList.innerHTML = '';
-            
-            // 获取所有标题元素
             const headings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
             
             if (headings.length === 0) {
@@ -425,7 +495,6 @@
                 return;
             }
             
-            // 过滤有效的标题
             const validHeadings = Array.from(headings).filter(heading => {
                 const text = heading.textContent.trim();
                 return text.length > 0 && 
@@ -440,13 +509,11 @@
             }
             
             let tocHTML = '';
-            
             validHeadings.forEach((heading, index) => {
                 const level = parseInt(heading.tagName.substring(1));
                 
-                // 生成ID
                 let headingId = heading.id;
-                if (!headingId || headingId.startsWith('heading-')) {
+                if (!headingId) {
                     const text = heading.textContent.trim();
                     headingId = 'toc-' + text
                         .toLowerCase()
@@ -456,22 +523,10 @@
                     heading.id = headingId;
                 }
                 
-                // 确保ID唯一
-                let uniqueId = headingId;
-                let counter = 1;
-                while (document.getElementById(uniqueId) && document.getElementById(uniqueId) !== heading) {
-                    uniqueId = headingId + '-' + counter;
-                    counter++;
-                }
-                if (uniqueId !== headingId) {
-                    heading.id = uniqueId;
-                }
-                
                 const levelClass = 'toc-level-' + level;
-                
                 tocHTML += `
                     <li class="${levelClass}">
-                        <a href="#${heading.id}" data-level="${level}" title="${heading.textContent.trim()}">
+                        <a href="#${heading.id}" data-level="${level}">
                             ${heading.textContent.trim()}
                         </a>
                     </li>
@@ -480,74 +535,55 @@
             
             tocList.innerHTML = tocHTML;
             console.log('目录生成完成，共', validHeadings.length, '个项目');
-            
-            // 初始化滚动监听
             initScrollSpy(validHeadings);
         }
         
-        // 初始化滚动监听
         function initScrollSpy(headings) {
             const tocLinks = document.querySelectorAll('#toc-list a');
             if (tocLinks.length === 0) return;
             
             function removeActiveClasses() {
-                tocLinks.forEach(link => {
-                    link.classList.remove('toc-active');
-                });
+                tocLinks.forEach(link => link.classList.remove('toc-active'));
             }
             
-            let scrollTimeout;
             window.addEventListener('scroll', function() {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    let current = '';
-                    let closestDistance = Infinity;
+                let current = '';
+                let closestDistance = Infinity;
+                
+                headings.forEach(heading => {
+                    const rect = heading.getBoundingClientRect();
+                    const distance = Math.abs(rect.top - 100);
                     
-                    headings.forEach(heading => {
-                        const rect = heading.getBoundingClientRect();
-                        const distance = Math.abs(rect.top - 100);
+                    if (rect.top <= 150 && distance < closestDistance) {
+                        closestDistance = distance;
+                        current = heading.id;
+                    }
+                });
+                
+                removeActiveClasses();
+                if (current) {
+                    const activeLink = document.querySelector(`#toc-list a[href="#${current}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('toc-active');
+                        const tocList = document.getElementById('toc-list');
+                        const activeLinkTop = activeLink.offsetTop;
+                        const tocListHeight = tocList.clientHeight;
                         
-                        if (rect.top <= 150 && distance < closestDistance) {
-                            closestDistance = distance;
-                            current = heading.id;
-                        }
-                    });
-                    
-                    removeActiveClasses();
-                    
-                    if (current) {
-                        const activeLink = document.querySelector(`#toc-list a[href="#${current}"]`);
-                        if (activeLink) {
-                            activeLink.classList.add('toc-active');
-                            
-                            const tocList = document.getElementById('toc-list');
-                            const activeLinkTop = activeLink.offsetTop;
-                            const tocListHeight = tocList.clientHeight;
-                            
-                            if (activeLinkTop > tocList.scrollTop + tocListHeight - 50) {
-                                tocList.scrollTop = activeLinkTop - tocListHeight + 50;
-                            } else if (activeLinkTop < tocList.scrollTop) {
-                                tocList.scrollTop = activeLinkTop - 20;
-                            }
+                        if (activeLinkTop > tocList.scrollTop + tocListHeight - 50) {
+                            tocList.scrollTop = activeLinkTop - tocListHeight + 50;
+                        } else if (activeLinkTop < tocList.scrollTop) {
+                            tocList.scrollTop = activeLinkTop - 20;
                         }
                     }
-                }, 10);
-            });
-            
-            // 初始激活第一个
-            if (headings.length > 0) {
-                const firstLink = document.querySelector(`#toc-list a[href="#${headings[0].id}"]`);
-                if (firstLink) {
-                    firstLink.classList.add('toc-active');
                 }
-            }
+            });
         }
         
         // 平滑滚动
-        document.querySelectorAll('#toc-list a').forEach(link => {
-            link.addEventListener('click', function(e) {
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('#toc-list a')) {
                 e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
+                const targetId = e.target.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
                 
                 if (targetElement) {
@@ -557,66 +593,12 @@
                         behavior: 'smooth'
                     });
                 }
-            });
+            }
         });
         
-        // 强制修复sticky定位问题
-        function forceFixSticky() {
-            const toc = document.getElementById('article-toc');
-            const sidebar = document.querySelector('.sidebar');
-            const placeholder = document.getElementById('toc-placeholder');
-            
-            if (!toc || !sidebar) return;
-            
-            console.log('开始修复目录定位...');
-            
-            // 检查sticky是否生效
-            function isStickyWorking() {
-                const rect = toc.getBoundingClientRect();
-                return rect.top <= 40; // 应该在40px左右固定
-            }
-            
-            // 如果sticky不生效，使用JavaScript固定
-            if (!isStickyWorking()) {
-                console.log('sticky定位失效，启用JavaScript固定方案');
-                
-                let isFixed = false;
-                
-                function updateTocPosition() {
-                    const sidebarRect = sidebar.getBoundingClientRect();
-                    const tocRect = toc.getBoundingClientRect();
-                    const scrollY = window.pageYOffset;
-                    
-                    // 当侧边栏进入视口时固定目录
-                    if (sidebarRect.top <= 20 && sidebarRect.bottom > window.innerHeight) {
-                        if (!isFixed) {
-                            toc.classList.add('js-fixed');
-                            placeholder.classList.add('visible');
-                            placeholder.style.height = toc.offsetHeight + 'px';
-                            isFixed = true;
-                        }
-                    } else {
-                        if (isFixed) {
-                            toc.classList.remove('js-fixed');
-                            placeholder.classList.remove('visible');
-                            isFixed = false;
-                        }
-                    }
-                }
-                
-                window.addEventListener('scroll', updateTocPosition);
-                window.addEventListener('resize', updateTocPosition);
-                
-                // 初始检查
-                setTimeout(updateTocPosition, 100);
-            } else {
-                console.log('sticky定位正常工作');
-            }
-        }
-        
-        // 延迟执行
+        // 初始化
+        setTimeout(checkBackToTopButton, 100);
         setTimeout(generateTOC, 300);
-        setTimeout(forceFixSticky, 500);
     });
     </script>
     
