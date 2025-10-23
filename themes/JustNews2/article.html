@@ -28,6 +28,14 @@
 		
 		<!-- 文章目录样式 -->
 		<style>
+		/* 修复文章目录sticky定位 - 确保始终固定在右侧 */
+		.sidebar {
+			position: relative;
+			height: fit-content;
+			display: flex;
+			flex-direction: column;
+		}
+
 		#article-toc {
 			background: rgba(255, 255, 255, 0.95);
 			border-radius: 8px;
@@ -36,9 +44,13 @@
 			border: 1px solid #e1e1e1;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 			position: sticky;
-			top: 100px; /* 调整这个值，从导航栏下方开始固定 */
-			z-index: 100;
+			top: 20px; /* 从导航栏下方开始固定 */
+			z-index: 99; /* 降低z-index确保不覆盖返回顶部按钮 */
+			max-height: calc(100vh - 40px);
+			overflow-y: auto;
+			flex-shrink: 0; /* 防止被压缩 */
 		}
+
 		#article-toc h3 {
 			margin: 0 0 12px 0;
 			padding-bottom: 8px;
@@ -275,52 +287,52 @@
 					</div>
 
 					<div id="linkcat-0" class="widget widget_links">
-    <h3 class="widget-title">
-        <span>链接</span></h3>
-    <div class="link-tagcloud">
-        {{ #widgetLinkList }}
-            <a href="{{ &url }}" target="_blank" class="link-tag">{{ &title }}</a>
-        {{ /widgetLinkList }}
-    </div>
-</div>
+						<h3 class="widget-title">
+							<span>链接</span></h3>
+						<div class="link-tagcloud">
+							{{ #widgetLinkList }}
+								<a href="{{ &url }}" target="_blank" class="link-tag">{{ &title }}</a>
+							{{ /widgetLinkList }}
+						</div>
+					</div>
 					{{ &OPT.widgetOther }}
 				</aside>
 			</div>
 		</div>
 
-		<!-- 社交图标栏 -->
-<div class="social-icons-bar">
-    <!-- 左侧图标 -->
-    <a href="mailto:kekelove1688@gmail.com" class="social-icon" title="邮箱">
-        <i class="fas fa-envelope"></i>
-    </a>
-    
-    <a href="https://weibo.com/u/7866257468" class="social-icon" target="_blank" title="微博">
-        <i class="fab fa-weibo"></i>
-    </a>
-    
-    <a href="https://www.facebook.com/profile.php?id=100091963634555" class="social-icon" target="_blank" title="Facebook">
-        <i class="fab fa-facebook-f"></i>
-    </a>
-    
-    <!-- 中间的返回顶部按钮 -->
-    <a href="#" class="social-icon back-to-top" onclick="scrollToTop(); return false;" title="返回顶部">
-        <i class="fas fa-chevron-up"></i>
-    </a>
-    
-    <!-- 右侧图标 -->
-    <a href="https://x.com/home/@chnbsdan" class="social-icon" target="_blank" title="X帐号">
-        <i class="fab fa-twitter"></i>
-    </a>
-    
-    <a href="https://space.bilibili.com/1913680621" class="social-icon" target="_blank" title="Bilibili">
-        <i class="fab fa-bilibili"></i>
-    </a>
-    
-    <a href="https://t.me/ben_mesa" class="social-icon" target="_blank" title="Telegram">
-        <i class="fab fa-telegram-plane"></i>
-    </a>
-</div>
+		<!-- 社交图标栏 - 在页尾上方 -->
+		<div class="social-icons-bar">
+			<!-- 左侧图标 -->
+			<a href="mailto:kekelove1688@gmail.com" class="social-icon" title="邮箱">
+				<i class="fas fa-envelope"></i>
+			</a>
+			
+			<a href="https://weibo.com/u/7866257468" class="social-icon" target="_blank" title="微博">
+				<i class="fab fa-weibo"></i>
+			</a>
+			
+			<a href="https://www.facebook.com/profile.php?id=100091963634555" class="social-icon" target="_blank" title="Facebook">
+				<i class="fab fa-facebook-f"></i>
+			</a>
+			
+			<!-- 中间的返回顶部按钮 -->
+			<a href="#" class="social-icon back-to-top" onclick="scrollToTop(); return false;" title="返回顶部">
+				<i class="fas fa-chevron-up"></i>
+			</a>
+			
+			<!-- 右侧图标 -->
+			<a href="https://x.com/home/@chnbsdan" class="social-icon" target="_blank" title="X帐号">
+				<i class="fab fa-twitter"></i>
+			</a>
+			
+			<a href="https://space.bilibili.com/1913680621" class="social-icon" target="_blank" title="Bilibili">
+				<i class="fab fa-bilibili"></i>
+			</a>
+			
+			<a href="https://t.me/ben_mesa" class="social-icon" target="_blank" title="Telegram">
+				<i class="fab fa-telegram-plane"></i>
+			</a>
+		</div>
 		
 		<footer class="footer">
 			<div class="container">
@@ -346,52 +358,29 @@
 			</div>
 		</div>
 
-<link rel='stylesheet' id='lazyload-spinner-css' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/lazyload.css?ver=3.4.9' type='text/css' media='all' />
-<script type='text/javascript' id='main-js-extra'>
-/* <![CDATA[ */
-var _wpcom_js = {"webp":"","ajaxurl":"","theme_url":"https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/","slide_speed":"5000","lightbox":"1","user_card_height":"356","video_height":"482","fixed_sidebar":"1","login_url":"/admin","register_url":"/","errors":{"require":"\u4e0d\u80fd\u4e3a\u7a7a","email":"\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u7535\u5b50\u90ae\u7bb1","pls_enter":"\u8bf7\u8f93\u5165","password":"\u5bc6\u7801\u5fc5\u987b\u4e3a6~32\u4e2a\u5b57\u7b26","passcheck":"\u4e24\u6b21\u5bc6\u7801\u8f93\u5165\u4e0d\u4e00\u81f4","phone":"\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u624b\u673a\u53f7\u7801","terms":"Please read and agree with the terms","sms_code":"\u9a8c\u8bc1\u7801\u9519\u8bef","captcha_verify":"\u8bf7\u70b9\u51fb\u6309\u94ae\u8fdb\u884c\u9a8c\u8bc1","captcha_fail":"\u70b9\u51fb\u9a8c\u8bc1\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5","nonce":"\u968f\u673a\u6570\u6821\u9a8c\u5931\u8d25","req_error":"\u8bf7\u6c42\u5931\u8d25"},"follow_btn":"<i class=\"wpcom-icon wi\"><svg aria-hidden=\"true\"><use xlink:href=\"#wi-add\"><\/use><\/svg><\/i>\u5173\u6ce8","followed_btn":"\u5df2\u5173\u6ce8","user_card":"1"};
-/* ]]> */
-</script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/main.js?ver=6.1.2' id='main-js'></script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.6/wp-includes/js/comment-reply.min.js?ver=5.6' id='comment-reply-js'></script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/idiotWu/jQuery-TOC@0.0.6/dist/jquery.toc.min.js?ver=1.0.1' id='githuber-toc-js'></script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/js/clipboard.min.js?ver=5.6' id='clipboard-js'></script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/npm/emojify.js@1.1.0/dist/js/emojify.min.js?ver=1.1.0' id='emojify-js'></script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/wp-embed.js?ver=6.1.2' id='wp-embed-js'></script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/lazySizesConfig.js?ver=3.4.9' id='lazysizes-config-js'></script>
-<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/plugins/unveilhooks/ls.unveilhooks.min.js?ver=5.6' id='unveilhooks-js'></script>
-<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/plugins/bgset/ls.bgset.min.js?ver=5.6' id='bgset-js'></script>
-<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js?ver=5.6' id='lazysizes-js'></script>
-<script type='text/javascript' id='fifu-image-js-js-extra'>
-/* <![CDATA[ */
-var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom":"inline","fifu_is_product":"","fifu_is_flatsome_active":"","fifu_rest_url":"","fifu_nonce":"96a15ffec7"};
-/* ]]> */
-</script>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/image.js?ver=3.4.9' id='fifu-image-js-js'></script>
-
-
-
-<script id="module-toc"> (function($) { $(function() { $("#md-post-toc").initTOC({ selector: "h2, h3, h4, h5, h6", scope: ".post", }); $("#md-post-toc a").click(function(e) { e.preventDefault(); var aid = $( this ).attr( "href" ); $( "html, body" ).animate( { scrollTop: $(aid).offset().top - 80 }, "slow" ); }); $("#md-widget-toc").initTOC({ selector: "h2, h3, h4, h5, h6", scope: ".post", }); $("#md-widget-toc a").click(function(e) { e.preventDefault(); var aid = $( this ).attr( "href" ); $( "html, body" ).animate( { scrollTop: $(aid).offset().top - 80 }, "slow" ); }); }); })(jQuery); </script> <script id="module-clipboard"> (function($) { $(function() { var pre = document.getElementsByTagName("pre"); var pasteContent = document.getElementById("paste-content"); var hasLanguage = false; for (var i = 0; i < pre.length; i++) { var codeClass = pre[i].children[0].className; var isLanguage = codeClass.indexOf("language-"); var excludedCodeClassNames = [ "language-katex", "language-seq", "language-sequence", "language-flow", "language-flowchart", "language-mermaid", ]; var isExcluded = excludedCodeClassNames.indexOf(codeClass); if (isExcluded !== -1) { isLanguage = -1; } if (isLanguage !== -1) { var button = document.createElement("button"); button.className = "copy-button"; button.textContent = "Copy"; pre[i].appendChild(button); hasLanguage = true; } }; if (hasLanguage) { var copyCode = new ClipboardJS(".copy-button", { target: function(trigger) { return trigger.previousElementSibling; } }); copyCode.on("success", function(event) { event.clearSelection(); event.trigger.textContent = "Copied"; window.setTimeout(function() { event.trigger.textContent = "Copy"; }, 2000); }); } }); })(jQuery); </script>
-<script id="module-emojify">
-				(function($) {
-					$(function() {
-						if (typeof emojify !== "undefined") {
-							emojify.setConfig({
-								img_dir: "https://cdn.jsdelivr.net/npm/emojify.js@1.1.0/dist/images/basic",
-								blacklist: {
-									"classes": ["no-emojify"],
-									"elements": ["script", "textarea", "pre", "code"]
-								}
-							});
-							emojify.run();
-						} else {
-							console.log("[wp-githuber-md] emogify is undefined.");
-						}
-					});
-				})(jQuery);
-			</script>
-<script>hljs.initHighlightingOnLoad(); //代码高亮
-					</script>
+		<!-- 外部脚本 -->
+		<link rel='stylesheet' id='lazyload-spinner-css' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/lazyload.css?ver=3.4.9' type='text/css' media='all' />
+		<script type='text/javascript' id='main-js-extra'>
+		/* <![CDATA[ */
+		var _wpcom_js = {"webp":"","ajaxurl":"","theme_url":"https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/","slide_speed":"5000","lightbox":"1","user_card_height":"356","video_height":"482","fixed_sidebar":"1","login_url":"/admin","register_url":"/","errors":{"require":"\u4e0d\u80fd\u4e3a\u7a7a","email":"\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u7535\u5b50\u90ae\u7bb1","pls_enter":"\u8bf7\u8f93\u5165","password":"\u5bc6\u7801\u5fc5\u987b\u4e3a6~32\u4e2a\u5b57\u7b26","passcheck":"\u4e24\u6b21\u5bc6\u7801\u8f93\u5165\u4e0d\u4e00\u81f4","phone":"\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u624b\u673a\u53f7\u7801","terms":"Please read and agree with the terms","sms_code":"\u9a8c\u8bc1\u7801\u9519\u8bef","captcha_verify":"\u8bf7\u70b9\u51fb\u6309\u94ae\u8fdb\u884c\u9a8c\u8bc1","captcha_fail":"\u70b9\u51fb\u9a8c\u8bc1\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5","nonce":"\u968f\u673a\u6570\u6821\u9a8c\u5931\u8d25","req_error":"\u8bf7\u6c42\u5931\u8d25"},"follow_btn":"<i class=\"wpcom-icon wi\"><svg aria-hidden=\"true\"><use xlink:href=\"#wi-add\"><\/use><\/svg><\/i>\u5173\u6ce8","followed_btn":"\u5df2\u5173\u6ce8","user_card":"1"};
+		/* ]]> */
+		</script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/main.js?ver=6.1.2' id='main-js'></script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.6/wp-includes/js/comment-reply.min.js?ver=5.6' id='comment-reply-js'></script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/idiotWu/jQuery-TOC@0.0.6/dist/jquery.toc.min.js?ver=1.0.1' id='githuber-toc-js'></script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/js/clipboard.min.js?ver=5.6' id='clipboard-js'></script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/npm/emojify.js@1.1.0/dist/js/emojify.min.js?ver=1.1.0' id='emojify-js'></script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/wp-embed.js?ver=6.1.2' id='wp-embed-js'></script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/lazySizesConfig.js?ver=3.4.9' id='lazysizes-config-js'></script>
+		<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/plugins/unveilhooks/ls.unveilhooks.min.js?ver=5.6' id='unveilhooks-js'></script>
+		<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/plugins/bgset/ls.bgset.min.js?ver=5.6' id='bgset-js'></script>
+		<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js?ver=5.6' id='lazysizes-js'></script>
+		<script type='text/javascript' id='fifu-image-js-js-extra'>
+		/* <![CDATA[ */
+		var fifuImageVars = {"fifu_lazy":"1","fifu_woo_lbox_enabled":"1","fifu_woo_zoom":"inline","fifu_is_product":"","fifu_is_flatsome_active":"","fifu_rest_url":"","fifu_nonce":"96a15ffec7"};
+		/* ]]> */
+		</script>
+		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/image.js?ver=3.4.9' id='fifu-image-js-js'></script>
 
 		<!-- 文章目录功能脚本 -->
 		<script>
