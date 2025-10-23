@@ -26,29 +26,27 @@
 		<link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.3.2/styles/tomorrow-night-bright.min.css">
 		<script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
 		
-		<!-- 文章目录样式 -->
+		<!-- 文章目录样式 - 使用固定定位 -->
 		<style>
-		/* 修复文章目录sticky定位 - 确保始终固定在右侧 */
-		.sidebar {
-			position: relative;
-			height: fit-content;
-			display: flex;
-			flex-direction: column;
-		}
-
+		/* 文章目录固定定位 - 类似右键菜单 */
 		#article-toc {
 			background: rgba(255, 255, 255, 0.95);
 			border-radius: 8px;
 			padding: 15px;
-			margin-bottom: 20px;
 			border: 1px solid #e1e1e1;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-			position: sticky;
-			top: 20px; /* 从导航栏下方开始固定 */
-			z-index: 99; /* 降低z-index确保不覆盖返回顶部按钮 */
-			max-height: calc(100vh - 40px);
+			position: fixed;
+			top: 100px; /* 距离顶部距离 */
+			right: 20px; /* 距离右侧距离 */
+			width: 280px; /* 固定宽度 */
+			z-index: 1000; /* 确保在最上层 */
+			max-height: calc(100vh - 140px); /* 最大高度 */
 			overflow-y: auto;
-			flex-shrink: 0; /* 防止被压缩 */
+			display: none; /* 默认隐藏，JS控制显示 */
+		}
+
+		#article-toc.show {
+			display: block; /* 显示目录 */
 		}
 
 		#article-toc h3 {
@@ -58,13 +56,16 @@
 			color: #2d3748;
 			font-size: 16px;
 			font-weight: 600;
+			position: sticky;
+			top: 0;
+			background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(10px);
+			z-index: 1001;
 		}
 		#toc-list {
 			list-style: none;
 			padding: 0;
 			margin: 0;
-			max-height: 400px;
-			overflow-y: auto;
 		}
 		#toc-list::-webkit-scrollbar {
 			width: 4px;
@@ -122,11 +123,11 @@
 		/* 移动端适配 */
 		@media (max-width: 768px) {
 			#article-toc {
-				position: relative;
-				top: 0;
-				margin-bottom: 15px;
-			}
-			#toc-list {
+				position: fixed;
+				top: 80px;
+				right: 10px;
+				left: 10px;
+				width: auto;
 				max-height: 200px;
 			}
 		}
@@ -240,14 +241,7 @@
 				</div>
 
 				<aside class="sidebar">
-					<!-- 文章目录 -->
-					<div id="article-toc">
-						<h3>📑 文章目录</h3>
-						<ul id="toc-list">
-							<li class="toc-empty">正在生成目录...</li>
-						</ul>
-					</div>
-
+					<!-- 侧边栏其他小部件保持不变 -->
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -298,6 +292,14 @@
 					{{ &OPT.widgetOther }}
 				</aside>
 			</div>
+		</div>
+
+		<!-- 文章目录 - 现在使用固定定位 -->
+		<div id="article-toc">
+			<h3>📑 文章目录</h3>
+			<ul id="toc-list">
+				<li class="toc-empty">正在生成目录...</li>
+			</ul>
 		</div>
 
 		<!-- 社交图标栏 - 在页尾上方 -->
@@ -385,6 +387,8 @@
 		<!-- 文章目录功能脚本 -->
 		<script>
 		document.addEventListener('DOMContentLoaded', function() {
+			const tocElement = document.getElementById('article-toc');
+			
 			// 生成文章目录
 			function generateTOC() {
 				const articleContent = document.querySelector('.entry-content');
@@ -429,6 +433,11 @@
 				});
 				
 				tocList.innerHTML = tocHTML;
+				
+				// 如果有标题，显示目录
+				if (tocCount > 0) {
+					tocElement.classList.add('show');
+				}
 				
 				// 添加滚动监听
 				initScrollSpy();
