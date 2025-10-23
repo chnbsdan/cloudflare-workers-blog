@@ -9,58 +9,52 @@
 <meta name="keywords" content="{{ &keyWords }}" />
 <meta name="description" content="{{ &OPT.siteDescription }}" />
 
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/main.css' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/font-awesome.css?ver=6.1.2' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/block-library/style.min.css?ver=5.6' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/components/style.min.css?ver=5.6' type='text/css' media='all' />
-<link rel='stylesheet' href='https://fonts.geekzu.org/css?family=Noto+Serif%3A400%2C400i%2C700%2C700i&#038;ver=5.6' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/block-editor/style.min.css?ver=5.6' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/nux/style.min.css?ver=5.6' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/editor/style.min.css?ver=5.6' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/newexsexy/wp@master/wp-content/plugins/ilab-media-tools/public/blocks/mediacloud-mux.blocks.style.min.css' type='text/css' media='all' />
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/emojify.js@1.1.0/dist/css/basic/emojify.min.css?ver=1.1.0' type='text/css' media='all' />
-<script src='https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js'></script>
-<script src='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.6/wp-includes/js/jquery/jquery-migrate.min.js'></script>
-<script src='https://cdn.jsdelivr.net/gh/wpcom-cn/assets/fonts/icons-2.6.4.js'></script>
+<link rel='stylesheet' id='stylesheet-css' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/main.css' type='text/css' media='all' />
+<link rel='stylesheet' id='font-awesome-css' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/font-awesome.css?ver=6.1.2' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-library-css' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/block-library/style.min.css?ver=5.6' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-components-css' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/components/style.min.css?ver=5.6' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-editor-font-css' href='https://fonts.geekzu.org/css?family=Noto+Serif%3A400%2C400i%2C700%2C700i&#038;ver=5.6' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-editor-css' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/block-editor/style.min.css?ver=5.6' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-nux-css' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/nux/style.min.css?ver=5.6' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-editor-css' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/editor/style.min.css?ver=5.6' type='text/css' media='all' />
+<link rel='stylesheet' id='mux_video_block_style-css' href='https://cdn.jsdelivr.net/gh/newexsexy/wp@master/wp-content/plugins/ilab-media-tools/public/blocks/mediacloud-mux.blocks.style.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='emojify-css' href='https://cdn.jsdelivr.net/npm/emojify.js@1.1.0/dist/css/basic/emojify.min.css?ver=1.1.0' type='text/css' media='all' />
+<script type='text/javascript' src='https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js?ver=3.5.1' id='jquery-core-js'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.6/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/wpcom-cn/assets/fonts/icons-2.6.4.js?ver=6.1.2' id='wpcom-icons-js'></script>
 <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.3.2/styles/tomorrow-night-bright.min.css">
 <script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
 
-<!-- 文章目录样式 -->
 <style>
-.sidebar {
-    position: relative;
+/* Sidebar 及文章目录布局 */
+.container.wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-/* TOC 样式 */
+.main {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 20px;
+}
+
+/* 文章目录样式 */
 #article-toc {
-    background: rgba(255, 255, 255, 0.95);
+    width: 100%;
+    background: rgba(255,255,255,0.95);
     border-radius: 8px;
     padding: 15px;
-    margin-bottom: 20px;
     border: 1px solid #e1e1e1;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    z-index: 100;
+    max-height: 500px;
     overflow-y: auto;
-}
-
-/* 桌面端固定 TOC */
-@media (min-width: 769px) {
-    #article-toc {
-        position: fixed;
-        right: 20px;
-        top: 100px;
-        max-height: calc(100vh - 120px);
-    }
-}
-
-/* 移动端适配 */
-@media (max-width: 768px) {
-    #article-toc {
-        position: relative;
-        top: 0;
-        margin-bottom: 15px;
-        max-height: 300px;
-    }
 }
 
 #article-toc h3 {
@@ -70,27 +64,11 @@
     color: #2d3748;
     font-size: 16px;
     font-weight: 600;
-    position: sticky;
-    top: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 101;
-    padding: 8px 0;
-    margin-bottom: 8px;
 }
 
-#toc-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-#toc-list::-webkit-scrollbar {
-    width: 4px;
-}
-#toc-list::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
-    border-radius: 2px;
-}
+#toc-list { list-style: none; padding: 0; margin: 0; }
+#toc-list::-webkit-scrollbar { width: 4px; }
+#toc-list::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 2px; }
 #toc-list li { margin: 4px 0; line-height: 1.4; }
 #toc-list a {
     display: block;
@@ -115,21 +93,28 @@
 .toc-active { background: #ebf8ff; color: #3b82f6; border-left-color: #3b82f6; font-weight: 500; }
 .toc-empty { color: #a0aec0; font-style: italic; text-align: center; padding: 20px; }
 
-/* 侧边栏小部件 */
+/* 其他小部件 */
 .sidebar .widget {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255,255,255,0.9);
     border-radius: 8px;
     padding: 15px;
-    margin-bottom: 20px;
     border: 1px solid #e1e1e1;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: relative;
+}
+
+@media (max-width: 768px) {
+    .container.wrap { flex-direction: column; }
+    .main { margin-right: 0; }
+    .sidebar { width: 100%; }
+    #article-toc { max-height: 300px; }
 }
 </style>
 
 {{ &OPT.codeBeforHead }}
 </head>
 <body class="archive paged category category-zhishi category-5 paged-2 category-paged-2 lang-cn el-boxed">
+
 <header class="header">
     <div class="container clearfix">
         <div class="navbar-header">
@@ -149,7 +134,7 @@
         </div>
         <div class="collapse navbar-collapse">
             <nav class="navbar-left primary-menu">
-                <ul class="nav navbar-nav wpcom-adv-menu">
+                <ul id="menu-%e5%af%bc%e8%88%aa" class="nav navbar-nav wpcom-adv-menu">
                     {{ #widgetMenuList }}
                         <li class="menu-item"><a href="{{ &url }}">{{ &title }}</a></li>
                     {{ /widgetMenuList }}
@@ -195,23 +180,33 @@
                         </div>
 
                         <div class="entry-page">
-                            {{ #articleNewer }}    
-                            <div class="entry-page-prev j-lazy lazyloaded" style="background-image: url(&quot;{{ &img }}&quot;); display: block;">
-                                <a href="{{ &url }}" title="{{ &title }}" rel="prev" ><span>{{ &title }}</span></a>
+                            {{ #articleNewer }}
+                            <div class="entry-page-prev j-lazy lazyloaded" style="background-image: url(&quot;{{ &img }}&quot;); display: block;" data-original="{{ &img }}" data-bg="{{ &img }}" fifu-width="392" fifu-height="86">
+                                <a href="{{ &url }}" title="{{ &title }}" rel="prev" >
+                                    <span>{{ &title }}</span></a>
                                 <div class="entry-page-info">
-                                    <span class="pull-left"><i class="wpcom-icon wi"><svg aria-hidden="true"><use xlink:href="#wi-arrow-left-double"></use></svg></i>上一篇</span>
-                                    <span class="pull-right">{{ &createDate10 }}</span>
-                                </div>
+                                    <span class="pull-left">
+                                        <i class="wpcom-icon wi">
+                                            <svg aria-hidden="true">
+                                                <use xlink:href="#wi-arrow-left-double"></use>
+                                            </svg>
+                                        </i>上一篇</span>
+                                    <span class="pull-right">{{ &createDate10 }}</span></div>
                             </div>
                             {{ /articleNewer }}
 
                             {{ #articleOlder }}
-                            <div class="entry-page-next j-lazy lazyloaded" style="background-image: url(&quot;{{ &img }}&quot;); display: block;">
-                                <a href="{{ &url }}" title="{{ &title }}" rel="next" ><span>{{ &title }}</span></a>
+                            <div class="entry-page-next j-lazy lazyloaded" style="background-image: url(&quot;{{ &img }}&quot;); display: block;" data-original="{{ &img }}" data-bg="{{ &img }}" fifu-width="392" fifu-height="86">
+                                <a href="{{ &url }}" title="{{ &title }}" rel="next" >
+                                    <span>{{ &title }}</span></a>
                                 <div class="entry-page-info">
-                                    <span class="pull-right">下一篇<i class="wpcom-icon wi"><svg aria-hidden="true"><use xlink:href="#wi-arrow-right-double"></use></svg></i></span>
-                                    <span class="pull-left">{{ &createDate10 }}</span>
-                                </div>
+                                    <span class="pull-right">下一篇
+                                        <i class="wpcom-icon wi">
+                                            <svg aria-hidden="true">
+                                                <use xlink:href="#wi-arrow-right-double"></use></svg>
+                                        </i>
+                                    </span>
+                                    <span class="pull-left">{{ &createDate10 }}</span></div>
                             </div>
                             {{ /articleOlder }}
                         </div>
@@ -240,32 +235,36 @@
                     <li class="item">
                         <div class="item-img">
                             <a class="item-img-inner" href="{{ &url }}" title="{{ &title }}">
-                                <img src="{{ &img }}" class="attachment-post-thumbnail wp-post-image j-lazy" /></a>
+                                <img width="480" height="264" src="{{ &img }}" class="attachment-post-thumbnail size-post-thumbnail wp-post-image j-lazy" alt="" title="" data-original="{{ &img }}" /></a>
                         </div>
                         <div class="item-content">
-                            <p class="item-title"><a href="{{ &url }}" title="{{ &title }}">{{&.}}</a></p>
-                            <p class="item-date">{{ &createDate10 }}</p>
-                        </div>
+                            <p class="item-title">
+                                <a href="{{ &url }}" title="{{ &title }}">{{ &title }}</a></p>
+                            <p class="item-date">{{ &createDate10 }}</p></div>
                     </li>
                     {{ /widgetRecentlyList }}
                 </ul>
             </div>
+
             <div id="categories-3" class="widget widget_categories">
                 <h3 class="widget-title"><span>分类目录</span></h3>
                 <ul>
                     {{ #widgetCategoryList }}
-                    <li class="cat-item"><a href="/category/{{&.}}">{{&.}}</a></li>
+                    <li class="cat-item cat-item-5 current-cat">
+                        <a aria-current="page" href="/category/{{&.}}">{{&.}}</a></li>
                     {{ /widgetCategoryList }}
                 </ul>
             </div>
+
             <div id="tag_cloud-3" class="widget widget_tag_cloud">
                 <h3 class="widget-title"><span>标签</span></h3>
                 <div class="tagcloud">
                     {{ #widgetTagsList }}
-                    <a href="/tags/{{&.}}" class="tag-cloud-link" style="font-size: 8pt;">{{&.}}</a>
+                    <a href="/tags/{{&.}}" class="tag-cloud-link tag-link-6 tag-link-position-1" style="font-size: 8pt;" aria-label="{{&.}}">{{&.}}</a>
                     {{ /widgetTagsList }}
                 </div>
             </div>
+
             <div id="linkcat-0" class="widget widget_links">
                 <h3 class="widget-title"><span>链接</span></h3>
                 <div class="link-tagcloud">
@@ -274,20 +273,26 @@
                     {{ /widgetLinkList }}
                 </div>
             </div>
-            
+
             {{ #OPT.widgetOther }}
-            <div class="widget_other">{{ &OPT.widgetOther }}</div>
+            <div class="widget_other">
+                {{ &OPT.widgetOther }}
+            </div>
             {{ /OPT.widgetOther }}
         </aside>
     </div>
 </div>
 
-<!-- 社交图标栏 -->
 <div class="social-icons-bar">
+    <!-- 左侧图标 -->
     <a href="mailto:kekelove1688@gmail.com" class="social-icon" title="邮箱"><i class="fas fa-envelope"></i></a>
     <a href="https://weibo.com/u/7866257468" class="social-icon" target="_blank" title="微博"><i class="fab fa-weibo"></i></a>
     <a href="https://www.facebook.com/profile.php?id=100091963634555" class="social-icon" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-    <a href="#" class="social-icon back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});" title="返回顶部"><i class="fas fa-chevron-up"></i></a>
+    
+    <!-- 中间的返回顶部按钮 -->
+    <a href="#" class="social-icon back-to-top" onclick="scrollToTop(); return false;" title="返回顶部"><i class="fas fa-chevron-up"></i></a>
+    
+    <!-- 右侧图标 -->
     <a href="https://x.com/home/@chnbsdan" class="social-icon" target="_blank" title="X帐号"><i class="fab fa-twitter"></i></a>
     <a href="https://space.bilibili.com/1913680621" class="social-icon" target="_blank" title="Bilibili"><i class="fab fa-bilibili"></i></a>
     <a href="https://t.me/ben_mesa" class="social-icon" target="_blank" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
@@ -304,87 +309,53 @@
     </div>
 </footer>
 
-<!-- 文章目录生成脚本 -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const tocList = document.getElementById('toc-list');
-    const articleContent = document.querySelector('.entry-content');
-    if (!tocList || !articleContent) return;
-
-    // 生成 TOC
     function generateTOC() {
-        const headings = Array.from(articleContent.querySelectorAll('h1,h2,h3,h4,h5,h6'))
-            .filter(h => h.textContent.trim() && !h.classList.contains('entry-title') && !h.closest('.widget') && !h.closest('.comments-area'));
-        if (!headings.length) {
-            tocList.innerHTML = '<li class="toc-empty">本文暂无有效的目录结构</li>';
-            return;
-        }
-
-        let html = '';
-        headings.forEach((h,i)=>{
-            let level = parseInt(h.tagName.substring(1));
-            let id = h.id || ('toc-'+h.textContent.trim().toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g,'-').replace(/-+/g,'-')+'-'+i);
-            h.id = id;
-            html += `<li class="toc-level-${level}"><a href="#${id}" data-level="${level}" title="${h.textContent.trim()}">${h.textContent.trim()}</a></li>`;
-        });
-        tocList.innerHTML = html;
-
-        // 点击平滑滚动
-        document.querySelectorAll('#toc-list a').forEach(a=>{
-            a.addEventListener('click', e=>{
-                e.preventDefault();
-                const target = document.getElementById(a.getAttribute('href').slice(1));
-                if (!target) return;
-                window.scrollTo({top: target.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth'});
-            });
-        });
-    }
-
-    generateTOC();
-
-    // 滚动高亮
-    const tocLinks = Array.from(document.querySelectorAll('#toc-list a'));
-    function highlightTOC() {
-        let scrollPos = window.scrollY || document.documentElement.scrollTop;
-        let activeSet = false;
-        for (let i = headings.length-1; i >=0 ; i--) {
-            let h = headings[i];
-            if (scrollPos + 100 >= h.offsetTop) {
-                tocLinks.forEach(a=>a.classList.remove('toc-active'));
-                let activeLink = tocLinks.find(a=>a.getAttribute('href')==`#${h.id}`);
-                if(activeLink) activeLink.classList.add('toc-active');
-                activeSet = true;
-                break;
+        const articleContent = document.querySelector('.entry-content');
+        const tocList = document.getElementById('toc-list');
+        if (!articleContent || !tocList) return;
+        tocList.innerHTML = '';
+        const headings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        const validHeadings = Array.from(headings).filter(h => h.textContent.trim().length>0 && !h.classList.contains('entry-title') && !h.closest('.widget') && !h.closest('.comments-area'));
+        if (validHeadings.length===0) {tocList.innerHTML='<li class="toc-empty">本文暂无有效的目录结构</li>'; return;}
+        let tocHTML = '';
+        validHeadings.forEach((h,i)=>{
+            let level=parseInt(h.tagName.substring(1));
+            let headingId=h.id;
+            if(!headingId||headingId.startsWith('heading-')) {
+                headingId='toc-'+h.textContent.trim().toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'')+'-'+i;
+                h.id=headingId;
             }
-        }
-        if(!activeSet) tocLinks.forEach(a=>a.classList.remove('toc-active'));
+            let uniqueId=headingId,counter=1;
+            while(document.getElementById(uniqueId)&&document.getElementById(uniqueId)!==h){uniqueId=headingId+'-'+counter;counter++;}
+            if(uniqueId!==headingId) h.id=uniqueId;
+            tocHTML+=`<li class="toc-level-${level}"><a href="#${h.id}" data-level="${level}" title="${h.textContent.trim()}">${h.textContent.trim()}</a></li>`;
+        });
+        tocList.innerHTML=tocHTML;
+
+        const tocLinks=document.querySelectorAll('#toc-list a');
+        function removeActive(){tocLinks.forEach(l=>l.classList.remove('toc-active'));}
+        window.addEventListener('scroll',function(){
+            let current=''; let closest=Infinity;
+            validHeadings.forEach(h=>{
+                let rect=h.getBoundingClientRect();
+                let d=Math.abs(rect.top-100);
+                if(rect.top<=150 && d<closest){closest=d; current=h.id;}
+            });
+            removeActive();
+            if(current){
+                const activeLink=document.querySelector(`#toc-list a[href="#${current}"]`);
+                if(activeLink){activeLink.classList.add('toc-active'); const toc=document.getElementById('toc-list'); const top=activeLink.offsetTop; const h=toc.clientHeight; if(top>toc.scrollTop+h-50){toc.scrollTop=top-h+50;} else if(top<toc.scrollTop){toc.scrollTop=top-20;}}
+            }
+        });
+
+        tocLinks.forEach(link=>{link.addEventListener('click',function(e){e.preventDefault();const targetId=this.getAttribute('href').substring(1);const target=document.getElementById(targetId);if(target){const offset=target.getBoundingClientRect().top+window.pageYOffset-80;window.scrollTo({top:offset,behavior:'smooth'});}});});
     }
-    window.addEventListener('scroll', highlightTOC);
-    highlightTOC();
-
-    // TOC 固定底部控制
-    function updateTOCPosition() {
-        const toc = document.getElementById('article-toc');
-        const main = document.querySelector('.main');
-        if(!toc||!main) return;
-
-        const mainTop = main.offsetTop;
-        const mainBottom = mainTop + main.offsetHeight;
-        const tocHeight = toc.offsetHeight;
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        let topOffset = 100;
-
-        if(scrollTop + topOffset + tocHeight > mainBottom) {
-            toc.style.top = (mainBottom - tocHeight - scrollTop) + 'px';
-        } else {
-            toc.style.top = topOffset + 'px';
-        }
-    }
-    window.addEventListener('scroll', updateTOCPosition);
-    window.addEventListener('resize', updateTOCPosition);
-    updateTOCPosition();
+    setTimeout(generateTOC,300);
 });
 </script>
 
+{{ &OPT.codeBeforBody }}
 </body>
 </html>
