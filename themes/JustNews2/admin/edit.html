@@ -1,535 +1,167 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="utf-8">
-    <title>编辑文章 - Hangdn-blog后台</title>
+    <title>编辑文章 - CF-blog后台</title>
     <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/chnbsdan/cloudflare-workers-blog/themes/JustNews2/files/favicon.ico" />
-    <link rel="shortcut icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/chnbsdan/cloudflare-workers-blog/themes/JustNews2/files/favicon.ico"/>
-    
-    <!-- 引入美化所需的CSS -->
+	<link rel="shortcut icon" type="image/x-icon"  href="https://cdn.jsdelivr.net/gh/chnbsdan/cloudflare-workers-blog/themes/JustNews2/files/favicon.ico"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--//<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/examples/css/style.css" />-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.css" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/bootstrap-select/1.9.4/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
-    <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #1abc9c;
-            --warning-color: #e74c3c;
-            --light-bg: #f8f9fa;
-            --dark-bg: #2c3e50;
-            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            padding-top: 0;
-        }
-        
-        .navbar {
-            border-radius: 0;
-            margin-bottom: 0;
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-            border: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .navbar-brand {
-            color: white !important;
-            font-weight: bold;
-            font-size: 22px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .navbar-brand i {
-            margin-right: 10px;
-        }
-        
-        .nav-tabs {
-            border-bottom: none;
-            background: white;
-            padding: 0 15px;
-            border-radius: 8px 8px 0 0;
-            box-shadow: var(--card-shadow);
-        }
-        
-        .nav-tabs > li > a {
-            border: none;
-            border-radius: 0;
-            color: #666;
-            font-weight: 500;
-            padding: 15px 25px;
-            transition: var(--transition);
-        }
-        
-        .nav-tabs > li > a:hover {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--primary-color);
-        }
-        
-        .nav-tabs > li.active > a, 
-        .nav-tabs > li.active > a:hover, 
-        .nav-tabs > li.active > a:focus {
-            border: none;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 4px 4px 0 0;
-        }
-        
-        .tab-content {
-            background: white;
-            padding: 30px;
-            border-radius: 0 0 8px 8px;
-            box-shadow: var(--card-shadow);
-            min-height: 600px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-        }
-        
-        h3 {
-            color: var(--secondary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-            margin-top: 0;
-            display: flex;
-            align-items: center;
-        }
-        
-        h3 i {
-            margin-right: 10px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-control {
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            padding: 10px 15px;
-            transition: var(--transition);
-            box-shadow: none;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-        }
-        
-        label {
-            font-weight: 500;
-            color: #555;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .btn {
-            border-radius: 4px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: var(--transition);
-            border: none;
-        }
-        
-        .btn-default {
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        
-        .btn-default:hover {
-            background-color: #e9ecef;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-warning {
-            background-color: var(--warning-color);
-            color: white;
-        }
-        
-        .btn-warning:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .editormd {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-        }
-        
-        .bootstrap-select .dropdown-toggle {
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            padding: 10px 15px;
-        }
-        
-        .bootstrap-select .dropdown-toggle:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-        }
-        
-        .card {
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            border: none;
-            margin-bottom: 20px;
-        }
-        
-        .card-header {
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: 8px 8px 0 0 !important;
-            padding: 15px 20px;
-            font-weight: 500;
-        }
-        
-        .card-body {
-            padding: 20px;
-        }
-        
-        .form-horizontal .control-label {
-            text-align: right;
-            padding-top: 7px;
-            margin-bottom: 0;
-        }
-        
-        .action-buttons {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            text-align: right;
-        }
-        
-        .action-buttons .btn {
-            margin-left: 10px;
-        }
-        
-        .article-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .article-info .info-item {
-            margin-bottom: 10px;
-            display: flex;
-        }
-        
-        .article-info .info-label {
-            font-weight: 500;
-            width: 120px;
-            color: #555;
-        }
-        
-        .article-info .info-value {
-            flex: 1;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            margin-top: 40px;
-            border-top: 1px solid #eee;
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .nav-tabs > li {
-                float: none;
-                display: block;
-                width: 100%;
-            }
-            
-            .nav-tabs > li > a {
-                border-radius: 0;
-                margin-right: 0;
-            }
-            
-            .tab-content {
-                padding: 15px;
-            }
-            
-            .form-horizontal .control-label {
-                text-align: left;
-                padding-top: 0;
-                margin-bottom: 5px;
-            }
-        }
-    </style>
+    <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-zh_CN.min.js"></script>
+	<style>
+		.bootstrap-select>.dropdown-toggle {
+		z-index:auto;
+		}
+	</style>
+	
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/admin/">
-                <i class="fa fa-pencil-square-o"></i> Hangdn-blog 后台管理系统
-            </a>
-        </div>
-        <div class="navbar-collapse">
-            <ul id="myTab" class="nav nav-tabs navbar-right">
-                <li class="active">
-                    <a href="/admin/"><i class="fa fa-arrow-left"></i> 返回文章列表</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
 
-<div class="container">
-    <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade in active">
-            <h3><i class="fa fa-edit"></i> 编辑文章</h3>
-            
-            <div class="article-info">
-                <div class="info-item">
-                    <span class="info-label">文章ID:</span>
-                    <span class="info-value" id="articleIdDisplay">加载中...</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">创建时间:</span>
-                    <span class="info-value" id="createDateDisplay">加载中...</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">最后修改:</span>
-                    <span class="info-value" id="modifyDateDisplay">刚刚</span>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">基本信息</div>
-                <div class="card-body">
-                    <form id="editForm" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="id">文章ID</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="id" id="id" readonly required="true">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="title">文章标题</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="title" id="title" placeholder="请输入文章标题" required="true">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="img">特色图片</label>
-                            <div class="col-sm-10">
-                                <input type="url" class="form-control" name="img" id="img" placeholder="请输入图片URL">
-                                <p class="help-block">请输入完整的图片URL地址</p>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="link">永久链接</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="link" id="link" placeholder="请输入文章链接" required="true">
-                                <p class="help-block">此链接将用于文章的唯一访问地址</p>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="createDate">创建日期</label>
-                            <div class="col-sm-10">
-                                <input type="datetime-local" class="form-control" id="createDate" name="createDate" placeholder="" required="true">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="category">文章分类</label>
-                            <div class="col-sm-10">
-                                <select class="selectpicker form-control" multiple name="category[]" id="category">
-                                </select>
-                                <p class="help-block">可多选，按住Ctrl键选择多个分类</p>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="tags">文章标签</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="tags" id="tags" placeholder="请输入标签，多个标签用逗号分隔">
-                                <p class="help-block">多个标签请用英文逗号分隔，例如：技术,教程,前端</p>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="priority">权重</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="priority" id="priority" value='0.5' placeholder="请输入文章权重">
-                                <p class="help-block">权重值影响文章在列表中的排序，值越大排序越靠前</p>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="changefreq">更新频率</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="changefreq" name="changefreq">
-                                    <option value="daily">daily</option>
-                                    <option value="hourly">hourly</option>
-                                    <option value="weekly">weekly</option>
-                                    <option value="monthly">monthly</option>
-                                    <option value="yearly">yearly</option>
-                                    <option value="never">never</option>
-                                    <option value="always">always</option>
-                                </select>
-                                <p class="help-block">此设置影响搜索引擎对文章更新频率的判断</p>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">文章内容</div>
-                <div class="card-body">
-                    <div id="content"><textarea style="display:none;"></textarea></div>
-                </div>
-            </div>
-            
-            <div class="action-buttons">
-                <button type="submit" id="btn_saveEdit" class="btn btn-primary" onclick="saveEdit()">
-                    <i class="fa fa-save"></i> 保存修改
-                </button>
-                <button type="submit" id="btn_delete" class="btn btn-warning" onclick="deleteArticle()">
-                    <i class="fa fa-trash"></i> 删除文章
-                </button>
-                <a href="/admin/" class="btn btn-default">
-                    <i class="fa fa-times"></i> 取消
-                </a>
-            </div>
-        </div>
-    </div>
+	<div>
+		<ul id="myTab" class="nav nav-tabs">
+			<li class="active">
+				<a href="/admin/" >返回文章</a>
+			</li>
+		</ul>
+	</div>
+	</div>
+</nav>
+<div id="myTabContent" class="tab-content" style="padding-top: 60px;">
+
+		<div class="container">
+			<h3>编辑文章</h3>   
+
+			<form id="editForm" class="form-inline"  action="/" >
+
+				<div class="form-group" style="width: 98%">
+					<input type="hidden" class="form-control" name="id" id="id" readonly required="true">
+					<input type="text" class="form-control" name="title" id="title" placeholder="标题" style="width: 800px;" required="true">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">特色图片</label>
+					<input type="url" class="form-control" style="width: 400px;"  name="img" id="img" placeholder="" >
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">永久链接</label>
+					<input type="text" class="form-control" name="link" id="link" placeholder="" style="vertical-align:left !important;" required="true">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">创建日期</label>
+					<input type="datetime-local" class="form-control" id="createDate" name="createDate" placeholder="" style="vertical-align:left !important;" required="true">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">分类</label>
+					<select class="selectpicker" multiple name="category[]" id="category">
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">标签</label>
+					<input type="text" class="form-control" name="tags" id="tags" placeholder="标签1,标签2">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">权重</label>
+					<input type="text" class="form-control" name="priority" id="priority" value='0.5' placeholder="权重">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">更新频率</label>
+					    <select class="form-control" id="changefreq" name="changefreq">
+						<option value="daily" >daily</option>
+						<option value="hourly" >hourly</option>
+						<option value="weekly" >weekly</option>
+						<option value="monthly" >monthly</option>
+						<option value="yearly" >yearly</option>
+						<option value="never" >never</option>
+						<option value="always" >always</option>
+					    </select>
+				</div>
+					<a tabindex="0"  role="button"  type="submit" id="btn_saveEdit" class="btn btn-default" onclick="saveEdit()">保存</a>
+					<a  type="submit" role="button" id="btn_delete" class="btn btn-warning" onclick="deleteArticle()">删除</a>
+				<div id="content"><textarea style="display:none;"></textarea></div>
+			</form>
+		</div>
+
 </div>
 
-<footer>
-    <p>Hangdn-blog 后台管理系统 &copy; 2023 | 基于 Cloudflare Workers</p>
-</footer>
-
-<!-- 引入JS库 -->
-<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-zh_CN.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/editormd.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/editormd.js"></script>   
 <script type="text/javascript">
-    $(function() {
-        $('#myTab li:eq(0) a').tab('show');
-        
-        // 模拟数据 - 实际使用时这些数据应该从后端获取
-        var articleJson = {
-            id: "12345",
-            title: "示例文章标题",
-            img: "https://example.com/image.jpg",
-            link: "example-article",
-            createDate: "2023-10-15T14:30",
-            tags: "技术,教程,前端",
-            priority: "0.8",
-            changefreq: "monthly",
-            category: ["技术文章", "前端开发"],
-            contentMD: "# 这是示例文章\n\n这是文章的示例内容，实际使用时这里会从后端加载真实的文章内容。"
-        };
-        
-        // 模拟分类数据
-        var categoryJson = ["技术文章", "生活随笔", "学习笔记", "前端开发", "后端开发"];
-        
-        var mdEditor = editormd("content", {
-            height: 640,
-            path: "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/",
-            appendMarkdown: articleJson.contentMD, //编辑器赋值
-            saveHTMLToTextarea: true,
-            mode: "markdown",
-            tex: true,
-            tocm: true, 
-            codeFold: true
-        });
-        
-        // 表单赋值
-        $('#id').val(articleJson.id);
-        $('#title').val(articleJson.title);
-        $('#img').val(articleJson.img);
-        $('#link').val(articleJson.link);
-        $('#createDate').val(articleJson.createDate);
-        $('#tags').val(articleJson.tags);
-        $('#priority').val((articleJson.priority === undefined ? "0.5" : articleJson.priority));
-        $('#changefreq').val((articleJson.changefreq === undefined ? "daily" : articleJson.changefreq));
-        
-        // 更新文章信息显示
-        $('#articleIdDisplay').text(articleJson.id);
-        $('#createDateDisplay').text(articleJson.createDate.replace("T", " "));
-        
-        var category = $('#category');
-        category.empty();
-        for (var i = 0; i < categoryJson.length; i++) {
-            category.append('<option id=' + categoryJson[i] + ' value=' + categoryJson[i] + '>' + categoryJson[i] + '</option>');
-        }
-        $('.selectpicker').selectpicker('refresh');
-        category.selectpicker('val', articleJson.category);
-    });
-    
+	$(function() {
+		$('#myTab li:eq(0) a').tab('show');
+		//获取文章
+		var articleJson = <!--{articleJson}-->;
+		//获取分类
+		var categoryJson = <!--{categoryJson}-->;
+
+		
+		var mdEditor = editormd("content", {
+				//width  : "90%",
+				height : 640,
+				path   : "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/",
+				appendMarkdown : articleJson.contentMD, //编辑器赋值
+				saveHTMLToTextarea : true,
+				mode : "markdown",
+				tex  : true,
+				tocm : true, 
+				codeFold : true
+			});
+		//表单赋值
+		$('#id').val(articleJson.id);
+		$('#title').val(articleJson.title);
+		$('#img').val(articleJson.img);
+		$('#link').val(articleJson.link);
+		$('#createDate').val(articleJson.createDate.replace(" ","T"));
+		$('#tags').val(articleJson.tags);
+		$('#priority').val( (articleJson.priority=== undefined ? "0.5":articleJson.priority) );
+		$('#changefreq').selectpicker('val', (articleJson.changefreq === undefined ? "daily":articleJson.changefreq));
+	
+		$('#WidgetCategory').val(JSON.stringify(categoryJson));
+		var category = $('#category');
+		category.empty();
+		for (var i = 0; i < categoryJson.length; i++) {
+			category.append('<option id=' + categoryJson[i] + ' value=' + categoryJson[i] + '>' + categoryJson[i] + '</option>');
+		}
+		category.selectpicker('val',articleJson.category);
+	});
     //保存按钮(编辑)
     function saveEdit(){
         $.ajax({
             type: "POST",
             dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            url: "/admin/saveEdit/",
+			contentType: "application/json; charset=utf-8",
+            url: "/admin/saveEdit/" ,//url
             data: JSON.stringify($("#editForm").serializeArray()), 
             success: function (result) {
                 alert(result.msg);
-                // 更新修改时间显示
-                $('#modifyDateDisplay').text(new Date().toLocaleString());
             }
         });
     }
-    
     //删除
     function deleteArticle(){
-        if (confirm("确定删除这篇文章吗？删除后需要重新发布才能生效。") == false){ 
+        if (confirm("确定删除吗?删除后重新发布才能生效")==false){ 
             return false; 
-        }
+          }
         $.ajax({
             type: "POST",
             dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            url: "/admin/delete/" + $('#id').val(),
-            data: [{"id": $('#id').val()}],
+			contentType: "application/json; charset=utf-8",
+            url: "/admin/delete/"+$('#id').val() ,//url
+            data: [{"id":$('#id').val()}],
             success: function (result) {
                 alert(result.msg);
-                if (result.success) {
-                    // 删除成功后跳转回文章列表
-                    window.location.href = "/admin/";
-                }
             }
         });
     }
 </script>
-
+  
 </body>
+
 </html>
