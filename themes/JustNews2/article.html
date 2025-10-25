@@ -309,120 +309,120 @@
 			}
 		}
 
-		/* 新增：固定右侧目录样式 - 修复版本 */
-		.toc-container {
-			position: sticky;
-			top: 5rem;
-			z-index: 5;
-			width: 100%;
-			cursor: pointer;
+		/* 新增：固定右侧目录样式 - 独立固定定位 */
+		#fixed-toc-container {
+			position: fixed;
+			top: 100px;
+			right: 30px;
+			width: 280px;
+			z-index: 999;
 			background: white;
 			padding: 1rem;
 			border-radius: 0.75rem;
-			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-			transition: all 0.5s;
-			margin-bottom: 1.5rem;
-		}
-
-		.toc-container:hover {
 			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			transition: all 0.3s ease;
+			max-height: calc(100vh - 140px);
+			overflow: hidden;
+			display: none;
 		}
 
-		.toc-container h2 {
+		#fixed-toc-container.show {
+			display: block;
+		}
+
+		#fixed-toc-container:hover {
+			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		}
+
+		#fixed-toc-container h2 {
 			display: inline-flex;
 			align-items: center;
 			gap: 0.5rem;
 			font-size: 1rem;
 			font-weight: 600;
 			color: #1f2937;
-			margin: 0;
+			margin: 0 0 0.75rem 0;
+			padding-bottom: 0.5rem;
+			border-bottom: 1px solid #e5e7eb;
+			width: 100%;
 		}
 
-		.toc-container .toc {
-			margin-top: 0.5rem;
-			max-height: 16rem;
-			overflow: auto;
+		#fixed-toc-container .fixed-toc {
+			max-height: calc(100vh - 200px);
+			overflow-y: auto;
+			padding-right: 5px;
 		}
 
-		.toc-container .toc::-webkit-scrollbar {
+		#fixed-toc-container .fixed-toc::-webkit-scrollbar {
 			width: 4px;
 		}
 
-		.toc-container .toc::-webkit-scrollbar-thumb {
+		#fixed-toc-container .fixed-toc::-webkit-scrollbar-thumb {
 			background: #d1d5db;
 			border-radius: 2px;
 		}
 
+		#fixed-toc-container .fixed-toc::-webkit-scrollbar-thumb:hover {
+			background: #9ca3af;
+		}
+
 		/* 暗色模式支持 */
 		@media (prefers-color-scheme: dark) {
-			.toc-container {
+			#fixed-toc-container {
 				background: #1e293b;
 				color: #f1f5f9;
+				border: 1px solid #374151;
 			}
 
-			.toc-container h2 {
+			#fixed-toc-container h2 {
 				color: #f1f5f9;
+				border-bottom-color: #374151;
 			}
 		}
 
-		/* 响应式布局调整 - 修复版本 */
-		@media (min-width: 992px) {
-			.container.wrap {
-				display: flex;
-				gap: 1.5rem;
-				align-items: flex-start;
-			}
-
-			.main {
-				flex: 1;
-				min-width: 0; /* 防止内容溢出 */
-			}
-
-			.sidebar {
-				width: 300px;
-				flex-shrink: 0;
-			}
-
-			.toc-container {
+		/* 响应式布局调整 */
+		@media (min-width: 1200px) {
+			#fixed-toc-container {
 				display: block;
 			}
+			
+			/* 为主内容区域添加右边距，为固定目录腾出空间 */
+			.container.wrap {
+				padding-right: 320px;
+			}
 		}
 
-		@media (max-width: 991px) {
-			.toc-container {
+		@media (max-width: 1199px) {
+			#fixed-toc-container {
 				display: none;
 			}
 			
 			.container.wrap {
-				display: block;
+				padding-right: 0;
 			}
 		}
 
-		/* 确保原有布局不受影响 */
-		.container.wrap {
-			max-width: 100%;
-		}
-
 		/* 修复目录链接样式 */
-		.toc-container .toc a {
+		.fixed-toc a {
 			display: block;
-			padding: 6px 12px;
+			padding: 8px 12px;
 			color: #4b5563;
 			text-decoration: none;
-			border-radius: 4px;
+			border-radius: 6px;
 			font-size: 14px;
 			transition: all 0.2s ease;
 			border-left: 3px solid transparent;
 			margin: 2px 0;
+			line-height: 1.4;
 		}
 
-		.toc-container .toc a:hover {
+		.fixed-toc a:hover {
 			background: #f3f4f6;
 			color: #3b82f6;
 			border-left-color: #3b82f6;
 		}
 
-		.toc-container .toc a.active {
+		.fixed-toc a.active {
 			background: #ebf8ff;
 			color: #3b82f6;
 			border-left-color: #3b82f6;
@@ -430,12 +430,23 @@
 		}
 
 		/* 目录层级缩进 */
-		.toc-level-1 a { padding-left: 12px; }
-		.toc-level-2 a { padding-left: 20px; }
-		.toc-level-3 a { padding-left: 28px; }
-		.toc-level-4 a { padding-left: 36px; }
-		.toc-level-5 a { padding-left: 44px; }
-		.toc-level-6 a { padding-left: 52px; }
+		.fixed-toc-level-1 a { padding-left: 12px; }
+		.fixed-toc-level-2 a { padding-left: 20px; }
+		.fixed-toc-level-3 a { padding-left: 28px; }
+		.fixed-toc-level-4 a { padding-left: 36px; }
+		.fixed-toc-level-5 a { padding-left: 44px; }
+		.fixed-toc-level-6 a { padding-left: 52px; }
+
+		/* 确保原有布局不受影响 */
+		.container.wrap {
+			position: relative;
+			transition: padding-right 0.3s ease;
+		}
+
+		/* 移除之前添加到侧边栏的目录样式 */
+		.sidebar .toc-container {
+			display: none;
+		}
 		</style>
 		
 		{{ &OPT.codeBeforHead }}
@@ -475,6 +486,16 @@
 				</div>
 			</div>
 		</header>
+
+		<!-- 独立固定目录容器 -->
+		<div id="fixed-toc-container" class="show">
+			<h2>
+				<i class="fas fa-list"></i>
+				目录
+			</h2>
+			<div class="fixed-toc"></div>
+		</div>
+
 		<div id="wrap">
 			<div class="container wrap">
 				<div class="main">
@@ -546,14 +567,7 @@
 				</div>
 
 				<aside class="sidebar">
-					<!-- 固定右侧目录 -->
-					<div class="toc-container">
-						<h2>
-							<i class="fas fa-list"></i>
-							目录
-						</h2>
-						<div class="toc"></div>
-					</div>
+					<!-- 移除侧边栏内的目录容器 -->
 
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
@@ -863,9 +877,9 @@
 			// 初始化浮动目录
 			setTimeout(initFloatingToc, 100);
 
-			// 新增：固定右侧目录功能
+			// 新增：独立固定目录功能
 			function initFixedToc() {
-				const fixedTocContainer = document.querySelector('.toc-container .toc');
+				const fixedTocContainer = document.querySelector('#fixed-toc-container .fixed-toc');
 				if (!fixedTocContainer) return;
 
 				const articleContent = document.querySelector('.entry-content');
@@ -892,8 +906,8 @@
 					const level = parseInt(heading.tagName.substring(1));
 
 					fixedTocHTML += `
-						<div class="toc-level-${level}">
-							<a href="#${headingId}" class="toc-link">
+						<div class="fixed-toc-level-${level}">
+							<a href="#${headingId}" class="fixed-toc-link">
 								${heading.textContent}
 							</a>
 						</div>
@@ -923,7 +937,7 @@
 						const activeLink = fixedTocContainer.querySelector(`a[href="#${current}"]`);
 						if (activeLink) {
 							activeLink.classList.add('active');
-						// 滚动到可见区域
+							// 滚动到可见区域
 							const container = fixedTocContainer;
 							const activeOffset = activeLink.offsetTop;
 							const containerHeight = container.clientHeight;
