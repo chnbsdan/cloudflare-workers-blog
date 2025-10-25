@@ -308,6 +308,90 @@
 				right: 50px;
 			}
 		}
+
+		/* 新增：固定右侧目录样式 */
+		.toc-container {
+			position: sticky;
+			top: 5rem;
+			z-index: 5;
+			width: 100%;
+			cursor: pointer;
+			background: white;
+			padding: 1rem;
+			border-radius: 0.75rem;
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+			transition: all 0.5s;
+			margin-bottom: 1.5rem;
+		}
+
+		.toc-container:hover {
+			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+		}
+
+		.toc-container h2 {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-size: 1rem;
+			font-weight: 600;
+			color: #1f2937;
+			margin: 0;
+		}
+
+		.toc-container .toc {
+			margin-top: 0.5rem;
+			max-height: 16rem;
+			overflow: auto;
+		}
+
+		.toc-container .toc::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		.toc-container .toc::-webkit-scrollbar-thumb {
+			background: #d1d5db;
+			border-radius: 2px;
+		}
+
+		/* 暗色模式支持 */
+		@media (prefers-color-scheme: dark) {
+			.toc-container {
+				background: #1e293b;
+				color: #f1f5f9;
+			}
+
+			.toc-container h2 {
+				color: #f1f5f9;
+			}
+		}
+
+		/* 响应式布局调整 */
+		@media (min-width: 768px) {
+			.container.wrap {
+				display: grid;
+				grid-template-columns: 1fr 18rem;
+				gap: 1.5rem;
+				align-items: start;
+			}
+
+			.main {
+				order: 1;
+			}
+
+			.sidebar {
+				order: 2;
+			}
+
+			.toc-container {
+				display: block;
+			}
+		}
+
+		@media (max-width: 767px) {
+			.toc-container {
+				display: none;
+			}
+		}
 		</style>
 		
 		{{ &OPT.codeBeforHead }}
@@ -418,6 +502,15 @@
 				</div>
 
 				<aside class="sidebar">
+					<!-- 固定右侧目录 -->
+					<div class="toc-container">
+						<h2>
+							<i class="fas fa-list"></i>
+							目录
+						</h2>
+						<div class="toc"></div>
+					</div>
+
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -725,6 +818,99 @@
 
 			// 初始化浮动目录
 			setTimeout(initFloatingToc, 100);
+
+			// 新增：固定右侧目录功能
+			function initFixedToc() {
+				const fixedTocContainer = document.querySelector('.toc-container .toc');
+				if (!fixedTocContainer) return;
+
+				const articleContent = document.querySelector('.entry-content');
+				if (!articleContent) return;
+
+				// 获取所有标题元素
+				const headings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+				if (headings.length === 0) {
+					fixedTocContainer.innerHTML = '<div style="color: #6b7280; text-align: center; padding: 20px; font-style: italic;">本文暂无目录结构</div>';
+					return;
+				}
+
+				let fixedTocHTML = '';
+
+				headings.forEach((heading, index) => {
+					// 为标题添加ID（如果还没有）
+					let headingId = heading.id;
+					if (!headingId) {
+						headingId = 'heading-' + index;
+						heading.id = headingId;
+					}
+
+					// 确定标题级别
+					const level = parseInt(heading.tagName.substring(1));
+					const levelClass = 'toc-level-' + level;
+
+					fixedTocHTML += `
+						<div class="${levelClass}" style="margin: 4px 0;">
+							<a href="#${headingId}" 
+							   style="display: block; 
+									  padding: 6px 12px; 
+									  color: #4b5563; 
+									  text-decoration: none; 
+									  border-radius: 4px; 
+									  font-size: 14px; 
+									  transition: all 0.2s ease;
+									  border-left: 3px solid transparent;
+									  padding-left: ${12 + (level - 1) * 8}px;"
+							   onmouseover="this.style.background='#f3f4f6'; this.style.color='#3b82f6'; this.style.borderLeftColor='#3b82f6'"
+							   onmouseout="if(!this.classList.contains('active')) {this.style.background='transparent'; this.style.color='#4b5563'; this.style.borderLeftColor='transparent'}"
+							   onclick="event.preventDefault(); 
+										const target = document.getElementById('${headingId}'); 
+										if(target) { 
+											const offset = target.getBoundingClientRect().top + window.pageYOffset - 80; 
+											window.scrollTo({top: offset, behavior: 'smooth'}); 
+										}">
+								${heading.textContent}
+							</a>
+						</div>
+					`;
+				});
+
+				fixedTocContainer.innerHTML = fixedTocHTML;
+
+				// 为固定目录添加滚动高亮
+				const fixedTocLinks = fixedTocContainer.querySelectorAll('a');
+				
+				window.addEventListener('scroll', function() {
+					let current = '';
+					
+					headings.forEach(heading => {
+						const headingTop = heading.getBoundingClientRect().top;
+						if (headingTop <= 100) {
+							current = heading.id;
+						}
+					});
+
+					fixedTocLinks.forEach(link => {
+						link.classList.remove('active');
+						link.style.background = 'transparent';
+						link.style.color = '#4b5563';
+						link.style.borderLeftColor = 'transparent';
+					});
+
+					if (current) {
+						const activeLink = fixedTocContainer.querySelector(`a[href="#${current}"]`);
+						if (activeLink) {
+							activeLink.classList.add('active');
+							activeLink.style.background = '#ebf8ff';
+							activeLink.style.color = '#3b82f6';
+							activeLink.style.borderLeftColor = '#3b82f6';
+							activeLink.style.fontWeight = '600';
+						}
+					}
+				});
+			}
+
+			// 初始化固定目录
+			setTimeout(initFixedToc, 100);
 		});
 		</script>
 
