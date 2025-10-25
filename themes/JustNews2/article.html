@@ -309,7 +309,7 @@
 			}
 		}
 
-		/* 新增：固定右侧目录样式 */
+		/* 新增：固定右侧目录样式 - 修复版本 */
 		.toc-container {
 			position: sticky;
 			top: 5rem;
@@ -365,21 +365,22 @@
 			}
 		}
 
-		/* 响应式布局调整 */
-		@media (min-width: 768px) {
+		/* 响应式布局调整 - 修复版本 */
+		@media (min-width: 992px) {
 			.container.wrap {
-				display: grid;
-				grid-template-columns: 1fr 18rem;
+				display: flex;
 				gap: 1.5rem;
-				align-items: start;
+				align-items: flex-start;
 			}
 
 			.main {
-				order: 1;
+				flex: 1;
+				min-width: 0; /* 防止内容溢出 */
 			}
 
 			.sidebar {
-				order: 2;
+				width: 300px;
+				flex-shrink: 0;
 			}
 
 			.toc-container {
@@ -387,11 +388,54 @@
 			}
 		}
 
-		@media (max-width: 767px) {
+		@media (max-width: 991px) {
 			.toc-container {
 				display: none;
 			}
+			
+			.container.wrap {
+				display: block;
+			}
 		}
+
+		/* 确保原有布局不受影响 */
+		.container.wrap {
+			max-width: 100%;
+		}
+
+		/* 修复目录链接样式 */
+		.toc-container .toc a {
+			display: block;
+			padding: 6px 12px;
+			color: #4b5563;
+			text-decoration: none;
+			border-radius: 4px;
+			font-size: 14px;
+			transition: all 0.2s ease;
+			border-left: 3px solid transparent;
+			margin: 2px 0;
+		}
+
+		.toc-container .toc a:hover {
+			background: #f3f4f6;
+			color: #3b82f6;
+			border-left-color: #3b82f6;
+		}
+
+		.toc-container .toc a.active {
+			background: #ebf8ff;
+			color: #3b82f6;
+			border-left-color: #3b82f6;
+			font-weight: 600;
+		}
+
+		/* 目录层级缩进 */
+		.toc-level-1 a { padding-left: 12px; }
+		.toc-level-2 a { padding-left: 20px; }
+		.toc-level-3 a { padding-left: 28px; }
+		.toc-level-4 a { padding-left: 36px; }
+		.toc-level-5 a { padding-left: 44px; }
+		.toc-level-6 a { padding-left: 52px; }
 		</style>
 		
 		{{ &OPT.codeBeforHead }}
@@ -846,28 +890,10 @@
 
 					// 确定标题级别
 					const level = parseInt(heading.tagName.substring(1));
-					const levelClass = 'toc-level-' + level;
 
 					fixedTocHTML += `
-						<div class="${levelClass}" style="margin: 4px 0;">
-							<a href="#${headingId}" 
-							   style="display: block; 
-									  padding: 6px 12px; 
-									  color: #4b5563; 
-									  text-decoration: none; 
-									  border-radius: 4px; 
-									  font-size: 14px; 
-									  transition: all 0.2s ease;
-									  border-left: 3px solid transparent;
-									  padding-left: ${12 + (level - 1) * 8}px;"
-							   onmouseover="this.style.background='#f3f4f6'; this.style.color='#3b82f6'; this.style.borderLeftColor='#3b82f6'"
-							   onmouseout="if(!this.classList.contains('active')) {this.style.background='transparent'; this.style.color='#4b5563'; this.style.borderLeftColor='transparent'}"
-							   onclick="event.preventDefault(); 
-										const target = document.getElementById('${headingId}'); 
-										if(target) { 
-											const offset = target.getBoundingClientRect().top + window.pageYOffset - 80; 
-											window.scrollTo({top: offset, behavior: 'smooth'}); 
-										}">
+						<div class="toc-level-${level}">
+							<a href="#${headingId}" class="toc-link">
 								${heading.textContent}
 							</a>
 						</div>
@@ -891,21 +917,43 @@
 
 					fixedTocLinks.forEach(link => {
 						link.classList.remove('active');
-						link.style.background = 'transparent';
-						link.style.color = '#4b5563';
-						link.style.borderLeftColor = 'transparent';
 					});
 
 					if (current) {
 						const activeLink = fixedTocContainer.querySelector(`a[href="#${current}"]`);
 						if (activeLink) {
 							activeLink.classList.add('active');
-							activeLink.style.background = '#ebf8ff';
-							activeLink.style.color = '#3b82f6';
-							activeLink.style.borderLeftColor = '#3b82f6';
-							activeLink.style.fontWeight = '600';
+						// 滚动到可见区域
+							const container = fixedTocContainer;
+							const activeOffset = activeLink.offsetTop;
+							const containerHeight = container.clientHeight;
+							const scrollTop = container.scrollTop;
+							
+							if (activeOffset < scrollTop || activeOffset > scrollTop + containerHeight - 50) {
+								container.scrollTo({
+									top: activeOffset - 50,
+									behavior: 'smooth'
+								});
+							}
 						}
 					}
+				});
+
+				// 点击目录链接平滑滚动
+				fixedTocLinks.forEach(link => {
+					link.addEventListener('click', function(e) {
+						e.preventDefault();
+						const targetId = this.getAttribute('href').substring(1);
+						const targetElement = document.getElementById(targetId);
+
+						if (targetElement) {
+							const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
+							window.scrollTo({
+								top: offsetTop,
+								behavior: 'smooth'
+							});
+						}
+					});
 				});
 			}
 
