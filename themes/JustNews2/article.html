@@ -28,7 +28,7 @@
 		
 		<!-- 文章目录样式 -->
 		<style>
-		/* 浮动目录按钮 - 保持原有功能 */
+		/* 浮动目录按钮 - 所有设备都显示 */
 		#toc-float-btn {
 			position: fixed;
 			right: 30px;
@@ -233,63 +233,75 @@
 		/* 固定右侧目录样式 - 使用真正的固定定位 */
 		.toc-container {
 			position: fixed;
-			top: 120px; /* 距离顶部的位置 */
-			right: calc((100vw - 1200px) / 2 + 20px); /* 根据容器宽度计算右侧位置 */
-			width: 280px;
+			top: 150px; /* 调整位置，避免压到文章内容 */
+			right: 30px; /* 直接使用固定右边距 */
+			width: 320px; /* 增加宽度 */
 			z-index: 100;
 			background: white;
-			padding: 1rem;
-			border-radius: 0.75rem;
-			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-			transition: all 0.5s;
+			padding: 1.2rem;
+			border-radius: 12px;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
 			display: none; /* 默认隐藏，在桌面端显示 */
+			max-height: 70vh;
+			overflow: hidden;
 		}
 
 		.toc-container:hover {
-			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+			box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+			transform: translateY(-2px);
 		}
 
 		.toc-container h2 {
 			display: inline-flex;
 			align-items: center;
 			gap: 0.5rem;
-			font-size: 1rem;
+			font-size: 1.1rem;
 			font-weight: 600;
 			color: #1f2937;
-			margin: 0 0 0.5rem 0;
+			margin: 0 0 0.8rem 0;
+			padding-bottom: 0.5rem;
+			border-bottom: 2px solid #e5e7eb;
 		}
 
 		.toc-container .toc {
-			max-height: 60vh;
-			overflow: auto;
+			max-height: calc(70vh - 80px);
+			overflow-y: auto;
+			padding-right: 5px;
 		}
 
 		.toc-container .toc::-webkit-scrollbar {
-			width: 4px;
+			width: 6px;
 		}
 
 		.toc-container .toc::-webkit-scrollbar-thumb {
-			background: #d1d5db;
-			border-radius: 2px;
+			background: #cbd5e0;
+			border-radius: 3px;
+		}
+
+		.toc-container .toc::-webkit-scrollbar-thumb:hover {
+			background: #9ca3af;
 		}
 
 		/* 修复目录链接样式 */
 		.toc-container .toc a {
 			display: block;
-			padding: 6px 12px;
+			padding: 8px 15px;
 			color: #4b5563;
 			text-decoration: none;
-			border-radius: 4px;
+			border-radius: 6px;
 			font-size: 14px;
 			transition: all 0.2s ease;
 			border-left: 3px solid transparent;
-			margin: 2px 0;
+			margin: 3px 0;
+			line-height: 1.4;
 		}
 
 		.toc-container .toc a:hover {
 			background: #f3f4f6;
 			color: #3b82f6;
 			border-left-color: #3b82f6;
+			transform: translateX(2px);
 		}
 
 		.toc-container .toc a.active {
@@ -297,15 +309,16 @@
 			color: #3b82f6;
 			border-left-color: #3b82f6;
 			font-weight: 600;
+			box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
 		}
 
 		/* 目录层级缩进 */
-		.toc-level-1 a { padding-left: 12px; }
-		.toc-level-2 a { padding-left: 20px; }
-		.toc-level-3 a { padding-left: 28px; }
-		.toc-level-4 a { padding-left: 36px; }
-		.toc-level-5 a { padding-left: 44px; }
-		.toc-level-6 a { padding-left: 52px; }
+		.toc-level-1 a { padding-left: 15px; font-weight: 600; }
+		.toc-level-2 a { padding-left: 25px; font-weight: 500; }
+		.toc-level-3 a { padding-left: 35px; }
+		.toc-level-4 a { padding-left: 45px; font-size: 13px; color: #6b7280; }
+		.toc-level-5 a { padding-left: 55px; font-size: 13px; color: #9ca3af; }
+		.toc-level-6 a { padding-left: 65px; font-size: 12px; color: #d1d5db; }
 
 		/* 响应式布局调整 */
 		@media (min-width: 1200px) {
@@ -313,10 +326,16 @@
 			.toc-container {
 				display: block;
 			}
-
-			/* 桌面端隐藏浮动按钮 */
+			
+			/* 桌面端也显示浮动按钮，但位置调整 */
 			#toc-float-btn {
-				display: none;
+				display: flex;
+				bottom: 150px; /* 调整位置避免重叠 */
+			}
+			
+			/* 调整主容器右边距，为固定目录腾出空间 */
+			.container.wrap {
+				padding-right: 360px; /* 为固定目录预留空间 */
 			}
 		}
 
@@ -329,6 +348,19 @@
 			/* 移动端显示浮动按钮 */
 			#toc-float-btn {
 				display: flex;
+				bottom: 100px;
+			}
+			
+			/* 移动端恢复正常边距 */
+			.container.wrap {
+				padding-right: 0;
+			}
+		}
+
+		/* 大屏幕适配 */
+		@media (min-width: 1400px) {
+			.toc-container {
+				right: calc((100vw - 1320px) / 2); /* 根据大屏幕调整位置 */
 			}
 		}
 
@@ -337,10 +369,12 @@
 			.toc-container {
 				background: #1e293b;
 				color: #f1f5f9;
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 			}
 
 			.toc-container h2 {
 				color: #f1f5f9;
+				border-bottom-color: #374151;
 			}
 
 			.toc-container .toc a {
@@ -369,6 +403,14 @@
 			#toc-floating-list a:hover {
 				background: #374151;
 				color: #60a5fa;
+			}
+			
+			.toc-container .toc::-webkit-scrollbar-thumb {
+				background: #4b5563;
+			}
+			
+			.toc-container .toc::-webkit-scrollbar-thumb:hover {
+				background: #6b7280;
 			}
 		}
 		</style>
@@ -545,7 +587,7 @@
 			<div class="toc"></div>
 		</div>
 
-		<!-- 浮动目录按钮 -->
+		<!-- 浮动目录按钮 - 所有设备都显示 -->
 		<button id="toc-float-btn" title="打开文章目录">
 			<i class="fas fa-list"></i>
 		</button>
