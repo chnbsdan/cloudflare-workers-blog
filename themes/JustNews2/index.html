@@ -32,38 +32,57 @@
 				position: relative;
 				display: inline-block;
 				margin-left: 20px;
+				vertical-align: middle;
 			}
 			
 			.search-form {
 				display: flex;
 				align-items: center;
+				position: relative;
 			}
 			
 			.search-input {
-				padding: 8px 15px;
+				padding: 8px 40px 8px 15px;
 				border: 1px solid #ddd;
 				border-radius: 20px;
 				outline: none;
 				width: 200px;
 				transition: all 0.3s;
+				font-size: 14px;
+				background: #fff;
 			}
 			
 			.search-input:focus {
 				border-color: #007cba;
 				width: 250px;
+				box-shadow: 0 0 5px rgba(0, 124, 186, 0.3);
 			}
 			
 			.search-button {
+				position: absolute;
+				right: 5px;
+				top: 50%;
+				transform: translateY(-50%);
 				background: none;
 				border: none;
-				margin-left: -35px;
 				cursor: pointer;
 				color: #666;
 				padding: 5px;
+				width: 30px;
+				height: 30px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 			
 			.search-button:hover {
 				color: #007cba;
+			}
+			
+			.search-icon {
+				width: 16px;
+				height: 16px;
+				fill: currentColor;
 			}
 			
 			.search-results {
@@ -79,12 +98,14 @@
 				max-height: 300px;
 				overflow-y: auto;
 				display: none;
+				margin-top: 5px;
 			}
 			
 			.search-result-item {
 				padding: 10px 15px;
 				border-bottom: 1px solid #eee;
 				cursor: pointer;
+				transition: background-color 0.2s;
 			}
 			
 			.search-result-item:hover {
@@ -98,17 +119,21 @@
 			.search-result-title {
 				font-weight: bold;
 				margin-bottom: 5px;
+				font-size: 14px;
+				color: #333;
 			}
 			
 			.search-result-excerpt {
-				font-size: 0.9em;
+				font-size: 12px;
 				color: #666;
+				line-height: 1.4;
 			}
 			
 			.no-results {
 				padding: 15px;
 				text-align: center;
 				color: #999;
+				font-size: 14px;
 			}
 			
 			/* 移动端适配 */
@@ -117,6 +142,7 @@
 					margin-left: 0;
 					margin-top: 10px;
 					width: 100%;
+					display: block;
 				}
 				
 				.search-form {
@@ -125,9 +151,14 @@
 				
 				.search-input {
 					width: 100%;
+					padding: 10px 45px 10px 15px;
 				}
 				
 				.search-input:focus {
+					width: 100%;
+				}
+				
+				.navbar-action {
 					width: 100%;
 				}
 			}
@@ -165,12 +196,10 @@
 						<div class="search-container">
 							<form class="search-form" id="search-form">
 								<input type="text" class="search-input" id="search-input" placeholder="搜索文章..." autocomplete="off">
-								<button type="submit" class="search-button">
-									<i class="wpcom-icon wi">
-										<svg aria-hidden="true">
-											<use xlink:href="#wi-search"></use>
-										</svg>
-									</i>
+								<button type="submit" class="search-button" title="搜索">
+									<svg class="search-icon" viewBox="0 0 24 24" width="16" height="16">
+										<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+									</svg>
 								</button>
 							</form>
 							<div class="search-results" id="search-results"></div>
@@ -477,44 +506,53 @@
 				const searchForm = document.getElementById('search-form');
 				const searchInput = document.getElementById('search-input');
 				const searchResults = document.getElementById('search-results');
-				const articleList = document.getElementById('article-list');
 				
-				// 存储所有文章的缓存
-				let allArticles = [];
+				// 简单的搜索功能 - 跳转到搜索页面
+				searchForm.addEventListener('submit', function(e) {
+					e.preventDefault();
+					const query = searchInput.value.trim();
+					if (query) {
+						// 跳转到搜索页面，您需要创建这个页面
+						window.location.href = '/search?q=' + encodeURIComponent(query);
+					}
+				});
 				
-				// 获取所有文章数据
-				function fetchAllArticles() {
-					// 这里需要根据您的后端API来获取所有文章
-					// 以下是一个示例，您需要根据实际情况修改
-					fetch('/api/all-articles')
-						.then(response => response.json())
-						.then(data => {
-							allArticles = data;
-						})
-						.catch(error => {
-							console.error('获取文章数据失败:', error);
-						});
-				}
-				
-				// 初始化时获取文章数据
-				fetchAllArticles();
-				
-				// 搜索功能
-				function performSearch(query) {
-					if (!query.trim()) {
+				// 简单的实时搜索建议（基于当前页面可见的文章）
+				searchInput.addEventListener('input', function() {
+					const query = this.value.trim();
+					
+					if (query.length < 2) {
 						searchResults.style.display = 'none';
 						return;
 					}
 					
-					// 在实际应用中，这里应该发送请求到后端进行搜索
-					// 这里使用前端过滤作为示例
-					const filteredArticles = allArticles.filter(article => {
-						return article.title.toLowerCase().includes(query.toLowerCase()) || 
-							   article.contentText.toLowerCase().includes(query.toLowerCase());
+					// 获取当前页面上的文章
+					const articles = document.querySelectorAll('#article-list .item');
+					const results = [];
+					
+					articles.forEach(article => {
+						const titleElement = article.querySelector('.item-title a');
+						const excerptElement = article.querySelector('.item-excerpt p');
+						const linkElement = article.querySelector('.item-img-inner');
+						
+						if (titleElement && excerptElement && linkElement) {
+							const title = titleElement.textContent;
+							const excerpt = excerptElement.textContent;
+							const url = linkElement.href;
+							
+							if (title.toLowerCase().includes(query.toLowerCase()) || 
+								excerpt.toLowerCase().includes(query.toLowerCase())) {
+								results.push({
+									title: title,
+									excerpt: excerpt,
+									url: url
+								});
+							}
+						}
 					});
 					
-					displaySearchResults(filteredArticles);
-				}
+					displaySearchResults(results);
+				});
 				
 				// 显示搜索结果
 				function displaySearchResults(results) {
@@ -528,7 +566,7 @@
 							resultItem.className = 'search-result-item';
 							resultItem.innerHTML = `
 								<div class="search-result-title">${article.title}</div>
-								<div class="search-result-excerpt">${article.contentText.substring(0, 60)}...</div>
+								<div class="search-result-excerpt">${article.excerpt.substring(0, 60)}...</div>
 							`;
 							resultItem.addEventListener('click', function() {
 								window.location.href = article.url;
@@ -540,27 +578,6 @@
 					searchResults.style.display = 'block';
 				}
 				
-				// 事件监听
-				searchForm.addEventListener('submit', function(e) {
-					e.preventDefault();
-					const query = searchInput.value.trim();
-					if (query) {
-						// 在实际应用中，这里应该跳转到搜索结果页面
-						// 这里使用前端过滤作为示例
-						window.location.href = `/search?q=${encodeURIComponent(query)}`;
-					}
-				});
-				
-				searchInput.addEventListener('input', function() {
-					performSearch(this.value);
-				});
-				
-				searchInput.addEventListener('focus', function() {
-					if (this.value.trim()) {
-						performSearch(this.value);
-					}
-				});
-				
 				// 点击页面其他地方关闭搜索结果
 				document.addEventListener('click', function(e) {
 					if (!searchForm.contains(e.target)) {
@@ -568,14 +585,21 @@
 					}
 				});
 				
-				// 返回顶部功能
-				function scrollToTop() {
-					window.scrollTo({
-						top: 0,
-						behavior: 'smooth'
-					});
-				}
+				// 输入框获得焦点时显示已有结果
+				searchInput.addEventListener('focus', function() {
+					if (this.value.trim().length >= 2) {
+						this.dispatchEvent(new Event('input'));
+					}
+				});
 			});
+			
+			// 返回顶部功能
+			function scrollToTop() {
+				window.scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				});
+			}
 		</script>
 		
 		{{ &OPT.codeBeforBody }}
