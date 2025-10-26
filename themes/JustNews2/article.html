@@ -436,6 +436,58 @@
 		.toc-level-4 a { padding-left: 36px; }
 		.toc-level-5 a { padding-left: 44px; }
 		.toc-level-6 a { padding-left: 52px; }
+
+		/* 社交图标栏样式 */
+		.social-icons-bar {
+			position: fixed;
+			left: 20px;
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			z-index: 9999;
+		}
+
+		.social-icon {
+			width: 40px;
+			height: 40px;
+			background: #3b82f6;
+			color: white;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+		}
+
+		.social-icon:hover {
+			background: #2563eb;
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+		}
+
+		.back-to-top {
+			background: #10b981;
+		}
+
+		.back-to-top:hover {
+			background: #059669;
+		}
+
+		@media (max-width: 768px) {
+			.social-icons-bar {
+				left: 10px;
+			}
+			
+			.social-icon {
+				width: 36px;
+				height: 36px;
+				font-size: 14px;
+			}
+		}
 		</style>
 		
 		{{ &OPT.codeBeforHead }}
@@ -923,7 +975,7 @@
 						const activeLink = fixedTocContainer.querySelector(`a[href="#${current}"]`);
 						if (activeLink) {
 							activeLink.classList.add('active');
-						// 滚动到可见区域
+							// 滚动到可见区域
 							const container = fixedTocContainer;
 							const activeOffset = activeLink.offsetTop;
 							const containerHeight = container.clientHeight;
@@ -959,6 +1011,23 @@
 
 			// 初始化固定目录
 			setTimeout(initFixedToc, 100);
+
+			// 返回顶部功能
+			function scrollToTop() {
+				window.scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				});
+			}
+
+			// 为返回顶部按钮添加事件
+			const backToTopBtn = document.querySelector('.back-to-top');
+			if (backToTopBtn) {
+				backToTopBtn.addEventListener('click', function(e) {
+					e.preventDefault();
+					scrollToTop();
+				});
+			}
 		});
 		</script>
 
