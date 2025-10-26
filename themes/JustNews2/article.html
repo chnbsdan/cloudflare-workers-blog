@@ -28,294 +28,12 @@
 		
 		<!-- 文章目录样式 -->
 		<style>
-		/* 浮动目录按钮 */
-		#toc-float-btn {
-			position: fixed;
-			right: 30px;
-			bottom: 100px;
-			width: 50px;
-			height: 50px;
-			background: #3b82f6;
-			color: white;
-			border: none;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			z-index: 10000;
-			box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-			transition: all 0.3s ease;
-			font-size: 18px;
-		}
-
-		#toc-float-btn:hover {
-			background: #2563eb;
-			transform: scale(1.1);
-			box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-		}
-
-		/* 文章目录容器 - 侧边中间小部件样式 */
-		#article-toc-floating {
-			position: fixed;
-			top: 50%;
-			right:260px;
-			transform: translateY(-50%);
-			width: 300px;
-			max-height: 60vh;
-			background: white;
-			border: 1px solid #e1e1e1;
-			border-radius: 12px;
-			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-			z-index: 10001;
-			display: none;
-			overflow: hidden;
-			animation: tocSlideIn 0.3s ease;
-		}
-
-		@keyframes tocSlideIn {
-			from {
-				opacity: 0;
-				transform: translateY(-50%) translateX(20px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(-50%) translateX(0);
-			}
-		}
-
-		#article-toc-floating.show {
-			display: block;
-		}
-
-		/* 目录遮罩 */
-		#toc-overlay {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.4);
-			z-index: 10000;
-			display: none;
-		}
-
-		#toc-overlay.show {
-			display: block;
-		}
-
-		/* 目录头部 */
-		.toc-floating-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 16px 20px;
-			background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-			color: white;
-			border-radius: 12px 12px 0 0;
-		}
-
-		.toc-floating-header h3 {
-			margin: 0;
-			font-size: 15px;
-			font-weight: 600;
-		}
-
-		.toc-close-btn {
-			background: none;
-			border: none;
-			color: white;
-			font-size: 16px;
-			cursor: pointer;
-			width: 28px;
-			height: 28px;
-			border-radius: 6px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			transition: background 0.3s ease;
-		}
-
-		.toc-close-btn:hover {
-			background: rgba(255, 255, 255, 0.2);
-		}
-
-		/* 目录内容 */
-		#toc-floating-list {
-			list-style: none;
-			padding: 15px;
-			margin: 0;
-			max-height: calc(60vh - 60px);
-			overflow-y: auto;
-		}
-
-		#toc-floating-list::-webkit-scrollbar {
-			width: 4px;
-		}
-
-		#toc-floating-list::-webkit-scrollbar-thumb {
-			background: #cbd5e0;
-			border-radius: 2px;
-		}
-
-		#toc-floating-list::-webkit-scrollbar-thumb:hover {
-			background: #a0aec0;
-		}
-
-		#toc-floating-list li {
-			margin: 3px 0;
-			line-height: 1.4;
-		}
-
-		#toc-floating-list a {
-			display: block;
-			padding: 8px 12px;
-			color: #4a5568;
-			text-decoration: none;
-			border-radius: 6px;
-			font-size: 14px;
-			transition: all 0.2s ease;
-			border-left: 3px solid transparent;
-		}
-
-		#toc-floating-list a:hover {
-			background: #f7fafc;
-			color: #3b82f6;
-			border-left-color: #3b82f6;
-		}
-
-		/* 精细的标题级别样式 */
-		#toc-floating-list .toc-h1 {
-			padding-left: 12px;
-			font-weight: 700;
-			font-size: 15px;
-			color: #1a202c;
-			border-left-color: #3b82f6;
-		}
-
-		#toc-floating-list .toc-h2 {
-			padding-left: 20px;
-			font-weight: 600;
-			font-size: 14px;
-			color: #2d3748;
-			border-left-color: #60a5fa;
-		}
-
-		#toc-floating-list .toc-h3 {
-			padding-left: 28px;
-			font-weight: 500;
-			font-size: 14px;
-			color: #4a5568;
-			border-left-color: #93c5fd;
-		}
-
-		#toc-floating-list .toc-h4 {
-			padding-left: 36px;
-			font-size: 13px;
-			color: #718096;
-			border-left-color: #bfdbfe;
-		}
-
-		#toc-floating-list .toc-h5 {
-			padding-left: 44px;
-			font-size: 13px;
-			color: #a0aec0;
-			border-left-color: #dbeafe;
-		}
-
-		#toc-floating-list .toc-h6 {
-			padding-left: 52px;
-			font-size: 12px;
-			color: #cbd5e0;
-			border-left-color: #eff6ff;
-		}
-
-		#toc-floating-list .toc-active {
-			background: #ebf8ff !important;
-			color: #3b82f6 !important;
-			font-weight: 600 !important;
-			border-left-color: #3b82f6 !important;
-		}
-
-		.toc-empty {
-			color: #a0aec0;
-			font-style: italic;
-			text-align: center;
-			padding: 40px 20px;
-			font-size: 14px;
-		}
-
-		/* 移动端适配 */
-		@media (max-width: 1024px) {
-			#article-toc-floating {
-				width: 280px;
-				right: 20px;
-			}
-		}
-
-		@media (max-width: 768px) {
-			#toc-float-btn {
-				right: 20px;
-				bottom: 80px;
-				width: 44px;
-				height: 44px;
-				font-size: 16px;
-			}
-
-			#article-toc-floating {
-				width: 90vw;
-				max-height: 70vh;
-				right: 5vw;
-				left: 5vw;
-				transform: none;
-				top: 50%;
-				transform: translateY(-50%);
-			}
-
-			.toc-floating-header {
-				padding: 14px 16px;
-			}
-
-			#toc-floating-list {
-				padding: 12px;
-				max-height: calc(70vh - 50px);
-			}
-
-			#toc-floating-list .toc-h1 { padding-left: 10px; }
-			#toc-floating-list .toc-h2 { padding-left: 18px; }
-			#toc-floating-list .toc-h3 { padding-left: 26px; }
-			#toc-floating-list .toc-h4 { padding-left: 34px; }
-			#toc-floating-list .toc-h5 { padding-left: 42px; }
-			#toc-floating-list .toc-h6 { padding-left: 50px; }
-		}
-
-		@media (max-width: 480px) {
-			#article-toc-floating {
-				width: 95vw;
-				right: 2.5vw;
-				left: 2.5vw;
-			}
-			
-			#toc-floating-list a {
-				padding: 6px 10px;
-				font-size: 13px;
-			}
-		}
-
-		/* 大屏幕适配 */
-		@media (min-width: 1440px) {
-			#article-toc-floating {
-				right: 50px;
-			}
-		}
-
-		/* 新增：固定右侧目录样式 - 修复版本 */
+		/* 固定右侧目录样式 */
 		.toc-container {
 			position: sticky;
-			top: 5rem;
+			top: 100px;
 			z-index: 5;
 			width: 100%;
-			cursor: pointer;
 			background: white;
 			padding: 1rem;
 			border-radius: 0.75rem;
@@ -335,11 +53,10 @@
 			font-size: 1rem;
 			font-weight: 600;
 			color: #1f2937;
-			margin: 0;
+			margin: 0 0 0.5rem 0;
 		}
 
 		.toc-container .toc {
-			margin-top: 0.5rem;
 			max-height: 16rem;
 			overflow: auto;
 		}
@@ -351,56 +68,6 @@
 		.toc-container .toc::-webkit-scrollbar-thumb {
 			background: #d1d5db;
 			border-radius: 2px;
-		}
-
-		/* 暗色模式支持 */
-		@media (prefers-color-scheme: dark) {
-			.toc-container {
-				background: #1e293b;
-				color: #f1f5f9;
-			}
-
-			.toc-container h2 {
-				color: #f1f5f9;
-			}
-		}
-
-		/* 响应式布局调整 - 修复版本 */
-		@media (min-width: 992px) {
-			.container.wrap {
-				display: flex;
-				gap: 1.5rem;
-				align-items: flex-start;
-			}
-
-			.main {
-				flex: 1;
-				min-width: 0; /* 防止内容溢出 */
-			}
-
-			.sidebar {
-				width: 300px;
-				flex-shrink: 0;
-			}
-
-			.toc-container {
-				display: block;
-			}
-		}
-
-		@media (max-width: 991px) {
-			.toc-container {
-				display: none;
-			}
-			
-			.container.wrap {
-				display: block;
-			}
-		}
-
-		/* 确保原有布局不受影响 */
-		.container.wrap {
-			max-width: 100%;
 		}
 
 		/* 修复目录链接样式 */
@@ -437,55 +104,64 @@
 		.toc-level-5 a { padding-left: 44px; }
 		.toc-level-6 a { padding-left: 52px; }
 
-		/* 社交图标栏样式 */
-		.social-icons-bar {
-			position: fixed;
-			left: 20px;
-			top: 50%;
-			transform: translateY(-50%);
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-			z-index: 9999;
+		/* 响应式布局调整 */
+		@media (min-width: 992px) {
+			.container.wrap {
+				display: flex;
+				gap: 1.5rem;
+				align-items: flex-start;
+			}
+
+			.main {
+				flex: 1;
+				min-width: 0;
+			}
+
+			.sidebar {
+				width: 300px;
+				flex-shrink: 0;
+			}
+
+			/* 桌面端显示固定目录 */
+			.toc-container {
+				display: block;
+			}
 		}
 
-		.social-icon {
-			width: 40px;
-			height: 40px;
-			background: #3b82f6;
-			color: white;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			text-decoration: none;
-			transition: all 0.3s ease;
-			box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-		}
-
-		.social-icon:hover {
-			background: #2563eb;
-			transform: scale(1.1);
-			box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-		}
-
-		.back-to-top {
-			background: #10b981;
-		}
-
-		.back-to-top:hover {
-			background: #059669;
-		}
-
-		@media (max-width: 768px) {
-			.social-icons-bar {
-				left: 10px;
+		@media (max-width: 991px) {
+			/* 移动端隐藏固定目录 */
+			.toc-container {
+				display: none;
 			}
 			
-			.social-icon {
-				width: 36px;
-				height: 36px;
-				font-size: 14px;
+			.container.wrap {
+				display: block;
+			}
+		}
+
+		/* 暗色模式支持 */
+		@media (prefers-color-scheme: dark) {
+			.toc-container {
+				background: #1e293b;
+				color: #f1f5f9;
+			}
+
+			.toc-container h2 {
+				color: #f1f5f9;
+			}
+
+			.toc-container .toc a {
+				color: #d1d5db;
+			}
+
+			.toc-container .toc a:hover {
+				background: #374151;
+				color: #60a5fa;
+			}
+
+			.toc-container .toc a.active {
+				background: #1e40af;
+				color: #dbeafe;
 			}
 		}
 		</style>
@@ -659,25 +335,6 @@
 			</div>
 		</div>
 
-		<!-- 浮动目录按钮 -->
-		<button id="toc-float-btn" title="打开文章目录">
-			<i class="fas fa-list"></i>
-		</button>
-
-		<!-- 浮动目录容器 -->
-		<div id="toc-overlay"></div>
-		<div id="article-toc-floating">
-			<div class="toc-floating-header">
-				<h3>📑 文章目录</h3>
-				<button class="toc-close-btn" title="关闭目录">
-					<i class="fas fa-times"></i>
-				</button>
-			</div>
-			<ul id="toc-floating-list">
-				<li class="toc-empty">正在生成目录...</li>
-			</ul>
-		</div>
-
 		<!-- 社交图标栏 -->
 		<div class="social-icons-bar">
 			<!-- 左侧图标 -->
@@ -760,162 +417,10 @@
 		</script>
 		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/image.js?ver=3.4.9' id='fifu-image-js-js'></script>
 
-		<!-- 浮动目录功能脚本 -->
+		<!-- 固定目录功能脚本 -->
 		<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			// 浮动目录功能
-			const tocFloatBtn = document.getElementById('toc-float-btn');
-			const tocFloating = document.getElementById('article-toc-floating');
-			const tocOverlay = document.getElementById('toc-overlay');
-			const tocCloseBtn = document.querySelector('.toc-close-btn');
-			let isTocGenerated = false;
-
-			// 初始化浮动目录
-			function initFloatingToc() {
-				// 点击浮动按钮打开目录
-				tocFloatBtn.addEventListener('click', openToc);
-
-				// 点击遮罩关闭目录
-				tocOverlay.addEventListener('click', closeToc);
-
-				// 点击关闭按钮关闭目录
-				tocCloseBtn.addEventListener('click', closeToc);
-
-				// ESC键关闭目录
-				document.addEventListener('keydown', function(e) {
-					if (e.key === 'Escape' && tocFloating.classList.contains('show')) {
-						closeToc();
-					}
-				});
-			}
-
-			// 打开目录
-			function openToc() {
-				tocFloating.classList.add('show');
-				tocOverlay.classList.add('show');
-				document.body.style.overflow = 'hidden';
-
-				// 如果目录内容未生成，则生成
-				if (!isTocGenerated) {
-					generateFloatingTOC();
-					isTocGenerated = true;
-				}
-			}
-
-			// 关闭目录
-			function closeToc() {
-				tocFloating.classList.remove('show');
-				tocOverlay.classList.remove('show');
-				document.body.style.overflow = '';
-			}
-
-			// 生成浮动目录内容
-			function generateFloatingTOC() {
-				const articleContent = document.querySelector('.entry-content');
-				const tocList = document.getElementById('toc-floating-list');
-
-				if (!articleContent || !tocList) return;
-
-				// 清空现有内容
-				tocList.innerHTML = '';
-
-				// 获取所有标题元素 (h1-h6)
-				const headings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-				if (headings.length === 0) {
-					tocList.innerHTML = '<li class="toc-empty">本文暂无目录结构</li>';
-					return;
-				}
-
-				let tocHTML = '';
-
-				headings.forEach((heading, index) => {
-					// 为标题添加ID（如果还没有）
-					let headingId = heading.id;
-					if (!headingId) {
-						headingId = 'heading-' + index;
-						heading.id = headingId;
-					}
-
-					// 确定标题级别
-					const level = parseInt(heading.tagName.substring(1));
-					const levelClass = 'toc-h' + level;
-
-					tocHTML += `
-						<li class="${levelClass}">
-							<a href="#${headingId}" data-level="${level}">
-								${heading.textContent}
-							</a>
-						</li>
-					`;
-				});
-
-				tocList.innerHTML = tocHTML;
-
-				// 初始化滚动监听和点击事件
-				initFloatingTocEvents();
-			}
-
-			// 初始化浮动目录事件
-			function initFloatingTocEvents() {
-				const tocLinks = document.querySelectorAll('#toc-floating-list a');
-				const headings = document.querySelectorAll('.entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6');
-
-				if (tocLinks.length === 0) return;
-
-				// 移除所有激活状态
-				function removeActiveClasses() {
-					tocLinks.forEach(link => {
-						link.classList.remove('toc-active');
-					});
-				}
-
-				// 滚动监听
-				window.addEventListener('scroll', function() {
-					let current = '';
-
-					headings.forEach(heading => {
-						const headingTop = heading.getBoundingClientRect().top;
-						if (headingTop <= 100) {
-							current = heading.id;
-						}
-					});
-
-					removeActiveClasses();
-
-					if (current) {
-						const activeLink = document.querySelector(`#toc-floating-list a[href="#${current}"]`);
-						if (activeLink) {
-							activeLink.classList.add('toc-active');
-						}
-					}
-				});
-
-				// 平滑滚动和关闭目录
-				tocLinks.forEach(link => {
-					link.addEventListener('click', function(e) {
-						e.preventDefault();
-						const targetId = this.getAttribute('href').substring(1);
-						const targetElement = document.getElementById(targetId);
-
-						if (targetElement) {
-							const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
-							window.scrollTo({
-								top: offsetTop,
-								behavior: 'smooth'
-							});
-
-							// 滚动后关闭目录
-							setTimeout(closeToc, 300);
-						}
-					});
-				});
-			}
-
-			// 初始化浮动目录
-			setTimeout(initFloatingToc, 100);
-
-			// 新增：固定右侧目录功能
+			// 固定右侧目录功能
 			function initFixedToc() {
 				const fixedTocContainer = document.querySelector('.toc-container .toc');
 				if (!fixedTocContainer) return;
@@ -1011,23 +516,6 @@
 
 			// 初始化固定目录
 			setTimeout(initFixedToc, 100);
-
-			// 返回顶部功能
-			function scrollToTop() {
-				window.scrollTo({
-					top: 0,
-					behavior: 'smooth'
-				});
-			}
-
-			// 为返回顶部按钮添加事件
-			const backToTopBtn = document.querySelector('.back-to-top');
-			if (backToTopBtn) {
-				backToTopBtn.addEventListener('click', function(e) {
-					e.preventDefault();
-					scrollToTop();
-				});
-			}
 		});
 		</script>
 
