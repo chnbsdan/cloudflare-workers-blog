@@ -309,19 +309,18 @@
 			}
 		}
 
-		/* 新增：固定右侧目录样式 - 独立固定定位 */
+		/* 新增：固定右侧目录样式 - 放在侧边栏位置 */
 		#fixed-toc-container {
 			position: fixed;
-			top: 100px;
-			right: 30px;
-			width: 280px;
+			top: 120px;
+			width: 300px; /* 与侧边栏小部件相同宽度 */
 			z-index: 999;
 			background: white;
 			padding: 1rem;
 			border-radius: 0.75rem;
 			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 			transition: all 0.3s ease;
-			max-height: calc(100vh - 140px);
+			max-height: calc(100vh - 160px);
 			overflow: hidden;
 			display: none;
 		}
@@ -348,7 +347,7 @@
 		}
 
 		#fixed-toc-container .fixed-toc {
-			max-height: calc(100vh - 200px);
+			max-height: calc(100vh - 220px);
 			overflow-y: auto;
 			padding-right: 5px;
 		}
@@ -380,25 +379,24 @@
 			}
 		}
 
-		/* 响应式布局调整 */
-		@media (min-width: 1200px) {
+		/* 响应式布局调整 - 精确定位在侧边栏区域 */
+		@media (min-width: 992px) {
 			#fixed-toc-container {
 				display: block;
-			}
-			
-			/* 为主内容区域添加右边距，为固定目录腾出空间 */
-			.container.wrap {
-				padding-right: 320px;
+				/* 精确定位在侧边栏区域 */
+				left: calc(50% + 320px); /* 假设主要内容区域宽度，侧边栏在右侧 */
 			}
 		}
 
-		@media (max-width: 1199px) {
+		@media (min-width: 1200px) {
+			#fixed-toc-container {
+				left: calc(50% + 350px); /* 在大屏幕上微调位置 */
+			}
+		}
+
+		@media (max-width: 991px) {
 			#fixed-toc-container {
 				display: none;
-			}
-			
-			.container.wrap {
-				padding-right: 0;
 			}
 		}
 
@@ -437,10 +435,18 @@
 		.fixed-toc-level-5 a { padding-left: 44px; }
 		.fixed-toc-level-6 a { padding-left: 52px; }
 
-		/* 确保原有布局不受影响 */
+		/* 确保原有布局完全不受影响 */
 		.container.wrap {
 			position: relative;
-			transition: padding-right 0.3s ease;
+			width: 100% !important;
+			max-width: 100% !important;
+			padding-right: 0 !important;
+			margin-right: 0 !important;
+		}
+
+		.main, .sidebar {
+			width: auto !important;
+			max-width: none !important;
 		}
 
 		/* 移除之前添加到侧边栏的目录样式 */
@@ -567,8 +573,7 @@
 				</div>
 
 				<aside class="sidebar">
-					<!-- 移除侧边栏内的目录容器 -->
-
+					<!-- 侧边栏内容保持不变 -->
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
