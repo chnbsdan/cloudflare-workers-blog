@@ -233,7 +233,7 @@
 		/* 固定右侧目录样式 - 使用真正的固定定位 */
 		.toc-container {
 			position: fixed;
-			top: 90px; /* ← 调整这个值：数值越大目录越靠下，数值越小目录越靠上 */
+			top: 85px; /* ← 调整这个值：数值越大目录越靠下，数值越小目录越靠上 */
 			right: 260px; /* ← 调整这个值：数值越大目录越靠左，数值越小目录越靠右 */
 			width: 340px; /* 保持原有侧边栏宽度300px */
 			z-index: 100;
@@ -319,7 +319,7 @@
 			/* 桌面端也显示浮动按钮，但位置调整 */
 			#toc-float-btn {
 				display: flex;
-				bottom: calc(150px - 5mm); /* 调整位置避免重叠并向下移动5mm */
+				bottom: calc(150px - 8mm); /* 调整位置避免重叠并向下移动5mm */
 			}
 		}
 
@@ -332,7 +332,7 @@
 			/* 移动端显示浮动按钮 */
 			#toc-float-btn {
 				display: flex;
-				bottom: calc(100px - 5mm); /* 向下移动5mm */
+				bottom: calc(100px - 8mm); /* 向下移动5mm */
 			}
 		}
 
