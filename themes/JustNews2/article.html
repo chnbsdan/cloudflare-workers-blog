@@ -1347,6 +1347,103 @@ pre:hover .code-copy-btn {
     .comments-title {
         font-size: 1.3em;
     }
+}	
+   /* 彻底修复评论区 - 直接嵌入文章内容区 */
+.comments-area,
+#comments,
+#waline {
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 40px 0 0 0 !important;
+    margin: 40px 0 0 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-top: 2px solid rgba(59, 130, 246, 0.1) !important;
+    backdrop-filter: none !important;
+}
+
+/* 移除所有嵌套背景和边框 */
+.comments-area > *,
+#comments > *,
+#waline > *,
+.waline,
+.waline-container,
+.waline-main,
+.comment-respond,
+.comment-list {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* 评论标题样式 - 简化 */
+.comments-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    background: transparent !important;
+}
+
+/* Waline 评论组件特殊处理 */
+#waline .wl-panel {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#waline .wl-card {
+    background: transparent !important;
+}
+
+/* 评论列表项样式 */
+.wl-comment {
+    background: rgba(248, 250, 252, 0.6) !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid rgba(226, 232, 240, 0.6) !important;
+}
+
+.wl-comment:hover {
+    background: rgba(241, 245, 249, 0.8) !important;
+    border-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* 评论表单样式 */
+.wl-editor {
+    background: rgba(248, 250, 252, 0.6) !important;
+    border: 1px solid rgba(226, 232, 240, 0.6) !important;
+    border-radius: 12px !important;
+}
+
+.wl-editor:focus {
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .comments-area,
+    #comments,
+    #waline {
+        padding: 30px 0 0 0 !important;
+        margin: 30px 0 0 0 !important;
+    }
+    
+    .comments-title {
+        font-size: 1.3em;
+    }
+    
+    .wl-comment {
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+    }
 }			 
 			 
    </style>
