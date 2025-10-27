@@ -27,6 +27,90 @@
 		<script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
 
          <style>
+			 /* 彻底移除文章内容区所有背景层 */
+.entry,
+.post,
+.article {
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    transition: none !important;
+}
+
+/* 移除文章内容区的所有背景 */
+.entry-content,
+.post-content,
+.article-content {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 移除文章标题区域的背景 */
+.entry-head {
+    background: transparent !important;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.1);
+}
+
+/* 移除文章底部区域的背景 */
+.entry-footer {
+    background: transparent !important;
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 2px solid rgba(59, 130, 246, 0.1);
+}
+
+/* 移除文章元信息区域的背景 */
+.entry-meta,
+.post-meta,
+.article-meta {
+    background: transparent !important;
+    border: none !important;
+    padding: 15px 0 !important;
+    margin-bottom: 25px !important;
+}
+
+/* 确保文章容器没有背景 */
+#post-{{ &articleSingle.id }} {
+    background: transparent !important;
+}
+
+/* 移除所有可能的父级背景 */
+.main,
+.container.wrap,
+#wrap {
+    background: transparent !important;
+}
+
+/* 强制移除body背景图片，使用纯色背景 */
+body {
+    background-image: none !important;
+    background-color: #f8fafc !important; /* 或者您想要的颜色 */
+}
+
+/* 如果还想保留背景图片，但确保内容区透明 */
+body {
+    background-image: url('https://img.hangdn.com/fg/fj31.jpg') !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+/* 确保内容区域完全透明 */
+.main > article,
+.main > .post,
+.main > .article {
+    background: transparent !important;
+}
 
        /* 首页文章标题美化 */
 .entry-title a,
