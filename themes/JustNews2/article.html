@@ -1290,6 +1290,65 @@ pre:hover .code-copy-btn {
 #waline-recent::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
+
+/* 修复评论区多层背景问题 - 简化版 */
+.comments-area,
+#comments,
+#waline {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-radius: 16px !important;
+    padding: 30px !important;
+    margin-bottom: 30px !important;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* 移除所有嵌套背景 */
+.comments-area > *,
+#comments > *,
+#waline > * {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 确保Waline评论组件没有额外背景 */
+.waline,
+#waline-main,
+.waline-container {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 评论标题样式 */
+.comments-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.1);
+    background: transparent !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .comments-area,
+    #comments,
+    #waline {
+        padding: 20px !important;
+        border-radius: 12px !important;
+    }
+    
+    .comments-title {
+        font-size: 1.3em;
+    }
+}			 
+			 
    </style>
 
 
