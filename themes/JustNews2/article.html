@@ -28,7 +28,42 @@
 
          <style>
 
-        /* 首页文章标题美化 */
+        /* 布局宽度调整 */
+.container.wrap {
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    gap: 2%;
+    align-items: flex-start;
+}
+
+/* 调整主要内容区域 */
+.main {
+    width: 70%;
+    flex-shrink: 0;
+}
+
+/* 调整侧边栏 */
+.sidebar {
+    width: 28%;
+    flex-shrink: 0;
+}
+
+/* 响应式布局调整 */
+@media (max-width: 768px) {
+    .container.wrap {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .main,
+    .sidebar {
+        width: 100%;
+    }
+}
+
+/* 首页文章标题美化 */
 .entry-title a,
 .post-title a,
 .article-title a {
@@ -170,110 +205,11 @@
     color: #2563eb;
 }
 
-/* 文章底部区域 */
+/* 文章底部区域 - 移除自定义样式，恢复原样 */
 .entry-footer {
     margin-top: 40px;
     padding-top: 25px;
     border-top: 2px solid rgba(59, 130, 246, 0.1);
-}
-
-/* 修复标签按钮样式 */
-.entry-tag {
-    margin-bottom: 25px;
-}
-
-.entry-tag a {
-    display: inline-block;
-    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-    color: #475569;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    text-decoration: none;
-    margin: 0 8px 8px 0;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-    font-weight: 500;
-}
-
-.entry-tag a:hover {
-    background: linear-gradient(135deg, #3b82f6, #6366f1);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    border-color: #3b82f6;
-}
-
-/* 恢复上一篇下一篇导航样式 */
-.entry-page {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.entry-page-prev,
-.entry-page-next {
-    background: linear-gradient(135deg, rgba(241, 245, 249, 0.8), rgba(226, 232, 240, 0.6));
-    border-radius: 12px;
-    padding: 20px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(226, 232, 240, 0.8);
-}
-
-.entry-page-prev:hover,
-.entry-page-next:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.05));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
-    border-color: rgba(59, 130, 246, 0.3);
-}
-
-.entry-page-prev a,
-.entry-page-next a {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.entry-page-prev span,
-.entry-page-next span {
-    display: block;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 8px;
-    line-height: 1.4;
-    font-size: 1.1em;
-}
-
-.entry-page-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #64748b;
-}
-
-.entry-page-prev .entry-page-info {
-    color: #3b82f6;
-}
-
-.entry-page-next .entry-page-info {
-    color: #8b5cf6;
-}
-
-.pull-left, .pull-right {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.wpcom-icon {
-    width: 16px;
-    height: 16px;
 }
 
 /* 文章摘要预览美化 */
@@ -444,16 +380,6 @@
         gap: 10px;
         font-size: 0.9em;
     }
-    
-    .entry-page {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .entry-page-prev,
-    .entry-page-next {
-        padding: 15px;
-    }
 }
 
 @media (max-width: 480px) {
@@ -485,17 +411,6 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
-    }
-    
-    .entry-page-info {
-        flex-direction: column;
-        gap: 8px;
-        align-items: flex-start;
-    }
-    
-    .pull-left, .pull-right {
-        width: 100%;
-        justify-content: space-between;
     }
 }
 
