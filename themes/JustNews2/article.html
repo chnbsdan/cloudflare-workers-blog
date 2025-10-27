@@ -27,7 +27,7 @@
 		<script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
 
          <style>
-			/* 保留一个主要背景层 - 文章容器 */
+			/* 保持容器布局，只移除多余背景层 */
 .entry,
 .post,
 .article {
@@ -40,7 +40,7 @@
     backdrop-filter: blur(10px) !important;
 }
 
-/* 移除内容区域的多余背景 */
+/* 移除内容区域的多余背景，但保持布局 */
 .entry-content,
 .post-content,
 .article-content {
@@ -51,7 +51,7 @@
     box-shadow: none !important;
 }
 
-/* 移除标题区域的背景 */
+/* 保持标题区域样式，只移除背景 */
 .entry-head {
     background: transparent !important;
     margin-bottom: 25px;
@@ -59,7 +59,7 @@
     border-bottom: 2px solid rgba(59, 130, 246, 0.1);
 }
 
-/* 移除底部区域的背景 */
+/* 保持底部区域样式，只移除背景 */
 .entry-footer {
     background: transparent !important;
     margin-top: 40px;
@@ -67,7 +67,7 @@
     border-top: 2px solid rgba(59, 130, 246, 0.1);
 }
 
-/* 移除元信息区域的背景 */
+/* 保持元信息区域样式，只移除背景 */
 .entry-meta,
 .post-meta,
 .article-meta {
@@ -77,20 +77,38 @@
     margin-bottom: 25px !important;
 }
 
-/* 确保父级容器没有额外背景 */
-.main,
-.container.wrap,
-#wrap {
+/* 确保1400px容器正常工作 */
+div#wrap > div.container.wrap {
+    max-width: 1400px !important;
+    width: 1400px !important;
     background: transparent !important;
 }
 
-/* 保留body背景图片 */
+div#wrap > div.container.wrap > div.main {
+    width: 75% !important;
+    float: left !important;
+    background: transparent !important;
+}
+
+div#wrap > div.container.wrap > aside.sidebar {
+    width: 24% !important;
+    float: right !important;
+    margin-left: 1% !important;
+    background: transparent !important;
+}
+
+/* 保持body背景图片，但确保内容在容器内 */
 body {
     background-image: url('https://img.hangdn.com/fg/fj31.jpg') !important;
     background-size: cover !important;
     background-attachment: fixed !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
+}
+
+/* 确保主要内容区域有合适的背景对比度 */
+.main > article {
+    background: rgba(255, 255, 255, 0.92) !important;
 }
 
        /* 首页文章标题美化 */
