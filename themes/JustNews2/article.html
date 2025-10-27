@@ -28,7 +28,7 @@
 
          <style>
 
-          /* 首页文章标题美化 */
+        /* 首页文章标题美化 */
 .entry-title a,
 .post-title a,
 .article-title a {
@@ -177,6 +177,7 @@
     border-top: 2px solid rgba(59, 130, 246, 0.1);
 }
 
+/* 修复标签按钮样式 */
 .entry-tag {
     margin-bottom: 25px;
 }
@@ -185,13 +186,14 @@
     display: inline-block;
     background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
     color: #475569;
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 20px;
     font-size: 0.85em;
     text-decoration: none;
     margin: 0 8px 8px 0;
     transition: all 0.3s ease;
     border: 1px solid transparent;
+    font-weight: 500;
 }
 
 .entry-tag a:hover {
@@ -199,9 +201,10 @@
     color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    border-color: #3b82f6;
 }
 
-/* 上一篇下一篇导航 */
+/* 恢复上一篇下一篇导航样式 */
 .entry-page {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -211,19 +214,21 @@
 
 .entry-page-prev,
 .entry-page-next {
-    background: rgba(241, 245, 249, 0.6);
+    background: linear-gradient(135deg, rgba(241, 245, 249, 0.8), rgba(226, 232, 240, 0.6));
     border-radius: 12px;
     padding: 20px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .entry-page-prev:hover,
 .entry-page-next:hover {
-    background: rgba(59, 130, 246, 0.05);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.05));
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
 }
 
 .entry-page-prev a,
@@ -233,6 +238,16 @@
     display: block;
 }
 
+.entry-page-prev span,
+.entry-page-next span {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    font-size: 1.1em;
+}
+
 .entry-page-info {
     display: flex;
     justify-content: space-between;
@@ -240,6 +255,25 @@
     margin-top: 10px;
     font-size: 0.9em;
     color: #64748b;
+}
+
+.entry-page-prev .entry-page-info {
+    color: #3b82f6;
+}
+
+.entry-page-next .entry-page-info {
+    color: #8b5cf6;
+}
+
+.pull-left, .pull-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.wpcom-icon {
+    width: 16px;
+    height: 16px;
 }
 
 /* 文章摘要预览美化 */
@@ -451,6 +485,17 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+    }
+    
+    .entry-page-info {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+    
+    .pull-left, .pull-right {
+        width: 100%;
+        justify-content: space-between;
     }
 }
 
@@ -788,19 +833,16 @@ pre:hover .code-copy-btn {
     font-weight: 600;
 }
 
-/* 评论区域样式 */
+/* 简化评论区为单层背景 */
 .comments-area,
 #comments {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 16px;
     padding: 30px;
     margin-bottom: 30px;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    backdrop-filter: blur(10px);
 }
 
 .comments-title {
@@ -817,7 +859,7 @@ pre:hover .code-copy-btn {
     .comments-area,
     #comments {
         padding: 20px;
-        border-radius: 16px;
+        border-radius: 12px;
     }
     
     .comments-title {
