@@ -84,51 +84,50 @@
     margin: 0 !important;
 }
 
-	/* 修复图片悬停时的蓝色线条问题+ */
+	/* 彻底修复图片蓝色线条问题+ */
 .entry-content img,
 .post-content img,
-.article-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    margin: 20px 0;
-    /* 添加以下属性防止蓝色边框 */
+.article-content img,
+.entry-content img:hover,
+.post-content img:hover,
+.article-content img:hover {
+    /* 移除所有可能的边框和轮廓 */
     outline: none !important;
     border: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+    
+    /* 防止任何浏览器默认样式 */
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-focus-ring-color: transparent !important;
+    
+    /* 确保盒模型正确 */
     box-sizing: border-box !important;
+    display: block !important;
 }
 
 .entry-content img:hover,
 .post-content img:hover,
 .article-content img:hover {
     transform: scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    /* 确保悬停时也没有边框 */
-    outline: none !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 修复可能由父元素继承的边框 */
+.entry-content,
+.post-content,
+.article-content {
     border: none !important;
-}
-
-/* 特别针对可能被添加边框的图片 */
-.entry-content img[style*="border"],
-.post-content img[style*="border"],
-.article-content img[style*="border"] {
-    border: none !important;
-}
-
-/* 修复可能由浏览器默认样式引起的边框 */
-img {
-    border-style: none !important;
-}
-
-/* 如果蓝色线条是聚焦轮廓，添加这个修复 */
-.entry-content img:focus,
-.post-content img:focus,
-.article-content img:focus {
     outline: none !important;
-    box-shadow: 0 0 0 0 transparent !important;
-}		 
+}
+
+.entry-content a,
+.post-content a,
+.article-content a {
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+}
 			 
 			/* 保持容器布局，只移除多余背景层+ */
 .entry,
