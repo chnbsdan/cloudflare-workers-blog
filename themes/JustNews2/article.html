@@ -27,7 +27,64 @@
 		<script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
 
          <style>
-			/* 保持容器布局，只移除多余背景层 */
+        /* 修复多层背景问题 - 移除多余白层 */
+.main > article {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 确保只有文章内容区域有背景 */
+.entry {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-radius: 16px !important;
+    padding: 30px !important;
+    margin-bottom: 30px !important;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* 移除内容区域的任何嵌套背景 */
+.entry-content {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 确保头部和底部也是透明的 */
+.entry-head,
+.entry-footer {
+    background: transparent !important;
+}
+
+/* 修复评论区多层背景 */
+.comments-area,
+#comments {
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 40px 0 0 0 !important;
+    margin: 40px 0 0 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-top: 2px solid rgba(59, 130, 246, 0.1) !important;
+}
+
+/* 移除所有嵌套背景 */
+.comments-area > *,
+#comments > * {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+			 
+			/* 保持容器布局，只移除多余背景层+ */
 .entry,
 .post,
 .article {
