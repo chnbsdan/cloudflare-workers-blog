@@ -1718,6 +1718,48 @@
 			/* ]]> */
 			</script>
 		<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/image.js?ver=3.4.9' id='fifu-image-js-js'></script>
+		
+	<!-- 在这里添加 LeanCloud 阅读统计代码 -->
+		<!-- LeanCloud 阅读统计 -->
+<script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化 LeanCloud
+    AV.init({
+        appId: "YzIvxm4yPfj7MyRIPtHmIyk",
+        appKey: "dksm1PbNJ1uf5dxE6CqeMJyk",
+        serverURL: "https://cfblog.hangdn.com"
+    });
+    
+    // 更新阅读数显示
+    function showPageViews() {
+        const visitors = document.querySelectorAll('.leancloud_visitors');
+        visitors.forEach(visitor => {
+            const url = visitor.id;
+            const countElement = visitor.querySelector('.leancloud-visitors-count');
+            
+            if (url && countElement) {
+                const query = new AV.Query('Counter');
+                query.equalTo('url', url);
+                query.find().then(function(results) {
+                    if (results.length > 0) {
+                        const counter = results[0];
+                        countElement.textContent = counter.get('time') || 0;
+                    } else {
+                        countElement.textContent = '0';
+                    }
+                }).catch(function(error) {
+                    console.log('获取阅读数失败:', error);
+                    countElement.textContent = '0';
+                });
+            }
+        });
+    }
+    
+    // 延迟执行，确保页面完全加载
+    setTimeout(showPageViews, 500);
+});
+</script>
 
 		<script id="module-clipboard">(function($) {
 				$(function() {
