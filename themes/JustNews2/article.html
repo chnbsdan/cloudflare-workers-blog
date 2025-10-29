@@ -932,6 +932,37 @@ pre:hover .code-copy-btn {
     box-shadow: 0 8px 30px rgba(59, 130, 246, 0.2);
 }
 
+/* 强制所有文章图片居中 - 最强优先级 */
+.entry-content img:not(.wp-smiley):not(.emoji),
+.post-content img:not(.wp-smiley):not(.emoji),
+.article-content img:not(.wp-smiley):not(.emoji) {
+    display: block !important;
+    margin: 20px auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    float: none !important;
+    text-align: center !important;
+}
+
+/* 确保所有图片容器居中 */
+.entry-content * img,
+.post-content * img,
+.article-content * img {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 覆盖任何可能的内联样式 */
+img[src*=".jpg"],
+img[src*=".jpeg"], 
+img[src*=".png"],
+img[src*=".gif"],
+img[src*=".webp"] {
+    display: block !important;
+    margin: 20px auto !important;
+}
+			 
 /* 链接样式 */
 .entry-content a,
 .post-content a,
