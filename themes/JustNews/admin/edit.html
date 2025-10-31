@@ -6,9 +6,11 @@
     <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon"  href="https://cdn.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/arya-markdown-editor/dist/arya.min.css" />
     <link rel="stylesheet" href="https://cdn.staticfile.org/bootstrap-select/1.9.4/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    
+    <!-- Toast UI Editor CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@toast-ui/editor@3.2.2/dist/toastui-editor.min.css" />
     
     <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -18,10 +20,16 @@
 		.bootstrap-select>.dropdown-toggle {
 		z-index:auto;
 		}
-        #arya-editor-container {
+        .form-group {
+            margin-bottom: 15px;
+        }
+        #toast-editor-container {
             margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .editor-actions {
+            margin: 15px 0;
+            text-align: right;
         }
 	</style>
 	
@@ -30,222 +38,456 @@
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
-
 	<div>
 		<ul id="myTab" class="nav nav-tabs">
 			<li class="active">
-				<a href="/admin/" >返回文章</a>
+				<a href="/admin/" >返回文章列表</a>
 			</li>
 		</ul>
 	</div>
 	</div>
 </nav>
+
 <div id="myTabContent" class="tab-content" style="padding-top: 60px;">
+	<div class="container">
+		<h3>编辑文章</h3>   
 
-		<div class="container">
-			<h3>编辑文章</h3>   
+		<form id="editForm" class="form-horizontal" action="/">
+			<!-- 文章基本信息 -->
+			<div class="form-group">
+				<label for="title" class="col-sm-2 control-label">文章标题</label>
+				<div class="col-sm-10">
+					<input type="hidden" class="form-control" name="id" id="id" readonly required>
+					<input type="text" class="form-control" name="title" id="title" placeholder="请输入文章标题" required>
+				</div>
+			</div>
 
-			<form id="editForm" class="form-inline"  action="/" >
+			<div class="form-group">
+				<label for="img" class="col-sm-2 control-label">特色图片</label>
+				<div class="col-sm-10">
+					<input type="url" class="form-control" name="img" id="img" placeholder="https://example.com/image.jpg">
+					<small class="text-muted">请输入图片URL地址</small>
+				</div>
+			</div>
 
-				<div class="form-group" style="width: 98%">
-					<input type="hidden" class="form-control" name="id" id="id" readonly required="true">
-					<input type="text" class="form-control" name="title" id="title" placeholder="标题" style="width: 800px;" required="true">
+			<div class="form-group">
+				<label for="link" class="col-sm-2 control-label">永久链接</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="link" id="link" placeholder="article-url" required>
+					<small class="text-muted">用于生成文章URL，请使用英文、数字和连字符</small>
 				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail2">特色图片</label>
-					<input type="url" class="form-control" style="width: 400px;"  name="img" id="img" placeholder="" >
+			</div>
+
+			<div class="form-group">
+				<label for="createDate" class="col-sm-2 control-label">发布日期</label>
+				<div class="col-sm-10">
+					<input type="datetime-local" class="form-control" id="createDate" name="createDate" required>
 				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail2">永久链接</label>
-					<input type="text" class="form-control" name="link" id="link" placeholder="" style="vertical-align:left !important;" required="true">
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail2">创建日期</label>
-					<input type="datetime-local" class="form-control" id="createDate" name="createDate" placeholder="" style="vertical-align:left !important;" required="true">
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail2">分类</label>
-					<select class="selectpicker" multiple name="category[]" id="category">
+			</div>
+
+			<div class="form-group">
+				<label for="category" class="col-sm-2 control-label">文章分类</label>
+				<div class="col-sm-10">
+					<select class="selectpicker" multiple name="category[]" id="category" required>
+						<!-- 分类选项将通过JavaScript动态加载 -->
 					</select>
 				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail2">标签</label>
-					<input type="text" class="form-control" name="tags" id="tags" placeholder="标签1,标签2">
+			</div>
+
+			<div class="form-group">
+				<label for="tags" class="col-sm-2 control-label">文章标签</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="tags" id="tags" placeholder标签1,标签2,标签3">
+					<small class="text-muted">多个标签请用英文逗号分隔</small>
 				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail2">权重</label>
-					<input type="text" class="form-control" name="priority" id="priority" value='0.5' placeholder="权重">
+			</div>
+
+			<!-- SEO 设置 -->
+			<div class="form-group">
+				<label for="priority" class="col-sm-2 control-label">权重优先级</label>
+				<div class="col-sm-4">
+					<input type="number" class="form-control" name="priority" id="priority" value="0.5" min="0.1" max="1.0" step="0.1">
+					<small class="text-muted">搜索引擎权重，0.1-1.0</small>
 				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail2">更新频率</label>
-					    <select class="form-control" id="changefreq" name="changefreq">
-						<option value="daily" >daily</option>
-						<option value="hourly" >hourly</option>
-						<option value="weekly" >weekly</option>
-						<option value="monthly" >monthly</option>
-						<option value="yearly" >yearly</option>
-						<option value="never" >never</option>
-						<option value="always" >always</option>
-					    </select>
-				</div>
-					<a tabindex="0"  role="button"  type="submit" id="btn_saveEdit" class="btn btn-default" onclick="saveEdit()">保存</a>
-					<a  type="submit" role="button" id="btn_delete" class="btn btn-warning" onclick="deleteArticle()">删除</a>
 				
-				<!-- Arya 编辑器容器 -->
-				<div id="arya-editor-container">
+				<label for="changefreq" class="col-sm-2 control-label">更新频率</label>
+				<div class="col-sm-4">
+					<select class="form-control" id="changefreq" name="changefreq">
+						<option value="daily">daily - 每日</option>
+						<option value="hourly">hourly - 每小时</option>
+						<option value="weekly">weekly - 每周</option>
+						<option value="monthly">monthly - 每月</option>
+						<option value="yearly">yearly - 每年</option>
+						<option value="never">never - 从不</option>
+						<option value="always">always - 总是</option>
+					</select>
+				</div>
+			</div>
+
+			<!-- 文章内容编辑器 -->
+			<div class="form-group">
+				<label class="col-sm-2 control-label">文章内容</label>
+				<div class="col-sm-10">
+					<!-- Toast UI Editor 容器 -->
+					<div id="toast-editor-container"></div>
+					
+					<!-- 隐藏的表单字段 -->
 					<textarea id="content-markdown-doc" name="content-markdown-doc" style="display:none;"></textarea>
 					<textarea id="content-html-code" name="content-html-code" style="display:none;"></textarea>
 				</div>
-			</form>
-		</div>
+			</div>
 
+			<!-- 操作按钮 -->
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<div class="editor-actions">
+						<button type="button" class="btn btn-primary" onclick="saveEdit()">
+							<span class="glyphicon glyphicon-floppy-disk"></span> 保存文章
+						</button>
+						<button type="button" class="btn btn-warning" onclick="previewArticle()">
+							<span class="glyphicon glyphicon-eye-open"></span> 预览文章
+						</button>
+						<button type="button" class="btn btn-danger" onclick="deleteArticle()">
+							<span class="glyphicon glyphicon-trash"></span> 删除文章
+						</button>
+						<a href="/admin/" class="btn btn-default">
+							<span class="glyphicon glyphicon-arrow-left"></span> 返回列表
+						</a>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/arya-markdown-editor/dist/arya.min.js"></script>   
+<!-- Toast UI Editor JS -->
+<script src="https://cdn.jsdelivr.net/npm/@toast-ui/editor@3.2.2/dist/toastui-editor.min.js"></script>
+
 <script type="text/javascript">
-	// 全局变量声明
-	let aryaEditor = null;
+	// 全局编辑器变量
+	let toastEditor = null;
 
 	$(function() {
 		$('#myTab li:eq(0) a').tab('show');
-		//获取文章
+		
+		// 获取文章数据
 		var articleJson = <!--{articleJson}-->;
-		//获取分类
+		// 获取分类数据
 		var categoryJson = <!--{categoryJson}-->;
 
-		// 初始化 Arya 编辑器
-		function initAryaEditor() {
-			if (typeof Arya === 'undefined') {
-				console.error('Arya editor not loaded');
-				// 备用方案：显示一个文本区域
-				$('#arya-editor-container').html('<textarea style="width:100%;height:600px;" name="content-markdown-doc" id="content-markdown-doc">' + (articleJson.contentMD || '') + '</textarea>');
+		console.log('文章数据加载完成:', articleJson);
+		console.log('分类数据加载完成:', categoryJson);
+
+		// 初始化 Toast UI Editor
+		function initToastEditor() {
+			if (typeof toastui === 'undefined') {
+				console.error('Toast UI Editor 未加载');
+				initFallbackEditor();
 				return;
 			}
-			
+
 			try {
-				aryaEditor = new Arya({
-					el: '#arya-editor-container',
-					value: articleJson.contentMD || '',
+				const Editor = toastui.Editor;
+				
+				toastEditor = new Editor({
+					el: document.querySelector('#toast-editor-container'),
 					height: '600px',
-					// 多媒体增强配置
-					video: {
-						enabled: true,
-						platforms: ['bilibili', 'youtube', 'youku', 'tencent', 'iqiyi']
-					},
-					audio: {
-						enabled: true,
-						supportBackground: true
-					},
-					image: {
-						upload: true,
-						maxSize: 10 * 1024 * 1024
-					},
-					toolbar: {
-						items: [
-							'headings', 'bold', 'italic', 'strike', 'link', '|',
-							'quote', 'code', 'inline-code', '|',
-							'unordered-list', 'ordered-list', '|',
-							'table', '|',
-							'image', 'video', 'audio', '|',
-							'undo', 'redo', '|',
-							'fullscreen'
-						]
-					},
-					onSave: function(markdown, html) {
-						$('#content-markdown-doc').val(markdown);
-						$('#content-html-code').val(html);
-					},
-					onChange: function(markdown, html) {
-						$('#content-markdown-doc').val(markdown);
-						$('#content-html-code').val(html);
+					initialEditType: 'markdown',
+					previewStyle: 'vertical',
+					initialValue: articleJson.contentMD || '# 请输入文章内容\n\n开始编写您的文章...',
+					usageStatistics: false,
+					toolbarItems: [
+						['heading', 'bold', 'italic', 'strike'],
+						['hr', 'quote'],
+						['ul', 'ol', 'task'],
+						['table', 'link'],
+						['code', 'codeblock'],
+						['scrollSync'],
+					],
+					hooks: {
+						addImageBlobHook: function(blob, callback) {
+							// 图片上传处理
+							handleImageUpload(blob, callback);
+						}
 					}
 				});
 				
-				console.log('Arya editor initialized successfully');
+				console.log('Toast UI Editor 初始化成功');
+				
+				// 监听内容变化
+				toastEditor.on('change', function() {
+					const markdown = toastEditor.getMarkdown();
+					const html = toastEditor.getHTML();
+					$('#content-markdown-doc').val(markdown);
+					$('#content-html-code').val(html);
+					console.log('内容已更新');
+				});
+
+				// 初始同步内容
+				const initialMarkdown = toastEditor.getMarkdown();
+				const initialHtml = toastEditor.getHTML();
+				$('#content-markdown-doc').val(initialMarkdown);
+				$('#content-html-code').val(initialHtml);
+
 			} catch (error) {
-				console.error('Failed to initialize Arya editor:', error);
-				// 备用方案
-				$('#arya-editor-container').html('<textarea style="width:100%;height:600px;" name="content-markdown-doc" id="content-markdown-doc">' + (articleJson.contentMD || '') + '</textarea>');
+				console.error('初始化 Toast UI Editor 时发生错误:', error);
+				initFallbackEditor();
 			}
+		}
+
+		// 备用编辑器（纯文本区域）
+		function initFallbackEditor() {
+			console.log('使用备用文本编辑器');
+			$('#toast-editor-container').html(
+				'<textarea style="width:100%;height:600px;border:1px solid #ddd;padding:10px;font-family:monospace;border-radius:4px;" ' +
+				'id="fallback-editor" name="content-markdown-doc">' + 
+				(articleJson.contentMD || '# 请输入文章内容\n\n开始编写您的文章...') + '</textarea>'
+			);
+			
+			// 监听文本区域变化
+			$('#fallback-editor').on('input', function() {
+				$('#content-markdown-doc').val($(this).val());
+				$('#content-html-code').val($(this).val()); // 简单处理，实际应该转换 Markdown 到 HTML
+			});
+		}
+
+		// 图片上传处理
+		function handleImageUpload(blob, callback) {
+			// 创建临时 URL 用于预览
+			const imageUrl = URL.createObjectURL(blob);
+			
+			// 这里可以添加实际的上传逻辑
+			// 例如上传到图床后返回真实的图片URL
+			console.log('图片上传:', blob);
+			
+			// 暂时使用临时URL
+			callback(imageUrl, '上传的图片');
+			
+			// 实际使用时应该这样：
+			// uploadToImageHost(blob).then(url => {
+			//     callback(url, '图片描述');
+			// }).catch(error => {
+			//     console.error('图片上传失败:', error);
+			//     alert('图片上传失败，请重试');
+			// });
+		}
+
+		// 表单数据初始化
+		function initFormData() {
+			// 基本表单赋值
+			$('#id').val(articleJson.id || '');
+			$('#title').val(articleJson.title || '');
+			$('#img').val(articleJson.img || '');
+			$('#link').val(articleJson.link || '');
+			$('#tags').val(articleJson.tags || '');
+			$('#priority').val(articleJson.priority || '0.5');
+			$('#changefreq').val(articleJson.changefreq || 'daily');
+
+			// 日期处理
+			if (articleJson.createDate) {
+				$('#createDate').val(articleJson.createDate.replace(" ","T"));
+			} else {
+				// 默认当前时间
+				$('#createDate').val(new Date().toISOString().slice(0, 16));
+			}
+
+			// 分类选择器初始化
+			var category = $('#category');
+			category.empty();
+			if (categoryJson && categoryJson.length > 0) {
+				for (var i = 0; i < categoryJson.length; i++) {
+					category.append('<option value="' + categoryJson[i] + '">' + categoryJson[i] + '</option>');
+				}
+			} else {
+				category.append('<option value="未分类">未分类</option>');
+			}
+			
+			// 设置选中的分类
+			if (articleJson.category && articleJson.category.length > 0) {
+				category.selectpicker('val', articleJson.category);
+			}
+			category.selectpicker('refresh');
+
+			console.log('表单数据初始化完成');
 		}
 
 		// 初始化编辑器
-		initAryaEditor();
+		initToastEditor();
+		
+		// 初始化表单数据
+		initFormData();
 
-		//表单赋值
-		$('#id').val(articleJson.id);
-		$('#title').val(articleJson.title);
-		$('#img').val(articleJson.img);
-		$('#link').val(articleJson.link);
-		$('#createDate').val(articleJson.createDate.replace(" ","T"));
-		$('#tags').val(articleJson.tags);
-		$('#priority').val( (articleJson.priority=== undefined ? "0.5":articleJson.priority) );
-		$('#changefreq').selectpicker('val', (articleJson.changefreq === undefined ? "daily":articleJson.changefreq));
-	
-		$('#WidgetCategory').val(JSON.stringify(categoryJson));
-		var category = $('#category');
-		category.empty();
-		for (var i = 0; i < categoryJson.length; i++) {
-			category.append('<option id=' + categoryJson[i] + ' value=' + categoryJson[i] + '>' + categoryJson[i] + '</option>');
-		}
-		category.selectpicker('val',articleJson.category);
-
-		// 表单提交前确保内容已同步
+		// 表单提交处理
 		$('#editForm').on('submit', function(e) {
 			e.preventDefault();
-			if (aryaEditor) {
-				const { markdown, html } = aryaEditor.getValue();
-				$('#content-markdown-doc').val(markdown);
-				$('#content-html-code').val(html);
-			}
 			saveEdit();
 		});
 	});
-    
-    //保存按钮(编辑)
-    function saveEdit(){
-        // 确保编辑器内容已同步
-        if (aryaEditor) {
-            const { markdown, html } = aryaEditor.getValue();
-            $('#content-markdown-doc').val(markdown);
-            $('#content-html-code').val(html);
-        }
 
-        $.ajax({
-            type: "POST",
-            dataType: "json",
+	// 保存文章
+	function saveEdit() {
+		// 验证必填字段
+		if (!$('#title').val().trim()) {
+			alert('请填写文章标题');
+			$('#title').focus();
+			return;
+		}
+
+		if (!$('#link').val().trim()) {
+			alert('请填写永久链接');
+			$('#link').focus();
+			return;
+		}
+
+		if (!$('#createDate').val()) {
+			alert('请选择发布日期');
+			$('#createDate').focus();
+			return;
+		}
+
+		// 确保编辑器内容已同步
+		if (toastEditor) {
+			const markdown = toastEditor.getMarkdown();
+			const html = toastEditor.getHTML();
+			$('#content-markdown-doc').val(markdown);
+			$('#content-html-code').val(html);
+		} else if ($('#fallback-editor').length) {
+			$('#content-markdown-doc').val($('#fallback-editor').val());
+			$('#content-html-code').val($('#fallback-editor').val());
+		}
+
+		// 检查文章内容
+		const content = $('#content-markdown-doc').val();
+		if (!content || content.trim().length < 10) {
+			if (!confirm('文章内容较短，确定要保存吗？')) {
+				return;
+			}
+		}
+
+		console.log('开始保存文章...');
+		
+		// 显示加载状态
+		const saveBtn = $('#editForm').find('button[onclick="saveEdit()"]');
+		const originalText = saveBtn.html();
+		saveBtn.html('<span class="glyphicon glyphicon-refresh spinning"></span> 保存中...').prop('disabled', true);
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
 			contentType: "application/json; charset=utf-8",
-            url: "/admin/saveEdit/",
-            data: JSON.stringify($("#editForm").serializeArray()), 
-            success: function (result) {
-                alert(result.msg);
-                if(result.rst){
-                    // 保存成功后的操作
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('保存失败: ' + error);
-            }
-        });
-    }
-    
-    //删除
-    function deleteArticle(){
-        if (confirm("确定删除吗?删除后重新发布才能生效")==false){ 
-            return false; 
-          }
-        $.ajax({
-            type: "POST",
-            dataType: "json",
+			url: "/admin/saveEdit/",
+			data: JSON.stringify($("#editForm").serializeArray()),
+			success: function (result) {
+				saveBtn.html(originalText).prop('disabled', false);
+				if (result.rst) {
+					alert('保存成功！');
+					console.log('文章保存成功，ID:', result.id);
+					// 可以跳转到文章列表或继续编辑
+				} else {
+					alert('保存失败：' + result.msg);
+				}
+			},
+			error: function(xhr, status, error) {
+				saveBtn.html(originalText).prop('disabled', false);
+				alert('保存失败，请检查网络连接：' + error);
+				console.error('保存错误:', error);
+			}
+		});
+	}
+
+	// 预览文章
+	function previewArticle() {
+		// 先保存内容到隐藏字段
+		if (toastEditor) {
+			const markdown = toastEditor.getMarkdown();
+			const html = toastEditor.getHTML();
+			$('#content-markdown-doc').val(markdown);
+			$('#content-html-code').val(html);
+		}
+
+		const id = $('#id').val();
+		if (id) {
+			// 在新窗口打开预览
+			window.open('/article/' + id + '/preview.html', '_blank');
+		} else {
+			alert('请先保存文章再进行预览');
+		}
+	}
+
+	// 删除文章
+	function deleteArticle() {
+		const id = $('#id').val();
+		const title = $('#title').val();
+		
+		if (!id) {
+			alert('文章ID不存在');
+			return;
+		}
+
+		if (!confirm('确定要删除文章 "' + (title || '未命名') + '" 吗？此操作不可恢复！')) {
+			return;
+		}
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
 			contentType: "application/json; charset=utf-8",
-            url: "/admin/delete/"+$('#id').val(),
-            data: [{"id":$('#id').val()}],
-            success: function (result) {
-                alert(result.msg);
-            }
-        });
-    }
+			url: "/admin/delete/" + id,
+			data: JSON.stringify([{"id": id}]),
+			success: function (result) {
+				alert(result.msg);
+				if (result.rst) {
+					// 删除成功，跳转到文章列表
+					window.location.href = '/admin/';
+				}
+			},
+			error: function(xhr, status, error) {
+				alert('删除失败：' + error);
+			}
+		});
+	}
+
+	// 生成永久链接
+	$('#title').on('blur', function() {
+		if (!$('#link').val()) {
+			// 简单的中文转拼音函数（实际使用时可能需要更完善的实现）
+			function simpleSlug(text) {
+				return text
+					.toLowerCase()
+					.replace(/[^\w\u4e00-\u9fa5]+/g, '-')
+					.replace(/^-+|-+$/g, '')
+					.replace(/--+/g, '-');
+			}
+			
+			const title = $(this).val().trim();
+			if (title) {
+				$('#link').val(simpleSlug(title));
+			}
+		}
+	});
 </script>
-  
+
+<style>
+	/* 加载旋转动画 */
+	.glyphicon.spinning {
+		animation: spin 1s infinite linear;
+	}
+	@keyframes spin {
+		from { transform: scale(1) rotate(0deg); }
+		to { transform: scale(1) rotate(360deg); }
+	}
+	
+	/* 改善表单样式 */
+	.form-horizontal .control-label {
+		text-align: right;
+		font-weight: bold;
+	}
+	
+	/* 改善选择器样式 */
+	.bootstrap-select .dropdown-menu {
+		z-index: 10000;
+	}
+</style>
+
 </body>
 </html>
