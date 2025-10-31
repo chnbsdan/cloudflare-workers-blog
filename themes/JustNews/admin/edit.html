@@ -103,6 +103,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/arya-markdown-editor/dist/arya.min.js"></script>   
 <script type="text/javascript">
+	// 全局变量声明
+	let aryaEditor = null;
+
 	$(function() {
 		$('#myTab li:eq(0) a').tab('show');
 		//获取文章
@@ -111,52 +114,59 @@
 		var categoryJson = <!--{categoryJson}-->;
 
 		// 初始化 Arya 编辑器
-		let aryaEditor;
 		function initAryaEditor() {
 			if (typeof Arya === 'undefined') {
 				console.error('Arya editor not loaded');
+				// 备用方案：显示一个文本区域
+				$('#arya-editor-container').html('<textarea style="width:100%;height:600px;" name="content-markdown-doc" id="content-markdown-doc">' + (articleJson.contentMD || '') + '</textarea>');
 				return;
 			}
 			
-			aryaEditor = new Arya({
-				el: '#arya-editor-container',
-				value: articleJson.contentMD || '',
-				height: '600px',
-				// 多媒体增强配置
-				video: {
-					enabled: true,
-					platforms: ['bilibili', 'youtube', 'youku', 'tencent', 'iqiyi']
-				},
-				audio: {
-					enabled: true,
-					supportBackground: true
-				},
-				image: {
-					upload: true,
-					maxSize: 10 * 1024 * 1024
-				},
-				toolbar: {
-					items: [
-						'headings', 'bold', 'italic', 'strike', 'link', '|',
-						'quote', 'code', 'inline-code', '|',
-						'unordered-list', 'ordered-list', '|',
-						'table', '|',
-						'image', 'video', 'audio', '|',
-						'undo', 'redo', '|',
-						'fullscreen'
-					]
-				},
-				onSave: function(markdown, html) {
-					$('#content-markdown-doc').val(markdown);
-					$('#content-html-code').val(html);
-				},
-				onChange: function(markdown, html) {
-					$('#content-markdown-doc').val(markdown);
-					$('#content-html-code').val(html);
-				}
-			});
-			
-			console.log('Arya editor initialized');
+			try {
+				aryaEditor = new Arya({
+					el: '#arya-editor-container',
+					value: articleJson.contentMD || '',
+					height: '600px',
+					// 多媒体增强配置
+					video: {
+						enabled: true,
+						platforms: ['bilibili', 'youtube', 'youku', 'tencent', 'iqiyi']
+					},
+					audio: {
+						enabled: true,
+						supportBackground: true
+					},
+					image: {
+						upload: true,
+						maxSize: 10 * 1024 * 1024
+					},
+					toolbar: {
+						items: [
+							'headings', 'bold', 'italic', 'strike', 'link', '|',
+							'quote', 'code', 'inline-code', '|',
+							'unordered-list', 'ordered-list', '|',
+							'table', '|',
+							'image', 'video', 'audio', '|',
+							'undo', 'redo', '|',
+							'fullscreen'
+						]
+					},
+					onSave: function(markdown, html) {
+						$('#content-markdown-doc').val(markdown);
+						$('#content-html-code').val(html);
+					},
+					onChange: function(markdown, html) {
+						$('#content-markdown-doc').val(markdown);
+						$('#content-html-code').val(html);
+					}
+				});
+				
+				console.log('Arya editor initialized successfully');
+			} catch (error) {
+				console.error('Failed to initialize Arya editor:', error);
+				// 备用方案
+				$('#arya-editor-container').html('<textarea style="width:100%;height:600px;" name="content-markdown-doc" id="content-markdown-doc">' + (articleJson.contentMD || '') + '</textarea>');
+			}
 		}
 
 		// 初始化编辑器
@@ -194,7 +204,8 @@
     
     //保存按钮(编辑)
     function saveEdit(){
-        if (typeof aryaEditor !== 'undefined') {
+        // 确保编辑器内容已同步
+        if (aryaEditor) {
             const { markdown, html } = aryaEditor.getValue();
             $('#content-markdown-doc').val(markdown);
             $('#content-html-code').val(html);
@@ -211,6 +222,9 @@
                 if(result.rst){
                     // 保存成功后的操作
                 }
+            },
+            error: function(xhr, status, error) {
+                alert('保存失败: ' + error);
             }
         });
     }
