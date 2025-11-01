@@ -1980,22 +1980,22 @@ img[src*=".webp"] {
 			font-size: 14px;
 		}
 
-		/* 修改文章目录容器定位和布局 */
+		/* 修改文章目录容器定位和布局 - 使用固定定位 */
 		.toc-container {
-			position: sticky;
-			top: 20px; /* 距离顶部20px固定 */
-			right: 0;
-			width: 100%; /* 占满侧边栏宽度 */
-			z-index: 99; /* 低于浮动按钮但高于其他内容 */
+			position: fixed;
+			top: 120px; /* 距离顶部固定位置 */
+			right: calc((100% - 1400px) / 2 + 75% + 1%); /* 精确定位在侧边栏区域 */
+			width: 24%; /* 与侧边栏同宽 */
+			max-width: 340px;
+			z-index: 999;
 			background: white;
 			padding: 1rem;
 			border-radius: 0.75rem;
 			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 			transition: all 0.3s ease;
 			display: block;
-			max-height: 400px; /* 限制最大高度 */
+			max-height: 60vh;
 			overflow: hidden;
-			margin-bottom: 20px; /* 与其他小部件间距 */
 		}
 
 		.toc-container:hover {
@@ -2013,7 +2013,7 @@ img[src*=".webp"] {
 		}
 
 		.toc-container .toc {
-			max-height: 350px;
+			max-height: calc(60vh - 60px);
 			overflow-y: auto;
 		}
 
@@ -2026,20 +2026,15 @@ img[src*=".webp"] {
 			border-radius: 2px;
 		}
 
-		/* 侧边栏布局调整 */
+		/* 侧边栏布局调整 - 移除目录容器 */
 		.sidebar {
 			position: relative;
 			display: flex;
 			flex-direction: column;
 		}
 
-		/* 确保文章目录在侧边栏中排在最前面 */
-		.sidebar .toc-container {
-			order: -1; /* 强制排在最前面 */
-		}
-
 		/* 其他小部件容器添加滚动效果 */
-		.sidebar > *:not(.toc-container) {
+		.sidebar .widget {
 			transition: transform 0.3s ease;
 		}
 
@@ -2322,16 +2317,7 @@ img[src*=".webp"] {
 				</div>
 
 				<aside class="sidebar">
-					<!-- 文章目录现在在侧边栏最前面 -->
-					<div class="toc-container">
-						<h2>
-							<i class="fas fa-list"></i>
-							目录
-						</h2>
-						<div class="toc"></div>
-					</div>
-
-					<!-- 原有侧边栏小部件保持不变，但在文章目录下方 -->
+					<!-- 原有侧边栏小部件保持不变 -->
 					<div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
 						<h3 class="widget-title">
 							<span>近期文章</span></h3>
@@ -2382,6 +2368,15 @@ img[src*=".webp"] {
 					{{ &OPT.widgetOther }}
 				</aside>
 			</div>
+		</div>
+
+		<!-- 固定目录容器 - 使用固定定位，独立于侧边栏 -->
+		<div class="toc-container">
+			<h2>
+				<i class="fas fa-list"></i>
+				目录
+			</h2>
+			<div class="toc"></div>
 		</div>
 
 		<!-- 浮动目录按钮 - 所有设备都显示 -->
@@ -2736,13 +2731,12 @@ img[src*=".webp"] {
 			// 初始化固定目录
 			setTimeout(initFixedToc, 100);
 
-			// 新增：侧边栏小部件滚动效果
+			// 新增：侧边栏小部件滚动效果 - 只滚动小部件，目录保持固定
 			function initSidebarScroll() {
 				const sidebar = document.querySelector('.sidebar');
-				const tocContainer = document.querySelector('.toc-container');
-				const widgets = document.querySelectorAll('.sidebar > *:not(.toc-container)');
+				const widgets = document.querySelectorAll('.sidebar .widget');
 				
-				if (!sidebar || !tocContainer) return;
+				if (!sidebar) return;
 				
 				let lastScrollTop = 0;
 				
@@ -2750,19 +2744,14 @@ img[src*=".webp"] {
 					const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 					const scrollDirection = scrollTop > lastScrollTop ? 'down' : 'up';
 					
-					// 获取文章目录的高度
-					const tocHeight = tocContainer.offsetHeight;
-					
 					// 为每个小部件应用滚动效果
 					widgets.forEach((widget, index) => {
-						const delay = index * 0.1; // 延迟效果
-						
 						if (scrollDirection === 'down') {
 							// 向下滚动时，小部件向上移动
-							widget.style.transform = `translateY(-${scrollTop * 0.1}px)`;
+							widget.style.transform = `translateY(-${scrollTop * 0.05}px)`;
 						} else {
 							// 向上滚动时，小部件向下移动（恢复位置）
-							const translateY = Math.max(0, -scrollTop * 0.1);
+							const translateY = Math.max(0, -scrollTop * 0.05);
 							widget.style.transform = `translateY(${translateY}px)`;
 						}
 					});
