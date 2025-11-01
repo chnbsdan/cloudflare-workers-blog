@@ -1775,14 +1775,13 @@ img[src*=".webp"] {
    </style>
 
 
-		
-		<!-- 文章目录样式 -->
+			<!-- 文章目录样式修正 -->
 		<style>
 		/* 浮动目录按钮 - 所有设备都显示 */
 		#toc-float-btn {
 			position: fixed;
 			right: 30px;
-			bottom:20px; /* 原100px */
+			bottom: 20px;
 			width: 50px;
 			height: 50px;
 			background: #3b82f6;
@@ -1805,7 +1804,154 @@ img[src*=".webp"] {
 			box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 		}
 
-		/* 文章目录容器 - 浮动面板 */
+		/* 修正文章目录容器定位 */
+		.toc-container {
+			position: fixed;
+			top: 120px; /* 距离顶部固定位置 */
+			right: 30px; /* 距离右侧30px */
+			width: 300px; /* 固定宽度 */
+			z-index: 999;
+			background: white;
+			padding: 1rem;
+			border-radius: 0.75rem;
+			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			transition: all 0.3s ease;
+			display: block;
+			max-height: 60vh;
+			overflow: hidden;
+		}
+
+		.toc-container:hover {
+			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		}
+
+		.toc-container h2 {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-size: 1rem;
+			font-weight: 600;
+			color: #1f2937;
+			margin: 0 0 0.5rem 0;
+		}
+
+		.toc-container .toc {
+			max-height: calc(60vh - 60px);
+			overflow-y: auto;
+		}
+
+		.toc-container .toc::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		.toc-container .toc::-webkit-scrollbar-thumb {
+			background: #d1d5db;
+			border-radius: 2px;
+		}
+
+		/* 修复目录链接样式 */
+		.toc-container .toc a {
+			display: block;
+			padding: 6px 12px;
+			color: #4b5563;
+			text-decoration: none;
+			border-radius: 4px;
+			font-size: 14px;
+			transition: all 0.2s ease;
+			border-left: 3px solid transparent;
+			margin: 2px 0;
+		}
+
+		.toc-container .toc a:hover {
+			background: #f3f4f6;
+			color: #3b82f6;
+			border-left-color: #3b82f6;
+		}
+
+		.toc-container .toc a.active {
+			background: #ebf8ff;
+			color: #3b82f6;
+			border-left-color: #3b82f6;
+			font-weight: 600;
+		}
+
+		/* 目录层级缩进 */
+		.toc-level-1 a { padding-left: 12px; }
+		.toc-level-2 a { padding-left: 20px; }
+		.toc-level-3 a { padding-left: 28px; }
+		.toc-level-4 a { padding-left: 36px; }
+		.toc-level-5 a { padding-left: 44px; }
+		.toc-level-6 a { padding-left: 52px; }
+
+		/* 响应式布局调整 */
+		@media (min-width: 1200px) {
+			/* 桌面端显示固定目录 */
+			.toc-container {
+				display: block;
+			}
+			
+			/* 桌面端也显示浮动按钮，但位置调整 */
+			#toc-float-btn {
+				display: flex;
+				bottom: 120px;
+			}
+		}
+
+		@media (max-width: 1199px) {
+			/* 移动端隐藏固定目录 */
+			.toc-container {
+				display: none;
+			}
+			
+			/* 移动端显示浮动按钮 */
+			#toc-float-btn {
+				display: flex;
+				bottom: 100px;
+			}
+		}
+
+		/* 确保在较小屏幕上目录不会超出屏幕 */
+		@media (max-width: 1400px) {
+			.toc-container {
+				right: 20px;
+				width: 280px;
+			}
+		}
+
+		@media (max-width: 1200px) {
+			.toc-container {
+				right: 15px;
+				width: 260px;
+			}
+		}
+
+		/* 暗色模式支持 */
+		@media (prefers-color-scheme: dark) {
+			.toc-container {
+				background: #1e293b;
+				color: #f1f5f9;
+			}
+
+			.toc-container h2 {
+				color: #f1f5f9;
+			}
+
+			.toc-container .toc a {
+				color: #d1d5db;
+			}
+
+			.toc-container .toc a:hover {
+				background: #374151;
+				color: #60a5fa;
+			}
+
+			.toc-container .toc a.active {
+				background: #1e40af;
+				color: #dbeafe;
+			}
+		}
+
+		/* 浮动目录相关样式保持不变 */
 		#article-toc-floating {
 			position: fixed;
 			top: 50%;
@@ -1979,232 +2125,6 @@ img[src*=".webp"] {
 			padding: 40px 20px;
 			font-size: 14px;
 		}
-
-		/* 修改文章目录容器定位和布局 - 使用固定定位 */
-		.toc-container {
-			position: fixed;
-			top: 120px; /* 距离顶部固定位置 */
-			right: calc((100% - 1400px) / 2 + 75% + 1%); /* 精确定位在侧边栏区域 */
-			width: 24%; /* 与侧边栏同宽 */
-			max-width: 340px;
-			z-index: 999;
-			background: white;
-			padding: 1rem;
-			border-radius: 0.75rem;
-			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-			transition: all 0.3s ease;
-			display: block;
-			max-height: 60vh;
-			overflow: hidden;
-		}
-
-		.toc-container:hover {
-			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-		}
-
-		.toc-container h2 {
-			display: inline-flex;
-			align-items: center;
-			gap: 0.5rem;
-			font-size: 1rem;
-			font-weight: 600;
-			color: #1f2937;
-			margin: 0 0 0.5rem 0;
-		}
-
-		.toc-container .toc {
-			max-height: calc(60vh - 60px);
-			overflow-y: auto;
-		}
-
-		.toc-container .toc::-webkit-scrollbar {
-			width: 4px;
-		}
-
-		.toc-container .toc::-webkit-scrollbar-thumb {
-			background: #d1d5db;
-			border-radius: 2px;
-		}
-
-		/* 侧边栏布局调整 - 移除目录容器 */
-		.sidebar {
-			position: relative;
-			display: flex;
-			flex-direction: column;
-		}
-
-		/* 其他小部件容器添加滚动效果 */
-		.sidebar .widget {
-			transition: transform 0.3s ease;
-		}
-
-		/* 修复目录链接样式 */
-		.toc-container .toc a {
-			display: block;
-			padding: 6px 12px;
-			color: #4b5563;
-			text-decoration: none;
-			border-radius: 4px;
-			font-size: 14px;
-			transition: all 0.2s ease;
-			border-left: 3px solid transparent;
-			margin: 2px 0;
-		}
-
-		.toc-container .toc a:hover {
-			background: #f3f4f6;
-			color: #3b82f6;
-			border-left-color: #3b82f6;
-		}
-
-		.toc-container .toc a.active {
-			background: #ebf8ff;
-			color: #3b82f6;
-			border-left-color: #3b82f6;
-			font-weight: 600;
-		}
-
-		/* 目录层级缩进 */
-		.toc-level-1 a { padding-left: 12px; }
-		.toc-level-2 a { padding-left: 20px; }
-		.toc-level-3 a { padding-left: 28px; }
-		.toc-level-4 a { padding-left: 36px; }
-		.toc-level-5 a { padding-left: 44px; }
-		.toc-level-6 a { padding-left: 52px; }
-
-		/* 响应式布局调整 */
-		@media (min-width: 1200px) {
-			/* 桌面端显示固定目录 */
-			.toc-container {
-				display: block;
-			}
-			
-			/* 桌面端也显示浮动按钮，但位置调整 */
-			#toc-float-btn {
-				display: flex;
-				bottom: 120px; /* 调整位置避免重叠 */
-			}
-		}
-
-		@media (max-width: 1199px) {
-			/* 移动端隐藏固定目录 */
-			.toc-container {
-				display: none;
-			}
-			
-			/* 移动端显示浮动按钮 */
-			#toc-float-btn {
-				display: flex;
-				bottom: 100px;
-			}
-		}
-
-		/* 暗色模式支持 */
-		@media (prefers-color-scheme: dark) {
-			.toc-container {
-				background: #1e293b;
-				color: #f1f5f9;
-			}
-
-			.toc-container h2 {
-				color: #f1f5f9;
-			}
-
-			.toc-container .toc a {
-				color: #d1d5db;
-			}
-
-			.toc-container .toc a:hover {
-				background: #374151;
-				color: #60a5fa;
-			}
-
-			.toc-container .toc a.active {
-				background: #1e40af;
-				color: #dbeafe;
-			}
-
-			#article-toc-floating {
-				background: #1e293b;
-				color: #f1f5f9;
-			}
-
-			#toc-floating-list a {
-				color: #d1d5db;
-			}
-
-			#toc-floating-list a:hover {
-				background: #374151;
-				color: #60a5fa;
-			}
-		}
-            /* 现代化分类目录按钮样式 */
-.widget_categories .link-tagcloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0 -4px;
-}
-
-.widget_categories .link-tag {
-    display: inline-block;
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-    color: #475569;
-    padding: 8px 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
-    flex: 1;
-    min-width: calc(33.333% - 16px);
-    text-align: center;
-    margin: 4px;
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
-}
-
-.widget_categories .link-tag::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(59, 130, 246, 0.1), 
-        transparent);
-    transition: left 0.6s ease;
-}
-
-.widget_categories .link-tag:hover {
-    background: linear-gradient(135deg, #3b82f6, #6366f1);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    border-color: #3b82f6;
-}
-
-.widget_categories .link-tag:hover::before {
-    left: 100%;
-}
-
-/* 响应式调整 */
-@media (max-width: 1024px) {
-    .widget_categories .link-tag {
-        min-width: calc(50% - 16px);
-    }
-}
-
-@media (max-width: 768px) {
-    .widget_categories .link-tag {
-        min-width: calc(100% - 16px);
-    }
-}
-			
 		</style>
 		
 		{{ &OPT.codeBeforHead }}
@@ -2370,7 +2290,7 @@ img[src*=".webp"] {
 			</div>
 		</div>
 
-		<!-- 固定目录容器 - 使用固定定位，独立于侧边栏 -->
+		<!-- 固定目录容器 - 使用固定定位在右侧 -->
 		<div class="toc-container">
 			<h2>
 				<i class="fas fa-list"></i>
@@ -2455,7 +2375,7 @@ img[src*=".webp"] {
 			</div>
 		</div>
 
-		<!-- 外部脚本 -->
+		<!-- 外部脚本保持不变 -->
 		<link rel='stylesheet' id='lazyload-spinner-css' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/lazyload.css?ver=3.4.9' type='text/css' media='all' />
 		<script type='text/javascript' id='main-js-extra'>
 		/* <![CDATA[ */
@@ -2772,4 +2692,5 @@ img[src*=".webp"] {
 
 		{{ &OPT.codeBeforBody }}
 	</body>
-</html>
+</html>	
+	
