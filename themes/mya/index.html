@@ -1542,6 +1542,52 @@
 					width: 100%;
 				}
 			}
+			/* 分类目录按钮样式 - 与链接保持一致 */
+.widget_categories .link-tagcloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin: 0 -4px;
+}
+
+.widget_categories .link-tag {
+    display: inline-block;
+    background: #f8f9fa;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 0px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: calc(33.333% - 16px);
+    text-align: center;
+    margin: 4px;
+    box-sizing: border-box;
+}
+
+.widget_categories .link-tag:hover {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+    .widget_categories .link-tag {
+        min-width: calc(50% - 16px);
+    }
+}
+
+@media (max-width: 768px) {
+    .widget_categories .link-tag {
+        min-width: calc(100% - 16px);
+    }
+}
 		</style>
 	</head>
 	<body class="archive paged category category-zhishi category-5 paged-2 category-paged-2 lang-cn el-boxed">
@@ -1684,16 +1730,16 @@
 						</ul>
 					</div>
 					
-					<div id="categories-3" class="widget widget_categories">
-						<h3 class="widget-title">
-							<span>分类目录</span></h3>
-						<ul>
-							{{ #widgetCategoryList }}
-							<li class="cat-item cat-item-5 current-cat">
-								<a aria-current="page" href="/category/{{&.}}">{{&.}}</a></li>
-							{{ /widgetCategoryList }}
-						</ul>
-					</div>
+					<!-- 修改分类目录为按钮样式 -->
+<div id="categories-3" class="widget widget_categories">
+    <h3 class="widget-title">
+        <span>分类目录</span></h3>
+    <div class="link-tagcloud">
+        {{ #widgetCategoryList }}
+        <a href="/category/{{&.}}" class="link-tag">{{&.}}</a>
+        {{ /widgetCategoryList }}
+    </div>
+</div>
 					<div id="tag_cloud-3" class="widget widget_tag_cloud">
 						<h3 class="widget-title">
 							<span>标签</span></h3>
