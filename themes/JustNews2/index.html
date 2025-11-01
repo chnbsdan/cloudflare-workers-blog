@@ -1542,6 +1542,73 @@
 					width: 100%;
 				}
 			}
+             /* 现代化分类目录按钮样式 */
+.widget_categories .link-tagcloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 -4px;
+}
+
+.widget_categories .link-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    color: #475569;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: calc(33.333% - 16px);
+    text-align: center;
+    margin: 4px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.widget_categories .link-tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(59, 130, 246, 0.1), 
+        transparent);
+    transition: left 0.6s ease;
+}
+
+.widget_categories .link-tag:hover {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    border-color: #3b82f6;
+}
+
+.widget_categories .link-tag:hover::before {
+    left: 100%;
+}
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+    .widget_categories .link-tag {
+        min-width: calc(50% - 16px);
+    }
+}
+
+@media (max-width: 768px) {
+    .widget_categories .link-tag {
+        min-width: calc(100% - 16px);
+    }
+}  
+			
 		</style>
 	</head>
 	<body class="archive paged category category-zhishi category-5 paged-2 category-paged-2 lang-cn el-boxed">
@@ -1684,16 +1751,16 @@
 						</ul>
 					</div>
 					
-					<div id="categories-3" class="widget widget_categories">
-						<h3 class="widget-title">
-							<span>分类目录</span></h3>
-						<ul>
-							{{ #widgetCategoryList }}
-							<li class="cat-item cat-item-5 current-cat">
-								<a aria-current="page" href="/category/{{&.}}">{{&.}}</a></li>
-							{{ /widgetCategoryList }}
-						</ul>
-					</div>
+					<!-- 修改分类目录为按钮样式 -->
+<div id="categories-3" class="widget widget_categories">
+    <h3 class="widget-title">
+        <span>分类目录</span></h3>
+    <div class="link-tagcloud">
+        {{ #widgetCategoryList }}
+        <a href="/category/{{&.}}" class="link-tag">{{&.}}</a>
+        {{ /widgetCategoryList }}
+    </div>
+</div>
 					<div id="tag_cloud-3" class="widget widget_tag_cloud">
 						<h3 class="widget-title">
 							<span>标签</span></h3>
