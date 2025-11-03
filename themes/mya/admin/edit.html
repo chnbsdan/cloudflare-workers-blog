@@ -1,451 +1,167 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>编辑文章 - CF-blog后台</title>
-    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/chnbsdan/cloudflare-workers-blog/themes/JustNews2/files/favicon.ico" />
-    <link rel="shortcut icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/chnbsdan/cloudflare-workers-blog/themes/JustNews2/files/favicon.ico"/>
-    
-    <!-- CSS 依赖 -->
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon"  href="https://cdn.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--//<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/examples/css/style.css" />-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.css" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/bootstrap-select/1.9.4/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     
-    <style>
-        .bootstrap-select > .dropdown-toggle {
-            z-index: auto;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .navbar-fixed-top {
-            z-index: 1030;
-        }
-        .container {
-            margin-top: 20px;
-        }
-        #content {
-            margin-top: 20px;
-        }
-        .alert {
-            display: none;
-            margin-top: 10px;
-        }
-        .btn-group {
-            margin: 15px 0;
-        }
-    </style>
+    <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-zh_CN.min.js"></script>
+	<style>
+		.bootstrap-select>.dropdown-toggle {
+		z-index:auto;
+		}
+	</style>
+	
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/admin/">CF-Blog 后台</a>
-        </div>
-        <div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/admin/">返回文章列表</a></li>
-            </ul>
-        </div>
-    </div>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+
+	<div>
+		<ul id="myTab" class="nav nav-tabs">
+			<li class="active">
+				<a href="/admin/" >返回文章</a>
+			</li>
+		</ul>
+	</div>
+	</div>
 </nav>
+<div id="myTabContent" class="tab-content" style="padding-top: 60px;">
 
-<div class="container" style="padding-top: 70px;">
-    <div class="row">
-        <div class="col-md-12">
-            <h3>编辑文章</h3>
-            
-            <!-- 消息提示区域 -->
-            <div id="alertMessage" class="alert alert-dismissible">
-                <button type="button" class="close" onclick="$('#alertMessage').hide()">&times;</button>
-                <span id="alertText"></span>
-            </div>
+		<div class="container">
+			<h3>编辑文章</h3>   
 
-            <form id="editForm">
-                <input type="hidden" name="id" id="id">
-                
-                <div class="form-group">
-                    <label for="title">标题 *</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="请输入文章标题" required style="width: 100%;">
-                </div>
-                
-                <div class="form-group">
-                    <label for="img">特色图片</label>
-                    <input type="url" class="form-control" name="img" id="img" placeholder="https://example.com/image.jpg" style="width: 100%;">
-                    <small class="text-muted">请输入完整的图片URL地址</small>
-                </div>
-                
-                <div class="form-group">
-                    <label for="link">永久链接 *</label>
-                    <input type="text" class="form-control" name="link" id="link" placeholder="article-slug" required style="width: 100%;">
-                    <small class="text-muted">文章的URL路径，建议使用英文和连字符</small>
-                </div>
-                
-                <div class="form-group">
-                    <label for="createDate">创建日期 *</label>
-                    <input type="datetime-local" class="form-control" id="createDate" name="createDate" required style="width: 100%;">
-                </div>
-                
-                <div class="form-group">
-                    <label for="category">分类</label>
-                    <select class="selectpicker form-control" multiple name="category" id="category" title="选择分类..." style="width: 100%;">
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="tags">标签</label>
-                    <input type="text" class="form-control" name="tags" id="tags" placeholder="标签1,标签2,标签3" style="width: 100%;">
-                    <small class="text-muted">多个标签请用英文逗号分隔</small>
-                </div>
-                
-                <div class="form-group">
-                    <label for="priority">权重</label>
-                    <input type="number" class="form-control" name="priority" id="priority" value="0.5" min="0" max="1" step="0.1" style="width: 100%;">
-                    <small class="text-muted">取值范围：0.0 - 1.0，数值越大权重越高</small>
-                </div>
-                
-                <div class="form-group">
-                    <label for="changefreq">更新频率</label>
-                    <select class="form-control" id="changefreq" name="changefreq" style="width: 100%;">
-                        <option value="daily">daily - 每日</option>
-                        <option value="hourly">hourly - 每小时</option>
-                        <option value="weekly">weekly - 每周</option>
-                        <option value="monthly">monthly - 每月</option>
-                        <option value="yearly">yearly - 每年</option>
-                        <option value="never">never - 从不</option>
-                        <option value="always">always - 总是</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>文章内容</label>
-                    <div id="content">
-                        <textarea style="display:none;" name="contentMD" id="contentMD"></textarea>
-                    </div>
-                </div>
-                
-                <div class="btn-group">
-                    <button type="button" id="btn_saveEdit" class="btn btn-primary" onclick="saveEdit()">
-                        <span class="glyphicon glyphicon-floppy-disk"></span> 保存文章
-                    </button>
-                    <button type="button" id="btn_delete" class="btn btn-danger" onclick="deleteArticle()">
-                        <span class="glyphicon glyphicon-trash"></span> 删除文章
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+			<form id="editForm" class="form-inline"  action="/" >
+
+				<div class="form-group" style="width: 98%">
+					<input type="hidden" class="form-control" name="id" id="id" readonly required="true">
+					<input type="text" class="form-control" name="title" id="title" placeholder="标题" style="width: 800px;" required="true">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">特色图片</label>
+					<input type="url" class="form-control" style="width: 400px;"  name="img" id="img" placeholder="" >
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">永久链接</label>
+					<input type="text" class="form-control" name="link" id="link" placeholder="" style="vertical-align:left !important;" required="true">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">创建日期</label>
+					<input type="datetime-local" class="form-control" id="createDate" name="createDate" placeholder="" style="vertical-align:left !important;" required="true">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">分类</label>
+					<select class="selectpicker" multiple name="category[]" id="category">
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">标签</label>
+					<input type="text" class="form-control" name="tags" id="tags" placeholder="标签1,标签2">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">权重</label>
+					<input type="text" class="form-control" name="priority" id="priority" value='0.5' placeholder="权重">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail2">更新频率</label>
+					    <select class="form-control" id="changefreq" name="changefreq">
+						<option value="daily" >daily</option>
+						<option value="hourly" >hourly</option>
+						<option value="weekly" >weekly</option>
+						<option value="monthly" >monthly</option>
+						<option value="yearly" >yearly</option>
+						<option value="never" >never</option>
+						<option value="always" >always</option>
+					    </select>
+				</div>
+					<a tabindex="0"  role="button"  type="submit" id="btn_saveEdit" class="btn btn-default" onclick="saveEdit()">保存</a>
+					<a  type="submit" role="button" id="btn_delete" class="btn btn-warning" onclick="deleteArticle()">删除</a>
+				<div id="content"><textarea style="display:none;"></textarea></div>
+			</form>
+		</div>
+
 </div>
 
-<!-- JavaScript 依赖 -->
-<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-zh_CN.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/editormd.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/editormd.js"></script>   
 <script type="text/javascript">
-    // 全局变量
-    var mdEditor;
-    var articleData = {};
-    var categoryData = [];
+	$(function() {
+		$('#myTab li:eq(0) a').tab('show');
+		//获取文章
+		var articleJson = <!--{articleJson}-->;
+		//获取分类
+		var categoryJson = <!--{categoryJson}-->;
 
-    $(document).ready(function() {
-        // 初始化数据（替换模板变量）
-        initData();
-        
-        // 初始化编辑器
-        initEditor();
-        
-        // 初始化表单
-        initForm();
-        
-        // 绑定事件
-        bindEvents();
-    });
-
-    // 初始化数据 - 替换服务器模板变量
-    function initData() {
-        // 模拟数据 - 实际应从服务器获取
-        articleData = {
-            id: 1,
-            title: "示例文章标题",
-            img: "https://example.com/image.jpg",
-            link: "example-article",
-            createDate: "2024-01-01T12:00",
-            category: ["技术", "编程"],
-            tags: "Markdown,编辑器,教程",
-            priority: 0.5,
-            changefreq: "monthly",
-            contentMD: "# 欢迎使用 Markdown 编辑器\n\n这是一个示例内容。\n\n## 功能特性\n\n- 支持 Markdown 语法\n- 实时预览\n- 代码高亮"
-        };
-
-        categoryData = ["技术", "编程", "生活", "旅行", "美食", "学习"];
-    }
-
-    // 初始化编辑器
-    function initEditor() {
-        mdEditor = editormd("content", {
-            width: "100%",
-            height: 640,
-            path: "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/",
-            appendMarkdown: articleData.contentMD || "",
-            saveHTMLToTextarea: true,
-            mode: "markdown",
-            tex: true,
-            tocm: true,
-            codeFold: true,
-            searchReplace: true,
-            toolbarIcons: function() {
-                return [
-                    "bold", "italic", "quote", "|", 
-                    "list-ul", "list-ol", "hr", "|", 
-                    "link", "image", "code-block", "|",
-                    "watch", "preview", "fullscreen"
-                ];
-            }
-        });
-    }
-
-    // 初始化表单
-    function initForm() {
-        // 填充表单数据
-        $('#id').val(articleData.id || '');
-        $('#title').val(articleData.title || '');
-        $('#img').val(articleData.img || '');
-        $('#link').val(articleData.link || '');
-        $('#createDate').val(articleData.createDate ? articleData.createDate.replace(" ", "T") : '');
-        $('#tags').val(articleData.tags || '');
-        $('#priority').val(articleData.priority || "0.5");
-        $('#changefreq').val(articleData.changefreq || "daily");
-
-        // 初始化分类选择器
-        var categorySelect = $('#category');
-        categorySelect.empty();
-        
-        $.each(categoryData, function(index, category) {
-            categorySelect.append(
-                $('<option>', {
-                    value: category,
-                    text: category
-                })
-            );
-        });
-        
-        categorySelect.selectpicker('refresh');
-        
-        // 设置选中的分类
-        if (articleData.category && articleData.category.length > 0) {
-            categorySelect.selectpicker('val', articleData.category);
-        }
-    }
-
-    // 绑定事件
-    function bindEvents() {
-        // 表单提交事件
-        $('#editForm').on('submit', function(e) {
-            e.preventDefault();
-            saveEdit();
-        });
-
-        // 输入验证
-        $('#title, #link').on('blur', function() {
-            validateField($(this));
-        });
-    }
-
-    // 显示消息提示
-    function showAlert(message, type) {
-        var alert = $('#alertMessage');
-        var alertText = $('#alertText');
-        
-        alert.removeClass('alert-success alert-danger alert-warning alert-info');
-        alert.addClass('alert-' + type);
-        alertText.text(message);
-        alert.fadeIn();
-        
-        // 5秒后自动隐藏
-        setTimeout(function() {
-            alert.fadeOut();
-        }, 5000);
-    }
-
-    // 字段验证
-    function validateField(field) {
-        var value = field.val().trim();
-        var fieldName = field.attr('name');
-        
-        if (fieldName === 'title' && !value) {
-            field.addClass('is-invalid');
-            return false;
-        }
-        
-        if (fieldName === 'link' && !value) {
-            field.addClass('is-invalid');
-            return false;
-        }
-        
-        if (fieldName === 'link' && value) {
-            // 验证链接格式（只允许字母、数字和连字符）
-            var linkPattern = /^[a-zA-Z0-9-]+$/;
-            if (!linkPattern.test(value)) {
-                field.addClass('is-invalid');
-                showAlert('永久链接只能包含字母、数字和连字符', 'danger');
-                return false;
-            }
-        }
-        
-        field.removeClass('is-invalid');
-        return true;
-    }
-
-    // 表单整体验证
-    function validateForm() {
-        var isValid = true;
-        
-        if (!validateField($('#title'))) {
-            isValid = false;
-        }
-        
-        if (!validateField($('#link'))) {
-            isValid = false;
-        }
-        
-        return isValid;
-    }
-
-    // 收集表单数据
-    function collectFormData() {
-        var formData = {
-            id: $('#id').val(),
-            title: $('#title').val().trim(),
-            img: $('#img').val().trim(),
-            link: $('#link').val().trim(),
-            createDate: $('#createDate').val(),
-            category: $('#category').val() || [],
-            tags: $('#tags').val().trim(),
-            priority: parseFloat($('#priority').val()) || 0.5,
-            changefreq: $('#changefreq').val(),
-            contentMD: mdEditor ? mdEditor.getMarkdown() : ''
-        };
-        
-        return formData;
-    }
-
-    // 保存编辑
-    function saveEdit() {
-        if (!validateForm()) {
-            showAlert('请正确填写所有必填字段', 'danger');
-            return;
-        }
-
-        // 显示加载状态
-        var saveBtn = $('#btn_saveEdit');
-        var originalText = saveBtn.html();
-        saveBtn.html('<span class="glyphicon glyphicon-refresh spinning"></span> 保存中...').prop('disabled', true);
-
-        // 收集表单数据
-        var formData = collectFormData();
-        
-        console.log('保存数据:', formData);
-
-        // AJAX 请求 - 修正序列化问题
+		
+		var mdEditor = editormd("content", {
+				//width  : "90%",
+				height : 640,
+				path   : "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/",
+				appendMarkdown : articleJson.contentMD, //编辑器赋值
+				saveHTMLToTextarea : true,
+				mode : "markdown",
+				tex  : true,
+				tocm : true, 
+				codeFold : true
+			});
+		//表单赋值
+		$('#id').val(articleJson.id);
+		$('#title').val(articleJson.title);
+		$('#img').val(articleJson.img);
+		$('#link').val(articleJson.link);
+		$('#createDate').val(articleJson.createDate.replace(" ","T"));
+		$('#tags').val(articleJson.tags);
+		$('#priority').val( (articleJson.priority=== undefined ? "0.5":articleJson.priority) );
+		$('#changefreq').selectpicker('val', (articleJson.changefreq === undefined ? "daily":articleJson.changefreq));
+	
+		$('#WidgetCategory').val(JSON.stringify(categoryJson));
+		var category = $('#category');
+		category.empty();
+		for (var i = 0; i < categoryJson.length; i++) {
+			category.append('<option id=' + categoryJson[i] + ' value=' + categoryJson[i] + '>' + categoryJson[i] + '</option>');
+		}
+		category.selectpicker('val',articleJson.category);
+	});
+    //保存按钮(编辑)
+    function saveEdit(){
         $.ajax({
             type: "POST",
             dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            url: "/admin/saveEdit/",
-            data: JSON.stringify(formData),
+			contentType: "application/json; charset=utf-8",
+            url: "/admin/saveEdit/" ,//url
+            data: JSON.stringify($("#editForm").serializeArray()), 
             success: function (result) {
-                saveBtn.html(originalText).prop('disabled', false);
-                
-                if (result.success) {
-                    showAlert(result.msg || '保存成功！', 'success');
-                    // 更新本地ID（如果是新建文章）
-                    if (result.id && !$('#id').val()) {
-                        $('#id').val(result.id);
-                    }
-                } else {
-                    showAlert(result.msg || '保存失败', 'danger');
-                }
-            },
-            error: function (xhr, status, error) {
-                saveBtn.html(originalText).prop('disabled', false);
-                showAlert('保存失败: ' + error, 'danger');
-                console.error('保存错误:', error);
+                alert(result.msg);
             }
         });
     }
-
-    // 删除文章
-    function deleteArticle() {
-        var articleId = $('#id').val();
-        
-        if (!articleId) {
-            showAlert('无法获取文章ID', 'danger');
-            return;
-        }
-
-        if (!confirm("确定要删除这篇文章吗？此操作不可撤销！")) {
-            return;
-        }
-
-        // 显示加载状态
-        var deleteBtn = $('#btn_delete');
-        var originalText = deleteBtn.html();
-        deleteBtn.html('<span class="glyphicon glyphicon-refresh spinning"></span> 删除中...').prop('disabled', true);
-
-        // AJAX 请求 - 修正数据格式
+    //删除
+    function deleteArticle(){
+        if (confirm("确定删除吗?删除后重新发布才能生效")==false){ 
+            return false; 
+          }
         $.ajax({
             type: "POST",
             dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            url: "/admin/delete/" + articleId,
-            data: JSON.stringify({ id: articleId }),
+			contentType: "application/json; charset=utf-8",
+            url: "/admin/delete/"+$('#id').val() ,//url
+            data: [{"id":$('#id').val()}],
             success: function (result) {
-                deleteBtn.html(originalText).prop('disabled', false);
-                
-                if (result.success) {
-                    showAlert(result.msg || '删除成功！', 'success');
-                    // 跳转回文章列表
-                    setTimeout(function() {
-                        window.location.href = '/admin/';
-                    }, 1500);
-                } else {
-                    showAlert(result.msg || '删除失败', 'danger');
-                }
-            },
-            error: function (xhr, status, error) {
-                deleteBtn.html(originalText).prop('disabled', false);
-                showAlert('删除失败: ' + error, 'danger');
-                console.error('删除错误:', error);
+                alert(result.msg);
             }
         });
     }
-
-    // 添加旋转动画样式
-    $('<style>')
-        .prop('type', 'text/css')
-        .html(`
-            .glyphicon.spinning {
-                animation: spin 1s infinite linear;
-            }
-            @keyframes spin {
-                from { transform: scale(1) rotate(0deg); }
-                to { transform: scale(1) rotate(360deg); }
-            }
-            .is-invalid {
-                border-color: #dc3545 !important;
-            }
-            .form-group label {
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-        `)
-        .appendTo('head');
 </script>
-
+  
 </body>
+
 </html>
