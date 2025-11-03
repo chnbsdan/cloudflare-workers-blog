@@ -1,923 +1,285 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width,viewport-fit=cover">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{{ &title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="{{ &keyWords }}" />
     <meta name="description" content="{{ &OPT.siteDescription }}" />
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/img/favicon.ico">
+    <!-- Fontawesome css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/font-awesome.min.css">
+    <!-- Bicon css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/bicon.min.css">
+    <!-- Themify css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/themify-icons.css">
+    <!-- Iconfont css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/icofont.css">
+     <!-- Animate css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/animate.css">
+    <!-- Animate headline css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/animated-headline.css">
+    <!-- Jquery magnific popup css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/magnific-popup.css">
+    <!-- youtube player css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/jquery.mb.YTPlayer.min.css">
+    <!-- Meanmenu css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/meanmenu.min.css">
+    <!-- Owl carousel css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/owl.carousel.min.css">
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/bootstrap.min.css">
+    <!-- Custom css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/default.css">
+    <!-- Main css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/style.css">
+    <!-- Responsive css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/css/responsive.css">
 
-    <!-- 现代字体和图标 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- 原有样式文件 -->
-    <link rel='stylesheet' id='stylesheet-css' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/main.css' type='text/css' media='all' />
-    <link rel='stylesheet' id='font-awesome-css' href='https://cdn.jsdelivr.net/gh/gdtool/cloudflare-workers-blog@master/themes/JustNews/files/font-awesome.css?ver=6.1.2' type='text/css' media='all' />
-    
-    <!-- 现代化样式 -->
-    <style>
-        :root {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
-            --secondary: #8b5cf6;
-            --accent: #06b6d4;
-            --dark: #0f172a;
-            --darker: #020617;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --gray-light: #cbd5e1;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            color: #334155;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        /* 现代化导航栏 */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-        
-        .header:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .navbar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 0;
-        }
-        
-        .logo img {
-            height: 40px;
-            transition: var(--transition);
-        }
-        
-        .logo:hover img {
-            transform: scale(1.05);
-        }
-        
-        /* 现代化导航菜单 */
-        .primary-menu ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .primary-menu a {
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            padding: 8px 0;
-            position: relative;
-            transition: var(--transition);
-        }
-        
-        .primary-menu a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-        
-        .primary-menu a:hover {
-            color: var(--primary);
-        }
-        
-        .primary-menu a:hover::after {
-            width: 100%;
-        }
-        
-        /* 现代化搜索框 */
-        .search-container {
-            position: relative;
-        }
-        
-        .search-form {
-            display: flex;
-            align-items: center;
-        }
-        
-        .search-input {
-            padding: 12px 45px 12px 15px;
-            border: 1px solid var(--gray-light);
-            border-radius: 25px;
-            outline: none;
-            width: 280px;
-            transition: var(--transition);
-            font-size: 14px;
-            background: rgba(248, 250, 252, 0.8);
-            backdrop-filter: blur(10px);
-        }
-        
-        .search-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            width: 320px;
-            background: white;
-        }
-        
-        .search-button {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--gray);
-            padding: 6px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-        
-        .search-button:hover {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--primary);
-        }
-        
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            max-height: 300px;
-            overflow-y: auto;
-            display: none;
-            margin-top: 10px;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        
-        /* 现代化主内容区 */
-        #wrap {
-            padding: 40px 0;
-        }
-        
-        .wrap {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 40px;
-            align-items: start;
-        }
-        
-        /* 现代化文章列表 */
-        .post-loop {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .item {
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            border: 1px solid rgba(226, 232, 240, 0.6);
-        }
-        
-        .item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .item-img {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .item-img-inner {
-            display: block;
-            width: 100%;
-            height: 220px;
-            overflow: hidden;
-        }
-        
-        .item-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-        
-        .item:hover .item-img img {
-            transform: scale(1.05);
-        }
-        
-        .item-category {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        
-        .item-category:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .item-content {
-            padding: 25px;
-        }
-        
-        .item-title {
-            margin-bottom: 15px;
-        }
-        
-        .item-title a {
-            color: var(--dark);
-            text-decoration: none;
-            font-size: 1.3rem;
-            font-weight: 600;
-            line-height: 1.4;
-            transition: var(--transition);
-            display: block;
-        }
-        
-        .item-title a:hover {
-            color: var(--primary);
-        }
-        
-        .item-excerpt {
-            color: var(--gray);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .item-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            color: var(--gray);
-            padding-top: 15px;
-            border-top: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        
-        /* 现代化侧边栏 */
-        .sidebar {
-            position: sticky;
-            top: 100px;
-        }
-        
-        .widget {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(226, 232, 240, 0.6);
-            transition: var(--transition);
-        }
-        
-        .widget:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-        }
-        
-        .widget-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(59, 130, 246, 0.1);
-            position: relative;
-        }
-        
-        .widget-title::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-        
-        /* 现代化分类目录 */
-        .link-tagcloud {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .link-tag {
-            display: inline-block;
-            background: rgba(241, 245, 249, 0.8);
-            color: var(--gray);
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: var(--transition);
-            border: 1px solid transparent;
-        }
-        
-        .link-tag:hover {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* 现代化标签云 */
-        .tagcloud {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .tag-cloud-link {
-            display: inline-block;
-            background: rgba(241, 245, 249, 0.8);
-            color: var(--gray);
-            padding: 6px 12px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 500;
-            transition: var(--transition);
-            border: 1px solid transparent;
-        }
-        
-        .tag-cloud-link:hover {
-            background: linear-gradient(90deg, var(--accent), var(--secondary));
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
-        }
-        
-        /* 现代化分页 */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 50px;
-            list-style: none;
-        }
-        
-        .pagination a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 20px;
-            background: white;
-            border-radius: 12px;
-            color: var(--gray);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            min-width: 44px;
-        }
-        
-        .pagination a:hover {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* 现代化社交图标栏 */
-        .social-icons-bar {
-            position: fixed;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 999;
-        }
-        
-        .social-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
-            color: var(--gray);
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-            font-size: 18px;
-        }
-        
-        .social-icon:hover {
-            transform: translateY(-5px) scale(1.1);
-            color: white;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .social-icon:nth-child(1):hover { background: #ea4335; } /* 邮箱 */
-        .social-icon:nth-child(2):hover { background: #e6162d; } /* 微博 */
-        .social-icon:nth-child(3):hover { background: #1877f2; } /* Facebook */
-        .social-icon:nth-child(4):hover { background: var(--primary); } /* 返回顶部 */
-        .social-icon:nth-child(5):hover { background: #000000; } /* X */
-        .social-icon:nth-child(6):hover { background: #fb7299; } /* Bilibili */
-        .social-icon:nth-child(7):hover { background: #26a5e4; } /* Telegram */
-        
-        /* 现代化页脚 */
-        .footer {
-            background: var(--dark);
-            color: var(--light);
-            padding: 40px 0 20px;
-            margin-top: 60px;
-        }
-        
-        .footer-col {
-            text-align: center;
-        }
-        
-        .copyright p {
-            color: rgba(248, 250, 252, 0.7);
-            font-size: 14px;
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 1024px) {
-            .wrap {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                position: static;
-                margin-top: 40px;
-            }
-            
-            .social-icons-bar {
-                display: none;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .post-loop {
-                grid-template-columns: 1fr;
-            }
-            
-            .primary-menu ul {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .search-input {
-                width: 200px;
-            }
-            
-            .search-input:focus {
-                width: 240px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 15px;
-            }
-            
-            .item-content {
-                padding: 20px;
-            }
-            
-            .widget {
-                padding: 20px;
-            }
-        }
-        
-        /* 动画效果 */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .item {
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .item:nth-child(1) { animation-delay: 0.1s; }
-        .item:nth-child(2) { animation-delay: 0.2s; }
-        .item:nth-child(3) { animation-delay: 0.3s; }
-        .item:nth-child(4) { animation-delay: 0.4s; }
-        .item:nth-child(5) { animation-delay: 0.5s; }
-        .item:nth-child(6) { animation-delay: 0.6s; }
-    </style>
-
-    <!-- 原有其他样式文件 -->
-    <link rel='stylesheet' id='wp-block-library-css' href='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.5.3/wp-includes/css/dist/block-library/style.min.css?ver=5.6' type='text/css' media='all' />
-    <!-- 其他原有样式文件... -->
-    
+    <!-- Modernizer js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/vendor/modernizr-3.5.0.min.js"></script>
     {{ &OPT.codeBeforHead }}
 </head>
-<body class="archive paged category category-zhishi category-5 paged-2 category-paged-2 lang-cn el-boxed">
-    <header class="header">
-        <div class="container clearfix">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar icon-bar-1"></span>
-                    <span class="icon-bar icon-bar-2"></span>
-                    <span class="icon-bar icon-bar-3"></span>
-                </button>
-                <div class="logo">
-                    {{ #OPT.logo }}
-                    <a href="/" rel="home"><img src="{{ &OPT.logo }}" alt="{{ &OPT.siteName }}"></a>
-                    {{ /OPT.logo }}
-                    
-                    {{ ^OPT.logo }}
-                    <a href="/" rel="home"><img src="https://cdn.jsdelivr.net/gh/chnbsdan/cloudflare-workers-blog@master/themes/JustNews2/files/logo2.png" alt="请自定义OPT.logo"></a>
-                    {{ /OPT.logo }}
+
+<body>
+    <!--[if lte IE 9]>
+		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+	<![endif]-->
+
+    <!-- Main Wrapper Start Here -->
+    <div class="wrapper">
+        <!-- Main Header Area Start -->
+        <header class="absolute-header trigger-menu header-sticky universal-header">
+            <div class="container">
+                <div class="main-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <!-- Logo Start -->
+                            <div class="logo">
+                                <a href="/"><img src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/img/logo2.png" alt="brand-logo"></a>
+                            </div>
+                            <!-- Logo End -->
+                        </div>
+                        <div class="col-md-9">
+                            <!-- Trigger Menu Area Start -->
+							<div class="slide-menu-wrapper d-none d-lg-block float-right">
+                                    <button class="trigger-menu-icon">
+									<span></span>
+									<span></span>
+									<span></span>
+								</button>
+								<nav class="menu slide-menu-inner">
+									<ul class="primary-menu-list d-flex align-items-center">
+                                        {{ #widgetMenuList }}
+                                        <li><a href="{{ &url }}">{{ &title }}.</a></li>
+                                        {{ /widgetMenuList }}
+                                        <li><a class="login cur" href="/admin">登录</a></li>
+									</ul>
+								</nav>
+							</div>
+				            <!-- Trigger Menu Area End -->
+                        </div>
+                    </div>
+                    <!-- Mobile Menu Start -->
+                    <div class="mobile-menu d-block d-lg-none">
+                        <nav>
+                            <ul>
+                                 {{ #widgetMenuList }}
+                                <li><a href="{{ &url }}">{{ &title }}</a></li>
+                                 {{ /widgetMenuList }}
+                                 <li><a class="login cur" href="/admin">登录</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- Mobile Menu End -->
                 </div>
             </div>
-            <div class="collapse navbar-collapse">
-                <nav class="navbar-left primary-menu">
-                    <ul id="menu-%e5%af%bc%e8%88%aa" class="nav navbar-nav wpcom-adv-menu">
-                        {{ #widgetMenuList }}
-                            <li class="menu-item"><a href="{{ &url }}">{{ &title }}</a></li>
-                        {{ /widgetMenuList }}
-                    </ul>
-                </nav>
-                <div class="navbar-action pull-right">
-                    <!-- 搜索框 -->
-                    <div class="search-container">
-                        <form class="search-form" id="search-form">
-                            <input type="text" class="search-input" id="search-input" placeholder="搜索文章..." autocomplete="off">
-                            <button type="submit" class="search-button" title="搜索">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </form>
-                        <div class="search-results" id="search-results"></div>
-                    </div>
-                    
-                    <div id="j-user-wrap">
-                        <a class="login cur" href="/admin">登录</a>
-                    </div>
+        </header>
+        <!-- Main Header Area End -->
+      
+        <!-- Banner Area Start -->
+        <div class="slider-area cloud-white-bg full-screen center-items ">
+            <div class="container">
+                <div class="single-man man-style-two wow fadeInRight d-none d-xl-block" data-wow-duration="1.5s" data-wow-delay=".3s">
+                    <img class="img" src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/img/man1.png" alt="single-man">
+                </div>
+                <div class="slider-text slider-triangle position-relative animation-style-01">
+                    <h5>HAY! THERE</h5>
+                    <h1>I AM Luka Dončić </h1>
+                    <h2 class="cd-headline clip is-full-width">本 赛 季 场 均
+                        <span class="cd-words-wrapper">
+                            <b class="is-visible" >得 分：<span id="output1">--</span></b>
+                            <b >篮 板：<span id="output2">--</span></b>
+                            <b >助 攻：<span id="output3">--</span></b>
+                        </span>
+                    </h2>
+                    <a class="transparent-btn" href="#">关注我</a>
                 </div>
             </div>
+            <ul class="social-footer slider-social social-style-two">
+                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                <li><a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
+                <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+            </ul>
         </div>
-    </header>
-    
-    <div id="wrap">
-        <div class="container wrap">
-            <div class="main">
-                <div class="sec-panel sec-panel-default">
-                    <div class="sec-panel-body">
-                        <ul class="post-loop post-loop-default cols-0" id="article-list">
-                            {{ #articleList }}
-                            <li class="item" id="post-{{&id}}">
-                                <div class="item-img">
-                                    <a class="item-img-inner" href="{{ &url }}" title="{{ &title }}" rel="bookmark">
-                                        <img width="437" height="300" src="{{ &img }}" class="attachment-post-thumbnail size-post-thumbnail wp-post-image j-lazy" alt="{{ &title }}" title="{{ &title }}" data-original="{{ &img }}" /></a>
-                                    {{ #category }}
-                                        <a class="item-category" href="/category/{{&.}}" >{{&.}}</a>
-                                    {{ /category }}
-                                </div>
-                                <div class="item-content">
-                                    <h2 class="item-title">
-                                        <a href="{{ &url }}" rel="bookmark">{{ &title }}</a></h2>
-                                    <div class="item-excerpt">
-                                        <p>{{ &contentText }} ...</p>
+        <!-- Banner Area End -->
+
+        <!-- Blog Area Start -->
+        <div class="blog-area ptb-150 off-white-bg">
+            <div class="container">
+                <div class="row">
+                   
+                    <!-- Single Blog Start -->
+                     {{ #articleList }}
+                    <div class="col-lg-4 col-md-6">
+                         <div class="single-blog">
+                            <div class="blog-inner">
+                                <div class="blog-header">
+                                    <div class="blog-img">
+                                        <a  href="{{ &url }}" title="{{ &title }}" rel="bookmark"><img src="{{ &img }}" alt="blog-img" alt="{{ &title }}" title="{{ &title }}" data-original="{{ &img }}"></a>
                                     </div>
-                                    <div class="item-meta">
-                                        <span class="item-meta-li date">{{ &createDate10 }}</span>
-                                        <div class="item-meta-right">
-                                            <span class="item-meta-li views" title="阅读数">
-                                                <i class="fas fa-eye"></i>
-                                                <span id="{{ &url }}" class="leancloud_visitors">
-                                                    <i class="leancloud-visitors-count"></i>
-                                                </span>    
-                                            </span>
+                                    <div class="blog-desc">
+                                        <ul class="meta-box d-flex">
+                                            <li class="meta-date"><span><i class="fa fa-calendar" aria-hidden="true"></i>{{ &createDate10 }}</span></li>
+                                            <li><i class="fa fa-inbox" aria-hidden="true"></i>
+                                            {{ #category }}
+											<a  href="/category/{{&.}}" >{{&.}}</a>
+                                            {{ /category }}
+                                            </li>
+                                        </ul>
+                                        <div class="blog-content">
+                                            <h6 class="blog-title"><a href="{{ &url }}">{{ &title }}</a></h6>
+                                            <p>{{ &contentText }} ...</p>
                                         </div>
                                     </div>
                                 </div>
-                            </li>
-                            {{ /articleList }}
-                        </ul>
-                        <ul class="pagination">
-                            {{ #pageNewer }}
-                            <li class="prev">
-                                <a href="{{ &url }}" class="prev">
-                                    <i class="fas fa-arrow-left"></i>
-                                    <span>上一页</span></a>
-                            </li>
-                            {{ /pageNewer }}
-
-                            {{ #pageOlder }}
-                            <li class="next">
-                                <a href="{{ &url }}" class="next">
-                                    <span>下一页</span>
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </li>
-                            {{ /pageOlder }}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <aside class="sidebar">
-                <div id="wpcom-post-thumb-2" class="widget widget_post_thumb">
-                    <h3 class="widget-title">
-                        <span>近期文章</span></h3>
-                    <ul>
-                        {{ #widgetRecentlyList }}
-                        <li class="item">
-                            <div class="item-img">
-                                <a class="item-img-inner" href="{{ &url }}" title="{{ &title }}">
-                                    <img width="480" height="264" src="{{ &img }}" class="attachment-post-thumbnail size-post-thumbnail wp-post-image j-lazy" alt="" title="" data-original="{{ &img }}" /></a>
+                                <div class="blog-btn">
+                                    <a class="read-more" href="{{ &url }}">Read More</a>
+                                 </div>
                             </div>
-                            <div class="item-content">
-                                <p class="item-title">
-                                    <a href="{{ &url }}" title="{{ &title }}">{{ &title }}</a></p>
-                                <p class="item-date">{{ &createDate10 }}</p></div>
-                        </li>
-                        {{ /widgetRecentlyList }}                                    
+                        </div>
+                    </div>
+                    {{ /articleList }}
+                    <!-- Single Blog End -->
+
+                </div>
+                <div class="breadcrumb-area text-center mt-20">
+                    <ul class="d-inline-flex pfolio-breadcrumb-list">
+                        {{ #pageNewer }}
+								<li class="prev">
+									<a href="{{ &url }}" class="prev">
+										<i class="fa fa-long-arrow-left" aria-hidden="true"></i><i class="wpcom-icon wi">
+											<svg aria-hidden="true"><use xlink:href="#wi-arrow-left"></use></svg>
+										</i>
+										<span>上一页</span></a>
+								</li>
+								{{ /pageNewer }}
+
+								{{ #pageOlder }}
+								<li class="next">
+									<a href="{{ &url }}" class="next">
+										<span>下一页</span><i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+										<i class="wpcom-icon wi">
+											<svg aria-hidden="true"><use xlink:href="#wi-arrow-right"></use></svg>
+										</i>
+									</a>
+								</li>
+								{{ /pageOlder }}
                     </ul>
                 </div>
-                
-                <!-- 修改分类目录为按钮样式 -->
-                <div id="categories-3" class="widget widget_categories">
-                    <h3 class="widget-title">
-                        <span>分类目录</span></h3>
-                    <div class="link-tagcloud">
-                        {{ #widgetCategoryList }}
-                        <a href="/category/{{&.}}" class="link-tag">{{&.}}</a>
-                        {{ /widgetCategoryList }}
-                    </div>
-                </div>
-                
-                <div id="tag_cloud-3" class="widget widget_tag_cloud">
-                    <h3 class="widget-title">
-                        <span>标签</span></h3>
-                    <div class="tagcloud">
-                        {{ #widgetTagsList }}
-                        <a href="/tags/{{&.}}" class="tag-cloud-link tag-link-6 tag-link-position-1" aria-label="{{&.}}">{{&.}}</a>
-                        {{ /widgetTagsList }}
-                    </div>
-                </div>
-
-                <div id="linkcat-0" class="widget widget_links">
-                    <h3 class="widget-title">
-                        <span>链接</span></h3>
-                    <div class="link-tagcloud">
-                        {{ #widgetLinkList }}
-                            <a href="{{ &url }}" target="_blank" class="link-tag">{{ &title }}</a>
-                        {{ /widgetLinkList }}
-                    </div>
-                </div>
-                {{ &OPT.widgetOther }}
-            </aside>
-        </div>
-    </div>
-
-    <!-- 社交图标栏 -->
-    <div class="social-icons-bar">
-        <!-- 左侧图标 -->
-        <a href="mailto:kekelove1688@gmail.com" class="social-icon" title="邮箱">
-            <i class="fas fa-envelope"></i>
-        </a>
-        
-        <a href="https://weibo.com/u/7866257468" class="social-icon" target="_blank" title="微博">
-            <i class="fab fa-weibo"></i>
-        </a>
-        
-        <a href="https://www.facebook.com/profile.php?id=100091963634555" class="social-icon" target="_blank" title="Facebook">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        
-        <!-- 中间的返回顶部按钮 -->
-        <a href="#" class="social-icon back-to-top" onclick="scrollToTop(); return false;" title="返回顶部">
-            <i class="fas fa-chevron-up"></i>
-        </a>
-        
-        <!-- 右侧图标 -->
-        <a href="https://x.com/home/@chnbsdan" class="social-icon" target="_blank" title="X帐号">
-            <i class="fab fa-twitter"></i>
-        </a>
-        
-        <a href="https://space.bilibili.com/1913680621" class="social-icon" target="_blank" title="Bilibili">
-            <i class="fab fa-bilibili"></i>
-        </a>
-        
-        <a href="https://t.me/ben_mesa" class="social-icon" target="_blank" title="Telegram">
-            <i class="fab fa-telegram-plane"></i>
-        </a>
-    </div>
-    
-    <footer class="footer">
-        <div class="container">
-            <div class="clearfix">
-                <div class="footer-col footer-col-copy">
-                    <div class="copyright">
-                        <p>{{ &OPT.copyRight }}</p>
-                    </div>
-                </div>
-                <div class="footer-col footer-col-sns">
-                    <div class="footer-sns"></div>
-                </div>
             </div>
         </div>
-    </footer>
+        <!-- Blog Area End -->
 
-    <!-- 原有脚本文件 -->
-    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js?ver=3.5.1' id='jquery-core-js'></script>
-    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/WordPress/WordPress@5.6/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
-    <!-- 其他原有脚本文件... -->
-    
-    <!-- 现代化功能脚本 -->
+        <!-- Footer Start -->
+        <footer class="footer-area ptb-100 dark-black-bg">
+            <div class="container">
+                <div class="footer-top text-center">
+                    <div class="logo mb-30">
+                        <a href="/"><img src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/img/logo.png" alt="brand-logo"></a>
+                    </div>
+                    <p>欢迎来到卢卡东契奇粉丝团.</p>
+                </div>
+                <!-- Footer Bottom Start -->
+                <div class="footer-bottom">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="copyright-text mb-sm-30 text-center text-md-left">
+                                <p>{{ &OPT.copyRight }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="social-footer d-flex justify-content-center justify-content-lg-end">
+                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer Bottom End -->
+            </div>      
+        </footer>
+        <!-- Footer End -->
+       
+    </div>
+    <!-- Main Wrapper End Here -->
+
+    <!-- jquery 3.2.1 -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/vendor/jquery-3.2.1.min.js"></script>
+    <!-- animate headline js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/animated-headline.js"></script>
+    <!-- youtube player js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/jquery.mb.YTPlayer.min.js"></script>
+    <!-- jquery appear js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/jquery.appear.js"></script>
+    <!-- Particle scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/particles.min.js"></script>
+    <!-- Parallax scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/jquery.parallax-1.1.3.js"></script>
+    <!-- Wow js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/wow.min.js"></script>
+    <!-- Mobile menu js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/jquery.meanmenu.min.js"></script>
+    <!-- ScrollUp js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/jquery.scrollUp.js"></script>
+    <!-- Image loaded js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/imagesloaded.pkgd.min.js"></script>
+    <!-- Isotope js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/isotope.pkgd.min.js"></script>
+    <!-- Magnific js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/jquery.magnific-popup.min.js"></script>
+    <!-- Owl carousel -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/owl.carousel.min.js"></script>
+    <!-- Bootstrap popper js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/bootstrap.min.js"></script>
+    <!-- Plugin js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/plugins.js"></script>
+    <!-- Main activaion js -->
+    <script src="https://cdn.jsdelivr.net/gh/Y560H/cloudflare-workers-blog/themes/luka/js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 搜索功能
-            const searchForm = document.getElementById('search-form');
-            const searchInput = document.getElementById('search-input');
-            const searchResults = document.getElementById('search-results');
-            
-            searchForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const query = searchInput.value.trim();
-                if (query) {
-                    window.location.href = '/search?q=' + encodeURIComponent(query);
-                }
-            });
-            
-            // 实时搜索建议
-            searchInput.addEventListener('input', function() {
-                const query = this.value.trim();
-                
-                if (query.length < 2) {
-                    searchResults.style.display = 'none';
-                    return;
-                }
-                
-                const articles = document.querySelectorAll('#article-list .item');
-                const results = [];
-                
-                articles.forEach(article => {
-                    const titleElement = article.querySelector('.item-title a');
-                    const excerptElement = article.querySelector('.item-excerpt p');
-                    const linkElement = article.querySelector('.item-img-inner');
-                    
-                    if (titleElement && excerptElement && linkElement) {
-                        const title = titleElement.textContent;
-                        const excerpt = excerptElement.textContent;
-                        const url = linkElement.href;
-                        
-                        if (title.toLowerCase().includes(query.toLowerCase()) || 
-                            excerpt.toLowerCase().includes(query.toLowerCase())) {
-                            results.push({
-                                title: title,
-                                excerpt: excerpt,
-                                url: url
-                            });
-                        }
-                    }
-                });
-                
-                displaySearchResults(results);
-            });
-            
-            function displaySearchResults(results) {
-                searchResults.innerHTML = '';
-                
-                if (results.length === 0) {
-                    searchResults.innerHTML = '<div class="no-results">没有找到相关文章</div>';
-                } else {
-                    results.slice(0, 5).forEach(article => {
-                        const resultItem = document.createElement('div');
-                        resultItem.className = 'search-result-item';
-                        resultItem.innerHTML = `
-                            <div class="search-result-title">${article.title}</div>
-                            <div class="search-result-excerpt">${article.excerpt.substring(0, 60)}...</div>
-                        `;
-                        resultItem.addEventListener('click', function() {
-                            window.location.href = article.url;
-                        });
-                        searchResults.appendChild(resultItem);
-                    });
-                }
-                
-                searchResults.style.display = 'block';
-            }
-            
-            document.addEventListener('click', function(e) {
-                if (!searchForm.contains(e.target)) {
-                    searchResults.style.display = 'none';
-                }
-            });
-            
-            searchInput.addEventListener('focus', function() {
-                if (this.value.trim().length >= 2) {
-                    this.dispatchEvent(new Event('input'));
-                }
-            });
-            
-            // 图片懒加载增强
-            const lazyImages = document.querySelectorAll('img.j-lazy');
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.getAttribute('data-original');
-                        img.classList.remove('j-lazy');
-                        imageObserver.unobserve(img);
-                    }
-                });
-            });
-            
-            lazyImages.forEach(img => imageObserver.observe(img));
-        });
-        
-        // 返回顶部功能
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-        
-        // 滚动时导航栏效果
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.05)';
-            }
-        });
-    </script>
-    
-    {{ &OPT.codeBeforBody }}
+
+     fetch('https://webws.365scores.com/web/athletes/?appTypeId=5&langId=141&timezoneName=Asia/Shanghai&userCountryId=79&athletes=53106&competitionId=103&fullDetails=true&topBookmaker=16') // 替换为你的 JSON 文件路径
+      .then(response => response.json())
+      .then(data => {
+       // document.getElementById('demo').innerText = JSON.stringify(data, null, 2);
+      document.getElementById("output1").innerHTML = JSON.stringify(Number(data.athletes[0].highlightStats[0].stats[0].value));
+      document.getElementById("output2").innerHTML = JSON.stringify(Number(data.athletes[0].highlightStats[0].stats[1].value));
+      document.getElementById("output3").innerHTML = JSON.stringify(Number(data.athletes[0].highlightStats[0].stats[2].value));
+      //document.getElementById("demo2").innerHTML = data.scores[1].name + " " + data.scores[1].score;
+      //document.getElementById("demo3").innerHTML = data.scores[2].name + " " + data.scores[2].score;
+      })
+      .catch(error => console.error('Error:', error));
+   
+</script>
 </body>
+
 </html>
